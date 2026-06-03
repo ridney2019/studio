@@ -84,8 +84,6 @@ export const translations = {
     services: 'Servicios',
     gallery: 'Galería',
     booking: 'Reserva Ahora',
-    followUs: 'Síguenos',
-    allRightsReserved: 'Todos los derechos reservados',
     // Contact page
     bookAppointment: 'Reserva una cita',
     bookingDescription: 'Por favor, envía un correo electrónico, llama o envía un mensaje de texto para solicitar tu consulta de tatuaje. Te responderemos con disponibilidad y próximos pasos.',
@@ -120,8 +118,6 @@ export const translations = {
     services: 'Services',
     gallery: 'Galerie',
     booking: 'Réserver Maintenant',
-    followUs: 'Nous Suivre',
-    allRightsReserved: 'Tous droits réservés',
     // Contact page
     bookAppointment: 'Prendre rendez-vous',
     bookingDescription: 'Veuillez envoyer un email, appeler ou envoyer un SMS pour demander votre consultation de tatouage. Nous répondrons avec disponibilité et prochaines étapes.',
@@ -154,8 +150,6 @@ export const translations = {
     services: 'Dienstleistungen',
     gallery: 'Galerie',
     booking: 'Jetzt Buchen',
-    followUs: 'Folge uns',
-    allRightsReserved: 'Alle Rechte vorbehalten',
     // Contact page
     bookAppointment: 'Termin vereinbaren',
     bookingDescription: 'Bitte senden Sie eine E-Mail, rufen an oder schreiben eine SMS, um Ihre Tattoo-Beratung anzufragen. Wir antworten mit Verfügbarkeit und nächsten Schritten.',
