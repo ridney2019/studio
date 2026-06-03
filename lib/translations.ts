@@ -1,42 +1,47 @@
 import { LanguageCode } from './languages';
 
-export type TranslationKey = keyof typeof translations['en'];
+// 1. Define base English dictionary
+const enTranslations = {
+  home: 'Home',
+  about: 'About',
+  contact: 'Contact',
+  language: 'Language',
+  selectLanguage: 'Select Language',
+  tagline: 'Modern Tattoo Studio',
+  description: 'Award-winning tattoo artists specializing in custom designs',
+  artists: 'Our Artists',
+  contactUs: 'Contact Us',
+  services: 'Services',
+  gallery: 'Gallery',
+  booking: 'Book Now',
+  followUs: 'Follow Us',
+  allRightsReserved: 'All rights reserved',
+  // Contact page
+  bookAppointment: 'Book an appointment',
+  bookingDescription: "Please email, call, or text to request your tattoo consultation. We'll reply with availability and next steps.",
+  sendMessage: 'Send a message',
+  name: 'Name',
+  yourName: 'Your name',
+  email: 'Email',
+  yourEmail: 'you@example.com',
+  message: 'Message',
+  tattooIdea: 'Tell us about your tattoo idea',
+  sendMessageBtn: 'Send Message',
+  studioDetails: 'Studio details',
+  location: 'Location',
+  hours: 'Hours',
+  tuesdayToSunday: 'Tuesday - Sunday',
+  closedMonday: 'Closed Monday',
+  timeOpen: '11AM to 7PM',
+  textPreferred: 'Text requests are preferred.',
+} as const;
 
-export const translations = {
-  en: {
-    home: 'Home',
-    about: 'About',
-    contact: 'Contact',
-    language: 'Language',
-    selectLanguage: 'Select Language',
-    tagline: 'Modern Tattoo Studio',
-    description: 'Award-winning tattoo artists specializing in custom designs',
-    artists: 'Our Artists',
-    contactUs: 'Contact Us',
-    services: 'Services',
-    gallery: 'Gallery',
-    booking: 'Book Now',
-    followUs: 'Follow Us',
-    allRightsReserved: 'All rights reserved',
-    // Contact page
-    bookAppointment: 'Book an appointment',
-    bookingDescription: "Please email, call, or text to request your tattoo consultation. We'll reply with availability and next steps.",
-    sendMessage: 'Send a message',
-    name: 'Name',
-    yourName: 'Your name',
-    email: 'Email',
-    yourEmail: 'you@example.com',
-    message: 'Message',
-    tattooIdea: 'Tell us about your tattoo idea',
-    sendMessageBtn: 'Send Message',
-    studioDetails: 'Studio details',
-    location: 'Location',
-    hours: 'Hours',
-    tuesdayToSunday: 'Tuesday - Sunday',
-    closedMonday: 'Closed Monday',
-    timeOpen: '11AM to 7PM',
-    textPreferred: 'Text requests are preferred.',
-  },
+// 2. Derive the key structure from English
+export type TranslationKey = keyof typeof enTranslations;
+
+// 3. Strongly type the main translation configuration matrix
+export const translations: Record<LanguageCode, Record<TranslationKey, string>> = {
+  en: enTranslations,
   pt: {
     home: 'Início',
     about: 'Sobre',
@@ -84,7 +89,6 @@ export const translations = {
     services: 'Servicios',
     gallery: 'Galería',
     booking: 'Reserva Ahora',
-    // Contact page
     bookAppointment: 'Reserva una cita',
     bookingDescription: 'Por favor, envía un correo electrónico, llama o envía un mensaje de texto para solicitar tu consulta de tatuaje. Te responderemos con disponibilidad y próximos pasos.',
     sendMessage: 'Enviar mensaje',
@@ -92,10 +96,10 @@ export const translations = {
     yourName: 'Tu nombre',
     email: 'Correo electrónico',
     yourEmail: 'tu@ejemplo.com',
-    message: 'Mensaje',
+    message: 'Message',
     tattooIdea: 'Cuéntanos sobre tu idea de tatuaje',
     sendMessageBtn: 'Enviar mensaje',
-    studioDetails: 'Detalles del estudio',
+    studioDetails: 'Detaljes del estudio',
     location: 'Ubicación',
     hours: 'Horario',
     tuesdayToSunday: 'Martes - Domingo',
@@ -118,9 +122,12 @@ export const translations = {
     services: 'Services',
     gallery: 'Galerie',
     booking: 'Réserver Maintenant',
+    // Added missing keys
+    followUs: 'Suivez-nous',
+    allRightsReserved: 'Tous droits réservés',
     // Contact page
     bookAppointment: 'Prendre rendez-vous',
-    bookingDescription: 'Veuillez envoyer un email, appeler ou envoyer un SMS pour demander votre consultation de tatouage. Nous répondrons avec disponibilité et prochaines étapes.',
+    bookingDescription: 'Veuillez envoyer un email, appeler ou envoyer un SMS pour demander votre consultation de tatouage. Nous répondrons avec disponibilité et prochaine étapes.',
     sendMessage: 'Envoyer un message',
     name: 'Nom',
     yourName: 'Votre nom',
@@ -150,6 +157,9 @@ export const translations = {
     services: 'Dienstleistungen',
     gallery: 'Galerie',
     booking: 'Jetzt Buchen',
+    // Added missing keys
+    followUs: 'Folge uns',
+    allRightsReserved: 'Alle Rechte vorbehalten',
     // Contact page
     bookAppointment: 'Termin vereinbaren',
     bookingDescription: 'Bitte senden Sie eine E-Mail, rufen an oder schreiben eine SMS, um Ihre Tattoo-Beratung anzufragen. Wir antworten mit Verfügbarkeit und nächsten Schritten.',
@@ -182,6 +192,8 @@ export const translations = {
     services: 'Servizi',
     gallery: 'Galleria',
     booking: 'Prenota Ora',
+    followUs: 'Seguici',
+    allRightsReserved: 'Tutti i diritti riservati',
     // Contact page
     bookAppointment: 'Prenota una consulenza',
     bookingDescription: "Invia un'email, chiama o invia un SMS per richiedere la tua consulenza sui tatuaggi. Ti risponderemo con disponibilità e prossimi passi.",
@@ -200,8 +212,6 @@ export const translations = {
     closedMonday: 'Chiuso lunedì',
     timeOpen: '11:00 - 19:00',
     textPreferred: 'Le richieste per SMS sono preferite.',
-    followUs: 'Seguici',
-    allRightsReserved: 'Tutti i diritti riservati',
   },
   ja: {
     home: 'ホーム',
@@ -216,7 +226,6 @@ export const translations = {
     services: 'サービス',
     gallery: 'ギャラリー',
     booking: '今すぐ予約',
-    // Contact page
     bookAppointment: '予約を取る',
     bookingDescription: 'タトゥーコンサルテーションをリクエストするには、メール、電話、またはテキストメッセージを送信してください。利用可能性と次のステップでお返事します。',
     sendMessage: 'メッセージを送信',
@@ -237,7 +246,7 @@ export const translations = {
     followUs: 'フォロー',
     allRightsReserved: '著作権所有',
   },
-} as const;
+};
 
 export const getTranslation = (
   lang: LanguageCode,

@@ -23,7 +23,7 @@ export default function ContactPage() {
           <p>101-103 Francis St, The Liberties, Dublin 8, D08 FHP9</p>
         </div>
       </section>
-
+ 
       <section className="contact-grid fade-section">
         <div className="contact-card contact-form-card">
           <h2>{t('sendMessage')}</h2>
