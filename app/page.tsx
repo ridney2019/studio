@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useTranslation } from "./hooks/useTranslation";
 import { SocialLinks } from "./components/SocialLinks";
+import { LocationMap } from "./components/LocationMap";
 
 
 const artists = [
@@ -157,6 +158,9 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Location Section */}
+      <LocationMap />
 
       {/* Social Media Links */}
       <SocialLinks />

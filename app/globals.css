@@ -392,6 +392,193 @@ button {
 .info-panel:hover {
   transform: translateY(-3px);
 }
+/* Location Map Section */
+.location-section {
+  display: grid;
+  gap: 3rem;
+  padding: 3rem 0;
+}
+
+.location-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 42rem;
+}
+
+.location-header h2 {
+  margin: 0;
+  font-size: clamp(2.75rem, 5vw, 4.75rem);
+  line-height: 0.95;
+  letter-spacing: -0.04em;
+}
+
+.location-subtitle {
+  margin: 0;
+  line-height: 1.8;
+  color: #d4d4d4;
+  font-size: 1rem;
+}
+
+.location-container {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 3rem;
+  /* CHANGED: This forces both columns to share the exact same calculated height */
+  align-items: stretch; 
+}
+
+.location-map-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%; /* Spans full height of grid container row */
+  border-radius: 1.75rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.location-map-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+}
+
+.location-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centers layout nicely if you add elements later */
+}
+
+.location-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1.75rem;
+  transition: all 0.3s ease;
+  height: 100%; /* Ensures the card uses full available height block */
+}
+
+.location-card:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+  transform: translateY(-3px);
+}
+
+.location-card h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.location-detail {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.location-detail svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  margin-top: 0.25rem;
+  color: #f5f5f5;
+}
+
+.detail-label {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #aaa;
+  font-weight: 600;
+}
+
+.detail-value {
+  margin: 0.5rem 0 0 0;
+  color: #d4d4d4;
+  line-height: 1.6;
+}
+
+.location-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: auto; /* Pushes action block cleanly to bottom of matched height */
+}
+
+.location-distance-btn {
+  padding: 0.95rem 1.7rem;
+  border-radius: 999px;
+  border: 1px solid rgba(245, 245, 245, 0.18);
+  background: transparent;
+  color: #f5f5f5;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+}
+
+.location-distance-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.location-distance-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.distance-display {
+  padding: 1rem;
+  background: rgba(245, 245, 245, 0.08);
+  border-left: 2px solid #f5f5f5;
+  border-radius: 0.5rem;
+  animation: slideIn 0.3s ease;
+}
+
+.distance-text {
+  margin: 0;
+  color: #d4d4d4;
+  font-size: 0.95rem;
+}
+
+.distance-value {
+  color: #f5f5f5;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive adjustments for phones/tablets */
+@media (max-width: 960px) {
+  .location-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .location-map-wrapper {
+    min-height: 350px; /* Gives the map a default size when stacked vertically */
+  }
+}
 
 /* Master Site Footer Element */
 .site-footer {
@@ -568,7 +755,8 @@ button {
   .hero-section,
   .product-section,
   .contact-hero,
-  .contact-grid {
+  .contact-grid,
+  .location-container {
     grid-template-columns: 1fr;
   }
 
@@ -582,6 +770,10 @@ button {
   .footer-main {
     grid-template-columns: 1fr;
     gap: 2.5rem;
+  }
+
+  .location-map-wrapper {
+    min-height: 400px;
   }
 }
 
@@ -601,8 +793,23 @@ button {
   }
 
   .info-panel,
-  .contact-card {
+  .contact-card,
+  .location-card {
     padding: 1.5rem;
+  }
+
+  .location-map-wrapper {
+    min-height: 350px;
+  }
+
+  .location-actions {
+    gap: 0.75rem;
+  }
+
+  .location-distance-btn,
+  .button-outline {
+    font-size: 0.85rem;
+    padding: 0.85rem 1.4rem;
   }
 
   .footer-bottom {
