@@ -39,6 +39,7 @@ button {
   cursor: pointer;
 }
 
+/* Page Shell Layouts */
 .page-shell,
 .contact-shell {
   display: flex;
@@ -68,6 +69,7 @@ button {
   transform: translateY(0);
 }
 
+/* Headers & Navigation Elements */
 .site-header {
   display: flex;
   justify-content: space-between;
@@ -87,6 +89,7 @@ button {
   font-weight: 700;
 }
 
+/* Action Buttons & Interface Items */
 .appointment-link,
 .button,
 .button-outline,
@@ -120,6 +123,7 @@ button {
   transform: translateY(-1px);
 }
 
+/* Structure Layout Sections */
 .hero-section,
 .product-section,
 .artists-section,
@@ -183,6 +187,7 @@ button {
   position: relative;
 }
 
+/* Info Panels & Interface Containers */
 .info-panel {
   display: grid;
   gap: 1.2rem;
@@ -235,6 +240,7 @@ button {
   align-items: center;
 }
 
+/* Artists Profile Elements */
 .artists-section {
   padding-bottom: 4rem;
 }
@@ -300,6 +306,7 @@ button {
   color: #c7c7c7;
 }
 
+/* Forms & Contact Channels */
 .contact-hero {
   grid-template-columns: minmax(0, 1fr) minmax(280px, 1fr);
   align-items: center;
@@ -369,6 +376,7 @@ button {
   gap: 1rem;
 }
 
+/* Motion Dynamics / Transforms */
 .hero-section,
 .contact-hero,
 .contact-card,
@@ -385,6 +393,177 @@ button {
   transform: translateY(-3px);
 }
 
+/* Master Site Footer Element */
+.site-footer {
+  margin-top: 6rem;
+  padding-top: 4rem;
+  padding-bottom: 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.footer-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-description {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #aaa;
+}
+
+.footer-nav-group,
+.footer-social-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.footer-heading {
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #aaa;
+  font-weight: 600;
+}
+
+.footer-nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  color: #d4d4d4;
+}
+
+.footer-nav-links a {
+  transition: color 0.2s ease;
+}
+
+.footer-nav-links a:hover {
+  color: #fff;
+}
+
+/* Social Media Networks Setup */
+.social-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.social-link {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #f5f5f5;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+.social-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 6px 20px rgba(245, 245, 245, 0.1);
+}
+
+.social-icon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.social-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 2;
+}
+
+.link-indicator {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: -2px;
+  right: -2px;
+  background: #f5f5f5;
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0) rotate(-45deg);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.link-indicator svg {
+  width: 7px;
+  height: 7px;
+  color: #050505;
+  stroke-width: 2.5;
+}
+
+.social-link:hover .social-icon {
+  transform: scale(0.7) rotate(-45deg);
+}
+
+.social-link:hover .link-indicator {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* Lower Base Metadata Section */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.copyright-text {
+  margin: 0;
+}
+
+.footer-legal {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.footer-legal a {
+  transition: color 0.2s ease;
+}
+
+.footer-legal a:hover {
+  color: #aaa;
+}
+
+/* System Breakpoint Adaptations */
 @media (max-width: 960px) {
   .hero-section,
   .product-section,
@@ -398,6 +577,11 @@ button {
   .product-copy h2,
   .contact-hero h1 {
     font-size: clamp(2.5rem, 7vw, 3.75rem);
+  }
+
+  .footer-main {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
   }
 }
 
@@ -419,5 +603,11 @@ button {
   .info-panel,
   .contact-card {
     padding: 1.5rem;
+  }
+
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
 }

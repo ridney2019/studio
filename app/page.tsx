@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useTranslation } from "./hooks/useTranslation";
+import { SocialLinks } from "./components/SocialLinks";
 
 
 const artists = [
@@ -156,6 +157,9 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Social Media Links */}
+      <SocialLinks />
     </main>
   );
 }
