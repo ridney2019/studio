@@ -58,7 +58,6 @@ export const LocationMap = () => {
     }
   };
 
-  // FIXED: Changed `2{` to `${}` for proper evaluation
   const googleMapsUrl = `https://maps.google.com/maps?q=${STUDIO_LOCATION.lat},${STUDIO_LOCATION.lng}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 
   return (
@@ -77,7 +76,7 @@ export const LocationMap = () => {
           <iframe
             width="100%"
             loading="lazy"
-            allowFullScreen=""
+            allowFullScreen={true} // FIXED: Changed from "" to true to satisfy TypeScript types
             referrerPolicy="no-referrer-when-downgrade"
             src={googleMapsUrl}
             title="Google Map Location"
@@ -147,7 +146,6 @@ export const LocationMap = () => {
             </div>
 
             <div className="location-actions">
-              {/* FIXED: Changed `4{` to standard `${}` layout notation */}
               <a
                 href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
                   STUDIO_LOCATION.address + " " + STUDIO_LOCATION.city
