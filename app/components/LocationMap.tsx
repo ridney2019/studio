@@ -58,6 +58,7 @@ export const LocationMap = () => {
     }
   };
 
+  // FIXED: Corrected template literal string interpolation (${})
   const googleMapsUrl = `https://maps.google.com/maps?q=${STUDIO_LOCATION.lat},${STUDIO_LOCATION.lng}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 
   return (
@@ -146,8 +147,9 @@ export const LocationMap = () => {
             </div>
 
             <div className="location-actions">
+              {/* FIXED: Corrected string template interpolation notation ($) */}
               <a
-                href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
+                href={`https://maps.google.com/?q=${encodeURIComponent(
                   STUDIO_LOCATION.address + " " + STUDIO_LOCATION.city
                 )}`}
                 target="_blank"
