@@ -54,7 +54,7 @@ export const SocialLinks = () => {
     },
     {
       name: "Email",
-      url: "mailto:FFFF@studio-tattoo.com",
+      url: "mailto:nexostudiosltd@gmail.com",
       icon: (
         <svg
           viewBox="0 0 24 24"

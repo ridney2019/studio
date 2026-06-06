@@ -9,8 +9,8 @@ const STUDIO_LOCATION = {
   country: "Ireland",
   lat: 53.33951,
   lng: -6.2908,
-  phone: "01 123 4567",
-  email: "nexo@studio-tattoo.com",
+  phone: "353 83 330 0832",
+  email: "nexostudiosltd@gmail.com",
 };
 
 export const LocationMap = () => {

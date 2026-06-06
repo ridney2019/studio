@@ -1,10 +1,13 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 import { useTranslation } from "./hooks/useTranslation";
 import { SocialLinks } from "./components/SocialLinks";
 import { LocationMap } from "./components/LocationMap";
 
+import ScrollToTopButton from "./components/ScrollToTopButton";
+import FloatingSocials from "./components/FloatingSocials";
 
 const artists = [
   {
@@ -60,7 +63,7 @@ const contacts = [
   },
   {
     title: "CONTACT US",
-    lines: ["FFFF@studio-tattoo.com", "NUMBER"],
+    lines: ["nexostudiosltd@gmail.com"],
   },
 ];
 
@@ -70,101 +73,109 @@ export default function Home() {
   if (!isHydrated) return null;
 
   return (
-    <main className={`page-shell loaded`}>
-      <header className="site-header fade-section">
-        <div className="brand">NEXO STUDIO TATTOO</div>
-        <a className="appointment-link" href="/contact">
-          MAKE AN APPOINTMENT
-        </a>
-      </header>
+    <>
+      {/* 1. Main visual viewport layout container */}
+      <main className="page-shell loaded relative">
+        <header className="site-header fade-section">
+          <div className="brand">NEXO STUDIO TATTOO</div>
+          <a className="appointment-link" href="/contact">
+            MAKE AN APPOINTMENT
+          </a>
+        </header>
 
-      {/* Hero Section */}
-      <section className="hero-section fade-section">
-        <div className="hero-copy">
-          <p className="eyebrow">STUDIO</p>
-          <h1>{t('tagline')}</h1>
-          <p className="hero-description">{t('description')}</p>
-          <div className="hero-actions">
-            <a className="button" href="/contact">
-              BOOK NOW
-            </a>
-            <a className="button-outline" href="">
-              SHOP STORE
+        {/* Hero Section */}
+        <section className="hero-section fade-section">
+          <div className="hero-copy">
+            <p className="eyebrow">STUDIO</p>
+            <h1>{t("tagline")}</h1>
+            <p className="hero-description">{t("description")}</p>
+            <div className="hero-actions">
+              <a className="button" href="/contact">
+                BOOK NOW
+              </a>
+              <a className="button-outline" href="">
+                SHOP STORE
+              </a>
+            </div>
+          </div>
+
+          {/* Contact Info Sidebar */}
+          <aside className="hero-side">
+            <div className="info-panel">
+              {contacts.map((block) => (
+                <div key={block.title} className="info-block">
+                  <h2>{block.title}</h2>
+                  {block.lines.map((line) => (
+                    <p key={line}>{line}</p>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </aside>
+        </section>
+
+        {/* Aftercare Section */}
+        <section className="product-section fade-section">
+          <div className="product-copy">
+            <p className="eyebrow">MARKET PLACE</p>
+            <h2>Gentle care for fresh ink</h2>
+            <p>
+              Shop a tattoo aftercare line that keeps your new work vibrant and protected while it heals.
+            </p>
+          </div>
+          <div className="product-action">
+            <a className="button button-outline" href="">
+              SHOP NOW
             </a>
           </div>
-        </div>
+        </section>
 
-        {/* Contact Info Sidebar */}
-        <aside className="hero-side">
-          <div className="info-panel">
-            {contacts.map((block) => (
-              <div key={block.title} className="info-block">
-                <h2>{block.title}</h2>
-                {block.lines.map((line) => (
-                  <p key={line}>{line}</p>
-                ))}
-              </div>
+        {/* Artists Section */}
+        <section id="about" className="artists-section fade-section">
+          <div className="section-header">
+            <p className="eyebrow">ARTISTS</p>
+            <h2>{t("artists")}</h2>
+          </div>
+          <div className="artist-grid">
+            {artists.map((artist, index) => (
+              <article
+                key={artist.name}
+                className="artist-card"
+                style={{ transitionDelay: `${index * 75}ms` }}
+              >
+                <div className="artist-image">
+                  <Image
+                    src={artist.image}
+                    alt={artist.name}
+                    width={800}
+                    height={800}
+                    className="artist-photo"
+                  />
+                </div>
+                <div className="artist-copy">
+                  <h3>{artist.name}</h3>
+                  <p>{artist.description}</p>
+                  <a className="view-gallery" href="/contact">
+                    BOOK AN APPOINTMENT
+                  </a>
+                </div>
+              </article>
             ))}
           </div>
-        </aside>
-      </section>
+        </section>
 
-      {/* Aftercare Section */}
-      <section className="product-section fade-section">
-        <div className="product-copy">
-          <p className="eyebrow">MARKET PLACE</p>
-          <h2>Gentle care for fresh ink</h2>
-          <p>
-            Shop a tattoo aftercare line that keeps your new work vibrant and protected while it heals.
-          </p>
-        </div>
-        <div className="product-action">
-          <a className="button button-outline" href="">
-            SHOP NOW
-          </a>
-        </div>
-      </section>
+        {/* Location Section */}
+        <LocationMap />
 
-      {/* Dynamic Translated Artists Section */}
-      <section id="about" className="artists-section fade-section">
-        <div className="section-header">
-          <p className="eyebrow">ARTISTS</p>
-          <h2>{t('artists')}</h2>
-        </div>
-        <div className="artist-grid">
-          {artists.map((artist, index) => (
-            <article
-              key={artist.name}
-              className="artist-card"
-              style={{ transitionDelay: `${index * 75}ms` }}
-            >
-              <div className="artist-image">
-                <Image
-                  src={artist.image}
-                  alt={artist.name}
-                  width={800}
-                  height={800}
-                  className="artist-photo"
-                />
-              </div>
-              <div className="artist-copy">
-                <h3>{artist.name}</h3>
-                <p>{artist.description}</p>
-                <a className="view-gallery" href="/contact">
-                  BOOK AN APPOINTMENT
-                </a>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
+        {/* Social Media Links Footer Section */}
+        <SocialLinks />
+      </main>
 
-      {/* Location Section */}
-      <LocationMap />
-
-      {/* Social Media Links */}
-      <SocialLinks />
-    </main>
+      {/* ========================================================= */}
+      {/* 2. FLOATING SYSTEM OVERLAYS (OUTSIDE OUTFLOW CONTAINER)    */}
+      {/* ========================================================= */}
+      <FloatingSocials />
+      <ScrollToTopButton />
+    </>
   );
 }
-
