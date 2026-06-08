@@ -4,7 +4,7 @@ export const SocialLinks = () => {
   const socialLinks = [
     {
       name: "Instagram",
-      url: "https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjm1c_BmfCUAxUBQUEAHS0FCckQFnoECBMQAQ&url=https%3A%2F%2Fwww.instagram.com%2Ffelipesantostattooartist%2F&usg=AOvVaw2lEXzggZKcNZlOmahYDu8m&opi=89978449",
+      url: "https://www.instagram.com/felipesantostattooartist/",
       icon: (
         <svg
           viewBox="0 0 24 24"
@@ -17,6 +17,57 @@ export const SocialLinks = () => {
           <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
           <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z"></path>
           <circle cx="17.5" cy="6.5" r="1.5"></circle>
+        </svg>
+      ),
+    },
+    {
+      name: "TikTok",
+      url: "https://www.tiktok.com", // Replace with your TikTok profile link if needed
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
+        </svg>
+      ),
+    },
+    {
+      name: "YouTube",
+      url: "https://www.youtube.com", // Replace with your YouTube channel link if needed
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
+          <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
+        </svg>
+      ),
+    },
+    {
+      name: "Pinterest",
+      url: "https://www.pinterest.com/nexostudiotattoo/",
+      icon: (
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <line x1="12" y1="8" x2="12" y2="22"></line>
+          <path d="M12 22c0 0 4.5-4.5 4.5-9a4.5 4.5 0 0 0-9 0c0 3.5 2.5 6 4.5 9z"></path>
+          <circle cx="12" cy="11" r="8"></circle>
         </svg>
       ),
     },
@@ -38,7 +89,7 @@ export const SocialLinks = () => {
     },
     {
       name: "WhatsApp",
-      url: "https://api.whatsapp.com/send/?phone=353831757502&text=Hello%21+I%27m+looking+to+get+a+new+tattoo%2C+how+can+I+get+a+quote%3F&type=phone_number&app_absent=0", // e.g., https://wa.me/1234567890
+      url: "https://api.whatsapp.com/send/?phone=353831757502&text=Hello%21+I%27m+looking+to+get+a+new+tattoo%2C+how+can+I+get+a+quote%3F&type=phone_number&app_absent=0",
       icon: (
         <svg
           viewBox="0 0 24 24"
@@ -84,16 +135,16 @@ export const SocialLinks = () => {
         <div className="footer-nav-group">
           <span className="footer-heading">Navigation</span>
           <ul className="footer-nav-links">
-            <li><a href="#home">Home</a></li>
+            <li><a href="./">Home</a></li>
             <li><a href="#gallery">Gallery</a></li>
             <li><a href="#artists">Artists</a></li>
-            <li><a href="#contact">Book Session</a></li>
+            <li><a href="./contact">Book Session</a></li>
           </ul>
         </div>
 
         {/* Social Links Container */}
         <div className="footer-social-group">
-          <span className="footer-heading">Connect</span>
+          <span className="footer-heading">Follow Us</span>
           <div className="social-links">
             {socialLinks.map((link) => (
               <a
@@ -116,7 +167,7 @@ export const SocialLinks = () => {
                     strokeLinejoin="round"
                     className="external-icon"
                   >
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2 2V8a2 2 0 0 1 2-2h6"></path>
                     <polyline points="15 3 21 3 21 9"></polyline>
                     <line x1="10" y1="14" x2="21" y2="3"></line>
                   </svg>

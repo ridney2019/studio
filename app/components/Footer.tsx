@@ -1,76 +1,7 @@
 import React from "react";
 
 export const Footer = () => {
-  const socialLinks = [
-    {
-      name: "Instagram",
-      url: "https://instagram.com",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37Z"></path>
-          <circle cx="17.5" cy="6.5" r="1.5"></circle>
-        </svg>
-      ),
-    },
-    {
-      name: "Facebook",
-      url: "https://facebook.com",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M18 2h-3a6 6 0 0 0-6 6v3H7v4h2v8h4v-8h3l1-4h-4V8a1 1 0 0 1 1-1h3z"></path>
-        </svg>
-      ),
-    },
-    {
-      name: "WhatsApp",
-      url: "https://wa.me/YOUR_PHONE_NUMBER", // e.g., https://wa.me/1234567890
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-        </svg>
-      ),
-    },
-    {
-      name: "Email",
-      url: "mailto:FFFF@studio-tattoo.com",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
-          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-        </svg>
-      ),
-    },
-  ];
-
+  
   return (
     <footer className="site-footer fade-section">
       <div className="footer-main">
@@ -93,7 +24,7 @@ export const Footer = () => {
 
         {/* Social Links Container */}
         <div className="footer-social-group">
-          <span className="footer-heading">Connect</span>
+          <span className="footer-heading">Follow Us</span>
           <div className="social-links">
             {socialLinks.map((link) => (
               <a
@@ -116,6 +47,7 @@ export const Footer = () => {
                     strokeLinejoin="round"
                     className="external-icon"
                   >
+                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2 2V8a2 2 0 0 1 2-2h6"></path>
                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                     <polyline points="15 3 21 3 21 9"></polyline>
                     <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -131,8 +63,8 @@ export const Footer = () => {
       <div className="footer-bottom">
         <p className="copyright-text">&copy; 2026 Ridney Silva. All rights reserved.</p>
         <div className="footer-legal">
-          <a href="#privacy">Privacy Policy</a>
-          <a href="#terms">Terms</a>
+          <a href="/privacy">Privacy Policy</a>
+          <a href="/terms">Terms</a>
         </div>
       </div>
     </footer>

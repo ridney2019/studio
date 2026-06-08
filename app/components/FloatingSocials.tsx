@@ -6,22 +6,16 @@ import { FaInstagram, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
 const FloatingSocials = () => {
   const buttons = [
     {
-      href: "https://wa.me/+3530831532243",
+      href: "https://api.whatsapp.com/send/?phone=353831757502&text=Hello%21+I%27m+looking+to+get+a+new+tattoo%2C+how+can+I+get+a+quote%3F&type=phone_number&app_absent=0",
       icon: <FaWhatsapp size={18} />,
       color: "#25D366",
       tooltip: "WhatsApp",
     },
     {
-      href: "https://instagram.com/ridney_silva",
+      href: "https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&ved=2ahUKEwjm1c_BmfCUAxUBQUEAHS0FCckQFnoECBMQAQ&url=https%3A%2F%2Fwww.instagram.com%2Ffelipesantostattooartist%2F&usg=AOvVaw2lEXzggZKcNZlOmahYDu8m&opi=89978449",
       icon: <FaInstagram size={18} />,
       color: "#E1306C",
       tooltip: "Instagram",
-    },
-    {
-      href: "https://ie.linkedin.com/in/ridney-silva",
-      icon: <FaLinkedinIn size={18} />,
-      color: "#0077B5",
-      tooltip: "LinkedIn",
     },
   ];
 

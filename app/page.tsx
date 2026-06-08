@@ -77,7 +77,7 @@ export default function Home() {
   return (
     <>
       {/* 1. Main visual viewport layout container */}
-      <main className="page-shell loaded relative">
+     <main id="home" className="page-shell loaded relative">
         <header className="site-header fade-section">
           <button 
             onClick={toggleTheme}
@@ -124,20 +124,7 @@ export default function Home() {
         </section>
 
         {/* Aftercare Section */}
-        <section className="product-section fade-section">
-          <div className="product-copy">
-            <p className="eyebrow">MARKET PLACE</p>
-            <h2>Gentle care for fresh ink</h2>
-            <p>
-              Shop a tattoo aftercare line that keeps your new work vibrant and protected while it heals.
-            </p>
-          </div>
-          <div className="product-action">
-            <a className="button button-outline" href="">
-              SHOP NOW
-            </a>
-          </div>
-        </section>
+     
 
         {/* Artists Section */}
         <section id="about" className="artists-section fade-section">
@@ -172,6 +159,48 @@ export default function Home() {
             ))}
           </div>
         </section>
+
+           
+      {/* Aftercare & Marketplace Section */}
+      <section className="product-section fade-section">
+        <div className="product-copy">
+          <p className="eyebrow">MARKETPLACE</p>
+          <h2>Gentle care for fresh ink</h2>
+          <p style={{ marginBottom: "1.5rem" }}>
+            Explore our curated studio marketplace to support your next project or maintain your current body art:
+          </p>
+          
+          <ul 
+            className="marketplace-list" 
+            style={{ 
+              listStyle: "none", 
+              padding: 0, 
+              margin: "0 0 2rem 0",
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.75rem"
+            }}
+          >
+            <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <span style={{ color: "var(--accent-color, #ffffff)" }}>✦</span>
+              <strong>Gift Cards</strong> – The perfect present for friend or family milestones.
+            </li>
+            <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <span style={{ color: "var(--accent-color, #ffffff)" }}>✦</span>
+              <strong>Flash Tattoos</strong> – Ready to ink designs directly from our resident artists.
+            </li>
+            <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <span style={{ color: "var(--accent-color, #ffffff)" }}>✦</span>
+              <strong>Tattoo Aftercare</strong> – Premium formulations to keep your new work vibrant and protected while it heals.
+            </li>
+          </ul>
+        </div>
+        <div className="product-action">
+          <a className="button button-outline" href="">
+            SHOP NOW
+          </a>
+        </div>
+      </section>
 
         {/* Location Section */}
         <LocationMap />
