@@ -34,6 +34,9 @@ const enTranslations = {
   closedMonday: 'Closed Monday',
   timeOpen: '11AM to 7PM',
   textPreferred: 'Text requests are preferred.',
+  privacy: 'Privacy Policy',
+  cookiePolicy: 'Cookie Policy',
+  cookieDescription: 'We use cookies to enhance your experience and analyze our traffic.',
 } as const;
 
 // 2. Derive the key structure from English
@@ -75,6 +78,9 @@ export const translations: Record<LanguageCode, Record<TranslationKey, string>> 
     closedMonday: 'Fechado segunda',
     timeOpen: '11h às 19h',
     textPreferred: 'Solicitações por mensagem de texto são preferidas.',
+    privacy: 'Política de Privacidade',
+    cookiePolicy: 'Política de Cookies',
+    cookieDescription: 'Usamos cookies para melhorar sua experiência e analisar nosso tráfego.',
   },
   es: {
     home: 'Inicio',
@@ -108,6 +114,9 @@ export const translations: Record<LanguageCode, Record<TranslationKey, string>> 
     textPreferred: 'Se prefieren solicitudes por mensaje de texto.',
     followUs: 'Síguenos',
     allRightsReserved: 'Todos los derechos reservados',
+    privacy: 'Política de Privacidad',
+    cookiePolicy: 'Política de Cookies',
+    cookieDescription: 'Utilizamos cookies para mejorar su experiencia y analizar nuestro tráfico.',
   },
   fr: {
     home: 'Accueil',
@@ -143,6 +152,9 @@ export const translations: Record<LanguageCode, Record<TranslationKey, string>> 
     closedMonday: 'Fermé le lundi',
     timeOpen: '11h à 19h',
     textPreferred: 'Les demandes par SMS sont préférées.',
+    privacy: 'Politique de Confidentialité',
+    cookiePolicy: 'Politique relative aux Cookies',
+    cookieDescription: 'Nous utilisons des cookies pour améliorer votre expérience et analyser notre trafic.',
   },
   de: {
     home: 'Startseite',
@@ -178,6 +190,9 @@ export const translations: Record<LanguageCode, Record<TranslationKey, string>> 
     closedMonday: 'Montag geschlossen',
     timeOpen: '11:00 bis 19:00 Uhr',
     textPreferred: 'SMS-Anfragen werden bevorzugt.',
+    privacy: 'Datenschutzrichtlinie',
+    cookiePolicy: 'Cookie-Richtlinie',
+    cookieDescription: 'Wir verwenden Cookies, um Ihr Erlebnis zu verbessern und unseren Traffic zu analysieren.',
   },
   it: {
     home: 'Home',
@@ -212,6 +227,9 @@ export const translations: Record<LanguageCode, Record<TranslationKey, string>> 
     closedMonday: 'Chiuso lunedì',
     timeOpen: '11:00 - 19:00',
     textPreferred: 'Le richieste per SMS sono preferite.',
+    privacy: 'Informativa sulla Privacy',
+    cookiePolicy: 'Informativa sui Cookie',
+    cookieDescription: 'Utilizziamo i cookie per migliorare la tua esperienza e analizzare il nostro traffico.',
   },
   ja: {
     home: 'ホーム',
@@ -245,6 +263,9 @@ export const translations: Record<LanguageCode, Record<TranslationKey, string>> 
     textPreferred: 'テキストメッセージでのリクエストをお勧めします。',
     followUs: 'フォロー',
     allRightsReserved: '著作権所有',
+    privacy: 'プライバシーポリシー',
+    cookiePolicy: 'クッキーポリシー',
+    cookieDescription: 'お客様の体験を向上させ、トラフィックを分析するためにクッキーを使用しています。',
   },
 };
 
