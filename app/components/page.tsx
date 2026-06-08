@@ -10,11 +10,10 @@ export default function TermsPage() {
   return (
     <main className="page-shell loaded">
       <section className="fade-section">
-        <p className="eyebrow">{t('legal')}</p>
-        <h1>{t('termsAndConditionsTitle')}</h1>
-        <p>{t('termsAndConditionsParagraph1')}</p>
-        <p>{t('termsAndConditionsParagraph2')}</p>
-        {/* Add more paragraphs and content as needed */}
+        <h1>LEGAL</h1>
+        <h2>Terms & Conditions</h2>
+        <p>Your paragraph 1 text here...</p>
+        <p>Your paragraph 2 text here...</p>
       </section>
     </main>
   );
