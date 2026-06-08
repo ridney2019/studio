@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ReactNode } from "react";
 import { LanguageProvider } from "./providers"; // Points directly to app/providers
 import { Header } from "./components/Header";
+import { CookieBanner } from "./components/CookieBanner";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -16,6 +17,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <LanguageProvider>
           <Header />
           {children}
+          <CookieBanner />
         </LanguageProvider>
       </body>
     </html>

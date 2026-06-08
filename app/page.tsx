@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { useTranslation } from "./hooks/useTranslation";
+import { useLanguage } from "./providers";
 import { SocialLinks } from "./components/SocialLinks";
 import { LocationMap } from "./components/LocationMap";
 
@@ -69,6 +70,7 @@ const contacts = [
 
 export default function Home() {
   const { t, isHydrated } = useTranslation();
+  const { theme, toggleTheme } = useLanguage();
 
   if (!isHydrated) return null;
 
@@ -77,6 +79,13 @@ export default function Home() {
       {/* 1. Main visual viewport layout container */}
       <main className="page-shell loaded relative">
         <header className="site-header fade-section">
+          <button 
+            onClick={toggleTheme}
+            className="accessibility-toggle"
+            aria-label="Toggle Accessibility Theme"
+          >
+            {theme === 'dark' ? '☀ LIGHT MODE' : '☾ DARK MODE'}
+          </button>
           <div className="brand">NEXO STUDIO TATTOO</div>
           <a className="appointment-link" href="/contact">
             MAKE AN APPOINTMENT

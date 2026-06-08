@@ -15,6 +15,8 @@ interface LanguageContextType {
   setLanguage: (lang: LanguageCode) => void;
   supportedLanguages: typeof SUPPORTED_LANGUAGES;
   isHydrated: boolean;
+  theme: 'dark' | 'light';
+  toggleTheme: () => void;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(
@@ -24,12 +26,19 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<LanguageCode>(DEFAULT_LANGUAGE);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
 
   // Initialize language on mount
   useEffect(() => {
     const saved = getSavedLanguage();
     const detected = getBrowserLanguage();
     const initial = saved || detected;
+    
+    const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.classList.toggle('light-theme', savedTheme === 'light');
+    }
     
     setLanguageState(initial);
     // Update HTML lang attribute
@@ -38,6 +47,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     }
     setIsHydrated(true);
   }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'dark' ? 'light' : 'dark';
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+    document.documentElement.classList.toggle('light-theme', newTheme === 'light');
+  };
 
   const setLanguage = (lang: LanguageCode) => {
     setLanguageState(lang);
@@ -56,6 +72,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         setLanguage,
         supportedLanguages: SUPPORTED_LANGUAGES,
         isHydrated,
+        theme,
+        toggleTheme,
       }}
     >
       {children}

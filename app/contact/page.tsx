@@ -12,14 +12,13 @@ export default function ContactPage() {
       <section className="contact-hero fade-section">
         <div>
           <p className="eyebrow">CONTACT</p>
-          <h1>{t('bookAppointment')}</h1>
+          <h2>{t('bookAppointment')}</h2>
           <p>
             {t('bookingDescription')}
           </p>
         </div>
         <div className="contact-details">
-          <p>nexo@studio-tattoo.com</p>
-          <p>NUMBER</p>
+          <p>nexostudiosltd@gmail.com</p>
           <p>101-103 Francis St, The Liberties, Dublin 8, D08 FHP9</p>
         </div>
       </section>
