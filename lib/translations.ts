@@ -37,6 +37,10 @@ const enTranslations = {
   privacy: 'Privacy Policy',
   cookiePolicy: 'Cookie Policy',
   cookieDescription: 'We use cookies to enhance your experience and analyze our traffic.',
+  accept: 'Accept',
+  decline: 'Decline',
+  studioEmail: 'nexostudiosltd@gmail.com',
+  studioAddress: '101-103 Francis St, The Liberties, Dublin 8, D08 FHP9, Ireland',
 } as const;
 
 // 2. Derive the key structure from English
@@ -81,6 +85,10 @@ export const translations: Record<LanguageCode, Record<TranslationKey, string>> 
     privacy: 'Política de Privacidade',
     cookiePolicy: 'Política de Cookies',
     cookieDescription: 'Usamos cookies para melhorar sua experiência e analisar nosso tráfego.',
+    accept: 'Aceitar',
+    decline: 'Recusar',
+    studioEmail: 'nexostudiosltd@gmail.com',
+    studioAddress: '101-103 Francis St, The Liberties, Dublin 8, D08 FHP9, Irlanda',
   },
   es: {
     home: 'Inicio',
@@ -117,6 +125,10 @@ export const translations: Record<LanguageCode, Record<TranslationKey, string>> 
     privacy: 'Política de Privacidad',
     cookiePolicy: 'Política de Cookies',
     cookieDescription: 'Utilizamos cookies para mejorar su experiencia y analizar nuestro tráfico.',
+    accept: 'Aceptar',
+    decline: 'Rechazar',
+    studioEmail: 'nexostudiosltd@gmail.com',
+    studioAddress: '101-103 Francis St, The Liberties, Dublin 8, D08 FHP9, Irlanda',
   },
   fr: {
     home: 'Accueil',
@@ -155,6 +167,10 @@ export const translations: Record<LanguageCode, Record<TranslationKey, string>> 
     privacy: 'Politique de Confidentialité',
     cookiePolicy: 'Politique relative aux Cookies',
     cookieDescription: 'Nous utilisons des cookies pour améliorer votre expérience et analyser notre trafic.',
+    accept: 'Accepter',
+    decline: 'Refuser',
+    studioEmail: 'nexostudiosltd@gmail.com',
+    studioAddress: '101-103 Francis St, The Liberties, Dublin 8, D08 FHP9, Irlande',
   },
   de: {
     home: 'Startseite',
@@ -193,6 +209,10 @@ export const translations: Record<LanguageCode, Record<TranslationKey, string>> 
     privacy: 'Datenschutzrichtlinie',
     cookiePolicy: 'Cookie-Richtlinie',
     cookieDescription: 'Wir verwenden Cookies, um Ihr Erlebnis zu verbessern und unseren Traffic zu analysieren.',
+    accept: 'Akzeptieren',
+    decline: 'Ablehnen',
+    studioEmail: 'nexostudiosltd@gmail.com',
+    studioAddress: '101-103 Francis St, The Liberties, Dublin 8, D08 FHP9, Irland',
   },
   it: {
     home: 'Home',
@@ -230,6 +250,10 @@ export const translations: Record<LanguageCode, Record<TranslationKey, string>> 
     privacy: 'Informativa sulla Privacy',
     cookiePolicy: 'Informativa sui Cookie',
     cookieDescription: 'Utilizziamo i cookie per migliorare la tua esperienza e analizzare il nostro traffico.',
+    accept: 'Accetta',
+    decline: 'Rifiuta',
+    studioEmail: 'nexostudiosltd@gmail.com',
+    studioAddress: '101-103 Francis St, The Liberties, Dublin 8, D08 FHP9, Irlanda',
   },
   ja: {
     home: 'ホーム',
@@ -266,6 +290,10 @@ export const translations: Record<LanguageCode, Record<TranslationKey, string>> 
     privacy: 'プライバシーポリシー',
     cookiePolicy: 'クッキーポリシー',
     cookieDescription: 'お客様の体験を向上させ、トラフィックを分析するためにクッキーを使用しています。',
+    accept: '同意する',
+    decline: '拒否',
+    studioEmail: 'nexostudiosltd@gmail.com',
+    studioAddress: '101-103 Francis St, The Liberties, Dublin 8, D08 FHP9, アイルランド',
   },
 };
 
