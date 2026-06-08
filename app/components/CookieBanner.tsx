@@ -29,11 +29,10 @@ export function CookieBanner() {
       <div className="cookie-banner">
         <div className="cookie-content">
           <div className="cookie-text">
-            <p className="eyebrow">Privacy</p>
-            <h3>Cookie Policy</h3>
+            <p className="eyebrow">{t('privacy')}</p>
+            <h3>{t('cookiePolicy')}</h3>
             <p>
-              We use cookies to enhance your experience and analyze our traffic. 
-              By clicking "Accept", you consent to our use of cookies.
+              {t('cookieDescription')}
             </p>
           </div>
           <div className="cookie-actions">
@@ -41,13 +40,13 @@ export function CookieBanner() {
               onClick={() => handleConsent("accepted")} 
               className="button"
             >
-              ACCEPT
+              {t('accept')}
             </button>
             <button 
               onClick={() => handleConsent("declined")} 
               className="button-outline"
             >
-              DECLINE
+              {t('decline')}
             </button>
           </div>
         </div>

@@ -18,8 +18,8 @@ export default function ContactPage() {
           </p>
         </div>
         <div className="contact-details">
-          <p>nexostudiosltd@gmail.com</p>
-          <p>101-103 Francis St, The Liberties, Dublin 8, D08 FHP9</p>
+          <p>{t('studioEmail')}</p>
+          <p>{t('studioAddress')}</p>
         </div>
       </section>
  
