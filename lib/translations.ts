@@ -32,7 +32,7 @@ const enTranslations = {
   hours: 'Hours',
   tuesdayToSunday: 'Tuesday - Sunday',
   closedMonday: 'Closed Monday',
-  timeOpen: '11AM to 7PM',
+  timeOpen: '11 AM to 7 PM',
   textPreferred: 'Text requests are preferred.',
   privacy: 'Privacy Policy',
   cookiePolicy: 'Cookie Policy',
