@@ -2,7 +2,7 @@
 
 :root {
   color-scheme: dark;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Twemoji Country Flags', 'Inter', system-ui, sans-serif;
   --bg-color: #050505;
   --text-primary: #f5f5f5;
   --text-secondary: #d4d4d4;
@@ -897,6 +897,11 @@ button {
 .cookie-actions {
   display: flex;
   gap: 1rem;
+}
+
+body, select, option, button {
+  /* Prepend the flag font to your layout typography rules */
+  font-family: "Twemoji Country Flags", inherit, sans-serif !important;
 }
 
 @keyframes slideUp {

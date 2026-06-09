@@ -10,6 +10,35 @@ import { LocationMap } from "./components/LocationMap";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import FloatingSocials from "./components/FloatingSocials";
 
+const languagesConfig = [
+  { code: 'english', name: 'English', label: 'EN', flag: '🇬🇧' },
+  { code: 'arabic', name: 'العربية', label: 'AR', flag: '🇦🇪' },
+  { code: 'azerbaijani', name: 'Azerbaijani', label: 'AZ', flag: '🇦🇿' },
+  { code: 'catalan', name: 'Català', label: 'CA', flag: '🇪🇸' },
+  { code: 'chinese', name: '中文', label: 'ZH', flag: '🇨🇳' },
+  { code: 'croatian', name: 'Hrvatski', label: 'HR', flag: '🇭🇷' },
+  { code: 'czech', name: 'Čeština', label: 'CZ', flag: '🇨🇿' },
+  { code: 'danish', name: 'Dansk', label: 'DA', flag: '🇩🇰' },
+  { code: 'dutch', name: 'Nederlands', label: 'NL', flag: '🇳🇱' },
+  { code: 'estonian', name: 'Estonian', label: 'ET', flag: '🇪🇪' },
+  { code: 'farsi', name: 'Persian', label: 'FA', flag: '🇮🇷' },
+  { code: 'french', name: 'Français', label: 'FR', flag: '🇫🇷' },
+  { code: 'german', name: 'Deutsch', label: 'DE', flag: '🇩🇪' },
+  { code: 'hebrew', name: 'עברית', label: 'HE', flag: '🇮🇱' },
+  { code: 'hungarian', name: 'Magyar', label: 'HU', flag: '🇭🇺' },
+  { code: 'italian', name: 'Italiano', label: 'IT', flag: '🇮🇹' },
+  { code: 'macedonian', name: 'Macedonian', label: 'MK', flag: '🇲🇰' },
+  { code: 'norwegian', name: 'Norwegian', label: 'NO', flag: '🇳🇴' },
+  { code: 'portuguese-br', name: 'Português (BR)', label: 'BR', flag: '🇧🇷' },
+  { code: 'portuguese-pt', name: 'Português (PT)', label: 'PT', flag: '🇵🇹' },
+  { code: 'romanian', name: 'Română', label: 'RO', flag: '🇷🇴' },
+  { code: 'russian', name: 'Русский', label: 'RU', flag: '🇷🇺' },
+  { code: 'spanish', name: 'Español', label: 'ES', flag: '🇪🇸' },
+  { code: 'swedish', name: 'Svenska', label: 'SV', flag: '🇸🇪' },
+  { code: 'turkish', name: 'Türkçe', label: 'TR', flag: '🇹🇷' },
+  { code: 'ukranian', name: 'Українська', label: 'UA', flag: '🇺🇦' },
+] as const;
+
 const artists = [
   {
     name: "FELIPE SANTOS BANG",
@@ -70,25 +99,110 @@ const contacts = [
 
 export default function Home() {
   const { t, isHydrated } = useTranslation();
-  const { theme, toggleTheme } = useLanguage();
+  const { theme, toggleTheme, language, setLanguage } = useLanguage();
 
   if (!isHydrated) return null;
+  
+  const currentLangConfig = languagesConfig.find(l => l.code === language) || languagesConfig[0];
 
   return (
     <>
-      {/* 1. Main visual viewport layout container */}
-     <main id="home" className="page-shell loaded relative">
-        <header className="site-header fade-section">
-          <button 
-            onClick={toggleTheme}
-            className="accessibility-toggle"
-            aria-label="Toggle Accessibility Theme"
-          >
-            {theme === 'dark' ? '☀ LIGHT MODE' : '☾ DARK MODE'}
-          </button>
-          <div className="brand">NEXO STUDIO TATTOO</div>
-          <a className="appointment-link" href="/contact">
-            MAKE AN APPOINTMENT
+      <main id="home" className="page-shell loaded relative">
+        {/* Adjusted Header: Custom positions matching your style */}
+        <header className="site-header fade-section" style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'flex-end', 
+          padding: '80px 4% 24px 4%',
+          minHeight: '160px'
+        }}>
+          
+          {/* Left Controls Container (Pushed Down and Aligned) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '4px' }}>
+            {/* Theme Toggle */}
+            <button 
+              onClick={toggleTheme}
+              className={`accessibility-toggle theme-${theme}`}
+              aria-label="Toggle Accessibility Theme"
+              style={{
+                background: 'transparent',
+                color: 'currentColor',
+                border: '1px solid currentColor',
+                padding: '0 16px',
+                fontFamily: 'inherit',
+                fontSize: '0.75rem',
+                letterSpacing: '0.1em',
+                cursor: 'pointer',
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+                height: '40px',
+                borderRadius: '20px'
+              }}
+            >
+              <span className="theme-icon">{theme === 'dark' ? '☀' : '☾'}</span>
+              <span className="theme-text">{theme === 'dark' ? 'LIGHT' : 'DARK'}</span>
+            </button>
+
+            {/* Custom Dropdown Component to resolve missing Windows Flag icons */}
+            <div className="custom-lang-selector" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+              <div style={{
+                position: 'absolute',
+                left: '14px',
+                pointerEvents: 'none',
+                fontSize: '0.95rem',
+                display: 'flex',
+                alignItems: 'center'
+              }}>
+                {currentLangConfig.flag}
+              </div>
+              <select
+                value={language || 'english'}
+                onChange={(e) => setLanguage(e.target.value as any)}
+                style={{
+                  background: 'transparent',
+                  color: 'currentColor',
+                  border: '1px solid currentColor',
+                  padding: '0 36px 0 42px',
+                  fontFamily: 'inherit',
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.1em',
+                  textTransform: 'uppercase',
+                  cursor: 'pointer',
+                  WebkitAppearance: 'none',
+                  MozAppearance: 'none',
+                  appearance: 'none',
+                  height: '40px',
+                  borderRadius: '20px'
+                }}
+              >
+                {languagesConfig.map((lang) => (
+                  <option key={lang.code} value={lang.code} style={{ background: '#0a0a0a', color: '#ffffff' }}>
+                    {lang.label} - {lang.name.toUpperCase()}
+                  </option>
+                ))}
+              </select>
+              <span style={{ position: 'absolute', right: '16px', pointerEvents: 'none', fontSize: '0.55rem' }}>▼</span>
+            </div>
+          </div>
+          
+          <div className="brand" style={{ paddingBottom: '12px', fontSize: '1.25rem', letterSpacing: '0.2em' }}>
+            NEXO STUDIO TATTOO
+          </div>
+          
+          <a className="appointment-link" href="/contact" style={{
+            background: '#ffffff',
+            color: '#000000',
+            padding: '12px 28px',
+            borderRadius: '24px',
+            fontWeight: '700',
+            fontSize: '0.75rem',
+            letterSpacing: '0.05em',
+            textDecoration: 'none',
+            marginBottom: '4px'
+          }}>
+            {t("booking").toUpperCase()}
           </a>
         </header>
 
@@ -100,7 +214,7 @@ export default function Home() {
             <p className="hero-description">{t("description")}</p>
             <div className="hero-actions">
               <a className="button" href="/contact">
-                BOOK NOW
+                {t("booking").toUpperCase()}
               </a>
               <a className="button-outline" href="">
                 SHOP STORE
@@ -122,9 +236,6 @@ export default function Home() {
             </div>
           </aside>
         </section>
-
-        {/* Aftercare Section */}
-     
 
         {/* Artists Section */}
         <section id="about" className="artists-section fade-section">
@@ -152,7 +263,7 @@ export default function Home() {
                   <h3>{artist.name}</h3>
                   <p>{artist.description}</p>
                   <a className="view-gallery" href="/contact">
-                    BOOK AN APPOINTMENT
+                    {t("bookAppointment").toUpperCase()}
                   </a>
                 </div>
               </article>
@@ -160,58 +271,51 @@ export default function Home() {
           </div>
         </section>
 
-           
-      {/* Aftercare & Marketplace Section */}
-      <section className="product-section fade-section">
-        <div className="product-copy">
-          <p className="eyebrow">MARKETPLACE</p>
-          <h2>Gentle care for fresh ink</h2>
-          <p style={{ marginBottom: "1.5rem" }}>
-            Explore our curated studio marketplace to support your next project or maintain your current body art:
-          </p>
-          
-          <ul 
-            className="marketplace-list" 
-            style={{ 
-              listStyle: "none", 
-              padding: 0, 
-              margin: "0 0 2rem 0",
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.75rem"
-            }}
-          >
-            <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: "var(--accent-color, #ffffff)" }}>✦</span>
-              <strong>Gift Cards</strong> – The perfect present for friend or family milestones.
-            </li>
-            <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: "var(--accent-color, #ffffff)" }}>✦</span>
-              <strong>Flash Tattoos</strong> – Ready to ink designs directly from our resident artists.
-            </li>
-            <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ color: "var(--accent-color, #ffffff)" }}>✦</span>
-              <strong>Tattoo Aftercare</strong> – Premium formulations to keep your new work vibrant and protected while it heals.
-            </li>
-          </ul>
-        </div>
-        <div className="product-action">
-          <a className="button button-outline" href="">
-            SHOP NOW
-          </a>
-        </div>
-      </section>
+        {/* Aftercare & Marketplace Section */}
+        <section className="product-section fade-section">
+          <div className="product-copy">
+            <p className="eyebrow">MARKETPLACE</p>
+            <h2>Gentle care for fresh ink</h2>
+            <p style={{ marginBottom: "1.5rem" }}>
+              Explore our curated studio marketplace to support your next project or maintain your current body art:
+            </p>
+            
+            <ul 
+              className="marketplace-list" 
+              style={{ 
+                listStyle: "none", 
+                padding: 0, 
+                margin: "0 0 2rem 0",
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.75rem"
+              }}
+            >
+              <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span style={{ color: "var(--accent-color, #ffffff)" }}>✦</span>
+                <strong>Gift Cards</strong> – The perfect present for friend or family milestones.
+              </li>
+              <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span style={{ color: "var(--accent-color, #ffffff)" }}>✦</span>
+                <strong>Flash Tattoos</strong> – Ready to ink designs directly from our resident artists.
+              </li>
+              <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+                <span style={{ color: "var(--accent-color, #ffffff)" }}>✦</span>
+                <strong>Tattoo Aftercare</strong> – Premium formulations to keep your new work vibrant and protected while it heals.
+              </li>
+            </ul>
+          </div>
+          <div className="product-action">
+            <a className="button button-outline" href="">
+              SHOP NOW
+            </a>
+          </div>
+        </section>
 
-        {/* Location Section */}
         <LocationMap />
-
-        {/* Social Media Links Footer Section */}
         <SocialLinks />
       </main>
 
-      {/* ========================================================= */}
-      {/* 2. FLOATING SYSTEM OVERLAYS (OUTSIDE OUTFLOW CONTAINER)    */}
-      {/* ========================================================= */}
       <FloatingSocials />
       <ScrollToTopButton />
     </>
