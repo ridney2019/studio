@@ -45,48 +45,40 @@ const artists = [
   {
     name: "FELIPE SANTOS BANG",
     image: "/artists/felipe-santos.jpg",
-    image: "/artists/bang-bang.svg",
     descKey: "artistFelipeDesc" as TranslationKey,
   },
   {
     name: "CARLA MORALES",
-    image: "/artists/carla-morales.jpg",
     image: "/artists/jay-shin.svg",
     descKey: "artistCarlaDesc" as TranslationKey,
   },
   {
     name: "ZACK",
-    image: "/artists/zack.jpg",
     image: "/artists/zee.svg",
     descKey: "artistZackDesc" as TranslationKey,
   },
   {
     name: "VICTORIA",
-    image: "/artists/victoria.jpg",
     image: "/artists/pawel.svg",
     descKey: "artistVictoriaDesc" as TranslationKey,
   },
   {
     name: "OWEN",
-    image: "/artists/owen.jpg",
     image: "/artists/solar.svg",
     descKey: "artistOwenDesc" as TranslationKey,
   },
   {
     name: "CONOR",
-    image: "/artists/conor.jpg",
     image: "/artists/adrian.svg",
     descKey: "artistConorDesc" as TranslationKey,
   },
   {
     name: "SARAH MORGAN",
-    image: "/artists/sarah-morgan.jpg",
     image: "/artists/sara-kori.svg",
     descKey: "artistSarahDesc" as TranslationKey,
   },
   {
     name: "ELIAS SILVA",
-    image: "/artists/elias-silva.jpg",
     image: "/artists/victor.svg",
     descKey: "artistEliasDesc" as TranslationKey,
   },
