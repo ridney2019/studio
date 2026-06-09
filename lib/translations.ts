@@ -1235,5 +1235,5 @@ export const getTranslation = (
   lang: LanguageCode,
   key: TranslationKey
 ): string => {
-  return translations[lang]?.[key] || translations['english'][key];
+  return translations[lang]?.[key] || enTranslations[key];
 };

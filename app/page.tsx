@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Image from "next/image";
 import { useTranslation } from "./hooks/useTranslation";
 import { TranslationKey } from "../lib/translations";
+import { LanguageCode } from "../lib/languages";
 import { useLanguage } from "./providers";
 import { SocialLinks } from "./components/SocialLinks";
 import { LocationMap } from "./components/LocationMap";
@@ -160,7 +161,7 @@ export default function Home() {
               </div>
               <select
                 value={language || 'english'}
-                onChange={(e) => setLanguage(e.target.value as any)}
+                onChange={(e) => setLanguage(e.target.value as LanguageCode)}
                 style={{
                   background: 'transparent',
                   color: 'currentColor',
