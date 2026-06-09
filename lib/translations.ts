@@ -72,7 +72,7 @@ const enTranslations = {
 
 export type TranslationKey = keyof typeof enTranslations;
 
-export const translations: Record<LanguageCode, Record<TranslationKey, string>> = {
+export const translations: Record<LanguageCode, Partial<Record<TranslationKey, string>>> = {
   english: enTranslations,
 
   arabic: {
