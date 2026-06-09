@@ -374,8 +374,6 @@ export const translations: Record<LanguageCode, Record<TranslationKey, string>> 
     studioAddress: '101-103 Francis St, The Liberties, Dublin 8, D08 FHP9, Ireland',
   },
 
-  english: enTranslations,
-
   estonian: {
     home: 'Avaleht',
     about: 'Meist',
