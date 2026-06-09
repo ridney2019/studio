@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 import Image from "next/image";
-import { useTranslation, TranslationKey } from "./hooks/useTranslation";
+import { useTranslation } from "./hooks/useTranslation";
+import { TranslationKey } from "../lib/translations";
 import { useLanguage } from "./providers";
 import { SocialLinks } from "./components/SocialLinks";
 import { LocationMap } from "./components/LocationMap";
