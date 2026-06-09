@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useTranslation } from "./hooks/useTranslation";
 import { TranslationKey } from "../lib/translations";
@@ -44,41 +44,49 @@ const languagesConfig = [
 const artists = [
   {
     name: "FELIPE SANTOS BANG",
+    image: "/artists/felipe-santos.jpg",
     image: "/artists/bang-bang.svg",
     descKey: "artistFelipeDesc" as TranslationKey,
   },
   {
     name: "CARLA MORALES",
+    image: "/artists/carla-morales.jpg",
     image: "/artists/jay-shin.svg",
     descKey: "artistCarlaDesc" as TranslationKey,
   },
   {
     name: "ZACK",
+    image: "/artists/zack.jpg",
     image: "/artists/zee.svg",
     descKey: "artistZackDesc" as TranslationKey,
   },
   {
     name: "VICTORIA",
+    image: "/artists/victoria.jpg",
     image: "/artists/pawel.svg",
     descKey: "artistVictoriaDesc" as TranslationKey,
   },
   {
     name: "OWEN",
+    image: "/artists/owen.jpg",
     image: "/artists/solar.svg",
     descKey: "artistOwenDesc" as TranslationKey,
   },
   {
     name: "CONOR",
+    image: "/artists/conor.jpg",
     image: "/artists/adrian.svg",
     descKey: "artistConorDesc" as TranslationKey,
   },
   {
     name: "SARAH MORGAN",
+    image: "/artists/sarah-morgan.jpg",
     image: "/artists/sara-kori.svg",
     descKey: "artistSarahDesc" as TranslationKey,
   },
   {
     name: "ELIAS SILVA",
+    image: "/artists/elias-silva.jpg",
     image: "/artists/victor.svg",
     descKey: "artistEliasDesc" as TranslationKey,
   },
@@ -102,6 +110,16 @@ const contacts = [
 export default function Home() {
   const { t, isHydrated } = useTranslation();
   const { theme, toggleTheme, language, setLanguage } = useLanguage();
+
+  const [currentArtistIndex, setCurrentArtistIndex] = useState(0);
+
+  const nextArtist = () => {
+    setCurrentArtistIndex((prev) => (prev + 1) % artists.length);
+  };
+
+  const prevArtist = () => {
+    setCurrentArtistIndex((prev) => (prev - 1 + artists.length) % artists.length);
+  };
 
   if (!isHydrated) return null;
   
@@ -245,31 +263,90 @@ export default function Home() {
             <p className="eyebrow">ARTISTS</p>
             <h2>{t("artists")}</h2>
           </div>
-          <div className="artist-grid">
-            {artists.map((artist, index) => (
-              <article
-                key={artist.name}
-                className="artist-card"
-                style={{ transitionDelay: `${index * 75}ms` }}
-              >
-                <div className="artist-image">
-                  <Image
-                    src={artist.image}
-                    alt={artist.name}
-                    width={800}
-                    height={800}
-                    className="artist-photo"
-                  />
+          
+          <div className="carousel-container" style={{ position: 'relative', overflow: 'hidden' }}>
+            <div 
+              className="artist-carousel-track" 
+              style={{ 
+                display: 'flex', 
+                transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                transform: `translateX(-${currentArtistIndex * 100}%)`
+              }}
+            >
+              {artists.map((artist) => (
+                <div 
+                  key={artist.name} 
+                  style={{ 
+                    minWidth: '100%', 
+                    padding: '0 20px',
+                    boxSizing: 'border-box'
+                  }}
+                >
+                  <article className="artist-card" style={{ maxWidth: '800px', margin: '0 auto' }}>
+                    <div className="artist-image">
+                      <Image
+                        src={artist.image}
+                        alt={artist.name}
+                        width={800}
+                        height={800}
+                        className="artist-photo"
+                      />
+                    </div>
+                    <div className="artist-copy" style={{ textAlign: 'center' }}>
+                      <h3>{artist.name}</h3>
+                      <p>{t(artist.descKey)}</p>
+                      <a className="view-gallery" href="/contact">
+                        {t("bookAppointment").toUpperCase()}
+                      </a>
+                    </div>
+                  </article>
                 </div>
-                <div className="artist-copy">
-                  <h3>{artist.name}</h3>
-                  <p>{t(artist.descKey)}</p>
-                  <a className="view-gallery" href="/contact">
-                    {t("bookAppointment").toUpperCase()}
-                  </a>
-                </div>
-              </article>
-            ))}
+              ))}
+            </div>
+
+            {/* Controls */}
+            <button 
+              onClick={prevArtist}
+              className="carousel-control prev"
+              aria-label="Previous artist"
+              style={{
+                position: 'absolute', left: '0', top: '40%', transform: 'translateY(-50%)',
+                background: 'rgba(255,255,255,0.05)', border: '1px solid currentColor', color: 'currentColor',
+                width: '44px', height: '44px', borderRadius: '50%', cursor: 'pointer', zIndex: 10,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem'
+              }}
+            >
+              ←
+            </button>
+            <button 
+              onClick={nextArtist}
+              className="carousel-control next"
+              aria-label="Next artist"
+              style={{
+                position: 'absolute', right: '0', top: '40%', transform: 'translateY(-50%)',
+                background: 'rgba(255,255,255,0.05)', border: '1px solid currentColor', color: 'currentColor',
+                width: '44px', height: '44px', borderRadius: '50%', cursor: 'pointer', zIndex: 10,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem'
+              }}
+            >
+              →
+            </button>
+
+            {/* Indicators */}
+            <div className="carousel-indicators" style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '40px' }}>
+              {artists.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentArtistIndex(i)}
+                  style={{
+                    width: '8px', height: '8px', borderRadius: '50%', border: 'none',
+                    background: i === currentArtistIndex ? 'currentColor' : 'rgba(128,128,128,0.3)',
+                    cursor: 'pointer', padding: 0, transition: 'all 0.3s ease'
+                  }}
+                  aria-label={`Go to artist ${i + 1}`}
+                />
+              ))}
+            </div>
           </div>
         </section>
 
