@@ -1032,7 +1032,7 @@ export const translations: Record<LanguageCode, Record<TranslationKey, string>> 
     studioAddress: '101-103 Francis St, The Liberties, Dublin 8, D08 FHP9, Ireland',
   },
 
-  ukranian: {
+  ukrainian: {
     home: 'Головна',
     about: 'Про нас',
     contact: 'Контакти',

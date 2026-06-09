@@ -3,7 +3,7 @@ export type LanguageCode =
   | 'czech' | 'danish' | 'dutch' | 'english' | 'estonian'
   | 'farsi' | 'french' | 'german' | 'hebrew' | 'hungarian'
   | 'italian' | 'macedonian' | 'norwegian' | 'portuguese-br' | 'portuguese-pt'
-  | 'romanian' | 'russian' | 'spanish' | 'swedish' | 'turkish' | 'ukranian';
+  | 'romanian' | 'russian' | 'spanish' | 'swedish' | 'turkish' | 'ukrainian';
 
 export const DEFAULT_LANGUAGE: LanguageCode = 'english';
 
@@ -33,7 +33,7 @@ export const SUPPORTED_LANGUAGES: Record<LanguageCode, { name: string; flag: str
   spanish: { name: 'Español', flag: '🇪🇸' },
   swedish: { name: 'Svenska', flag: '🇸🇪' },
   turkish: { name: 'Türkçe', flag: '🇹🇷' },
-  ukranian: { name: 'Українська', flag: '🇺🇦' }
+  ukrainian: { name: 'Українська', flag: '🇺🇦' }
 };
 
 export function getBrowserLanguage(): LanguageCode {
@@ -45,7 +45,7 @@ export function getBrowserLanguage(): LanguageCode {
     cs: 'czech', da: 'danish', nl: 'dutch', en: 'english', et: 'estonian',
     fa: 'farsi', fr: 'french', de: 'german', he: 'hebrew', hu: 'hungarian',
     it: 'italian', mk: 'macedonian', no: 'norwegian', ro: 'romanian', ru: 'russian',
-    es: 'spanish', sv: 'swedish', tr: 'turkish', uk: 'ukranian'
+    es: 'spanish', sv: 'swedish', tr: 'turkish', uk: 'ukrainian'
   };
 
   if (navLang === 'pt') {
