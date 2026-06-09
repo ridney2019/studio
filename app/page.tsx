@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import Image from "next/image";
-import { useTranslation } from "./hooks/useTranslation";
+import { useTranslation, TranslationKey } from "./hooks/useTranslation";
 import { useLanguage } from "./providers";
 import { SocialLinks } from "./components/SocialLinks";
 import { LocationMap } from "./components/LocationMap";
@@ -36,49 +36,49 @@ const languagesConfig = [
   { code: 'spanish', name: 'Español', label: 'ES', flag: '🇪🇸' },
   { code: 'swedish', name: 'Svenska', label: 'SV', flag: '🇸🇪' },
   { code: 'turkish', name: 'Türkçe', label: 'TR', flag: '🇹🇷' },
-  { code: 'ukranian', name: 'Українська', label: 'UA', flag: '🇺🇦' },
+  { code: 'ukrainian', name: 'Українська', label: 'UA', flag: '🇺🇦' },
 ] as const;
 
 const artists = [
   {
     name: "FELIPE SANTOS BANG",
     image: "/artists/bang-bang.svg",
-    description: "Owner/operator FELIPE SANTOS NEXO is named by 'CONCEPTION?' as the most famous tattoo artist in the world.",
+    descKey: "artistFelipeDesc" as TranslationKey,
   },
   {
     name: "CARLA MORALES",
     image: "/artists/jay-shin.svg",
-    description: "Specializes in illustrative color, fine line and single needle tattoo work.",
+    descKey: "artistCarlaDesc" as TranslationKey,
   },
   {
     name: "ZACK",
     image: "/artists/zee.svg",
-    description: "Specializes in black and gray realism and fine line. Flowers, texture, and portrait detail define his work.",
+    descKey: "artistZackDesc" as TranslationKey,
   },
   {
     name: "VICTORIA",
     image: "/artists/pawel.svg",
-    description: "Black and gray hyper realism with baroque light and sculptural detail.",
+    descKey: "artistVictoriaDesc" as TranslationKey,
   },
   {
     name: "OWEN",
     image: "/artists/solar.svg",
-    description: "Illustrative color and ornamental art inspired by antique jewels, royal artifacts, and modern decorative detail.",
+    descKey: "artistOwenDesc" as TranslationKey,
   },
   {
     name: "CONOR",
     image: "/artists/adrian.svg",
-    description: "Watercolor and illustrative color tattoos with space, galaxy and dreamlike themes.",
+    descKey: "artistConorDesc" as TranslationKey,
   },
   {
     name: "SARAH MORGAN",
     image: "/artists/sara-kori.svg",
-    description: "Fine line technique celebrating strength, individuality, and emotional power.",
+    descKey: "artistSarahDesc" as TranslationKey,
   },
   {
     name: "ELIAS SILVA",
     image: "/artists/victor.svg",
-    description: "Blackwork, fineline, geometric realism, and cyberpunk-inspired tattoo artistry.",
+    descKey: "artistEliasDesc" as TranslationKey,
   },
 ];
 
@@ -261,7 +261,7 @@ export default function Home() {
                 </div>
                 <div className="artist-copy">
                   <h3>{artist.name}</h3>
-                  <p>{artist.description}</p>
+                  <p>{t(artist.descKey)}</p>
                   <a className="view-gallery" href="/contact">
                     {t("bookAppointment").toUpperCase()}
                   </a>
@@ -274,10 +274,10 @@ export default function Home() {
         {/* Aftercare & Marketplace Section */}
         <section className="product-section fade-section">
           <div className="product-copy">
-            <p className="eyebrow">MARKETPLACE</p>
-            <h2>Gentle care for fresh ink</h2>
+            <p className="eyebrow">{t('marketplace')}</p>
+            <h2>{t('aftercareTitle')}</h2>
             <p style={{ marginBottom: "1.5rem" }}>
-              Explore our curated studio marketplace to support your next project or maintain your current body art:
+              {t('aftercareDescription')}
             </p>
             
             <ul 
@@ -293,21 +293,21 @@ export default function Home() {
             >
               <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                 <span style={{ color: "var(--accent-color, #ffffff)" }}>✦</span>
-                <strong>Gift Cards</strong> – The perfect present for friend or family milestones.
+                {t('giftCards')}
               </li>
               <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                 <span style={{ color: "var(--accent-color, #ffffff)" }}>✦</span>
-                <strong>Flash Tattoos</strong> – Ready to ink designs directly from our resident artists.
+                {t('flashTattoos')}
               </li>
               <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
                 <span style={{ color: "var(--accent-color, #ffffff)" }}>✦</span>
-                <strong>Tattoo Aftercare</strong> – Premium formulations to keep your new work vibrant and protected while it heals.
+                {t('aftercareProduct')}
               </li>
             </ul>
           </div>
           <div className="product-action">
             <a className="button button-outline" href="">
-              SHOP NOW
+              {t('shopNow')}
             </a>
           </div>
         </section>

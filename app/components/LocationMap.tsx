@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslation } from "../hooks/useTranslation";
 
 const STUDIO_LOCATION = {
   name: "NEXO STUDIO TATTOO",
@@ -16,6 +17,7 @@ const STUDIO_LOCATION = {
 export const LocationMap = () => {
   const [distance, setDistance] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: number) => {
     const R = 6371; // Earth's radius in km
@@ -63,10 +65,10 @@ export const LocationMap = () => {
   return (
     <section className="location-section fade-section">
       <div className="location-header">
-        <p className="eyebrow">VISIT US</p>
-        <h2>Find Our Studio</h2>
+        <p className="eyebrow">{t('visitUs')}</p>
+        <h2>{t('findOurStudio')}</h2>
         <p className="location-subtitle">
-          Located in the heart of Dublin's Liberties, step into NEXO STUDIO TATTOO
+          {t('locationSubtitle')}
         </p>
       </div>
 
@@ -101,7 +103,7 @@ export const LocationMap = () => {
                 <circle cx="12" cy="10" r="3"></circle>
               </svg>
               <div>
-                <p className="detail-label">ADDRESS</p>
+                <p className="detail-label">{t('addressLabel')}</p>
                 <p className="detail-value">
                   {STUDIO_LOCATION.address}
                   <br />
@@ -122,7 +124,7 @@ export const LocationMap = () => {
                 <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
               </svg>
               <div>
-                <p className="detail-label">PHONE</p>
+                <p className="detail-label">{t('phoneLabel')}</p>
                 <p className="detail-value">{STUDIO_LOCATION.phone}</p>
               </div>
             </div>
@@ -140,7 +142,7 @@ export const LocationMap = () => {
                 <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
               </svg>
               <div>
-                <p className="detail-label">EMAIL</p>
+                <p className="detail-label">{t('emailLabel')}</p>
                 <p className="detail-value">{STUDIO_LOCATION.email}</p>
               </div>
             </div>
@@ -154,7 +156,7 @@ export const LocationMap = () => {
                 rel="noopener noreferrer"
                 className="button-outline"
               >
-                GET DIRECTIONS
+                {t('getDirections')}
               </a>
 
               <button
@@ -162,14 +164,14 @@ export const LocationMap = () => {
                 className="location-distance-btn"
                 disabled={isLoading}
               >
-                {isLoading ? "GETTING LOCATION..." : "SHOW DISTANCE"}
+                {isLoading ? t('gettingLocation') : t('showDistance')}
               </button>
             </div>
 
             {distance !== null && (
               <div className="distance-display">
                 <p className="distance-text">
-                  You are <span className="distance-value">{distance} km</span> away
+                  {t('distanceAway')} <span className="distance-value">{distance} {t('distanceKm')}</span>
                 </p>
               </div>
             )}
