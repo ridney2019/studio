@@ -43,43 +43,43 @@ const languagesConfig = [
 
 const artists = [
   {
-    name: "FELIPE SANTOS BANG",
+    name: "FELIPE SANTOS",
     image: "/artists/felipe-santos.jpg",
     descKey: "artistFelipeDesc" as TranslationKey,
   },
   {
     name: "CARLA MORALES",
-    image: "/artists/jay-shin.svg",
+    image: "/artists/carla-morales.jpg",
     descKey: "artistCarlaDesc" as TranslationKey,
   },
   {
     name: "ZACK",
-    image: "/artists/zee.svg",
+    image: "/artists/zack.jpg",
     descKey: "artistZackDesc" as TranslationKey,
   },
   {
     name: "VICTORIA",
-    image: "/artists/pawel.svg",
+    image: "/artists/victoria.jpg",
     descKey: "artistVictoriaDesc" as TranslationKey,
   },
   {
     name: "OWEN",
-    image: "/artists/solar.svg",
+    image: "/artists/owen.jpg",
     descKey: "artistOwenDesc" as TranslationKey,
   },
   {
     name: "CONOR",
-    image: "/artists/adrian.svg",
+    image: "/artists/conor.jpg",
     descKey: "artistConorDesc" as TranslationKey,
   },
   {
     name: "SARAH MORGAN",
-    image: "/artists/sara-kori.svg",
+    image: "/artists/sarah-morgan.jpg",
     descKey: "artistSarahDesc" as TranslationKey,
   },
   {
     name: "ELIAS SILVA",
-    image: "/artists/victor.svg",
+    image: "/artists/elias-silva.jpg",
     descKey: "artistEliasDesc" as TranslationKey,
   },
 ];
