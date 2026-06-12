@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { useTranslation } from "./hooks/useTranslation";
 import { TranslationKey } from "../lib/translations";
 import { LanguageCode, SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from "../lib/languages"; 
@@ -10,6 +11,32 @@ import { SocialLinks } from "./components/SocialLinks";
 import { LocationMap } from "./components/LocationMap";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import FloatingSocials from "./components/FloatingSocials";
+
+// Custom Tattoo Icons for the Marketplace and UI
+const Icons = {
+  Machine: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2v8M9 6h6M8 10h8l-2 12H10l-2-12zM12 15v3" />
+      <path d="M7 10c0-3 2-5 5-5s5 2 5 5" />
+    </svg>
+  ),
+  Ink: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2s-5 3-5 8c0 2.8 2.2 5 5 5s5-2.2 5-5c0-5-5-8-5-8z" />
+      <path d="M7 10c0-1.5 1-3 1-3" />
+      <path d="M12 15v5M9 22h6" />
+    </svg>
+  ),
+  Gift: () => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="8" width="18" height="12" rx="2" />
+      <path d="M12 20V8M3 12h18M12 8c-2-2-5-2-5 2 0 3 5 3 5 3s5 0 5-3c0-4-3-4-5-2z" />
+    </svg>
+  ),
+  Menu: () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+  )
+};
 
 const artists = [
   {
@@ -101,7 +128,7 @@ export default function Home() {
   return (
     <>
       <main id="home" className="page-shell loaded relative">
-        <header className="site-header fade-section" style={{ 
+        <header style={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
           alignItems: 'flex-end', 
@@ -182,7 +209,9 @@ export default function Home() {
           {/* Central Brand and Navigation */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
             <div className="brand" style={{ fontSize: '1.25rem', letterSpacing: '0.2em' }}>
-              <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>NEXO STUDIO TATTOO</a>
+              <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                NEXO STUDIO TATTOO
+              </Link>
             </div>
             <nav style={{ position: 'relative' }} ref={menuRef}>
               <button 
@@ -205,7 +234,7 @@ export default function Home() {
                   fontWeight: 'bold'
                 }}
               >
-                {t("menu") || "MENU"} 
+                <Icons.Menu /> {t("menu" as TranslationKey) || "MENU"} 
                 <span style={{ 
                   fontSize: '0.6rem', 
                   transition: 'transform 0.3s ease', 
@@ -230,13 +259,13 @@ export default function Home() {
                 }}>
                   <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column' }}>
                     <li>
-                      <a href="/" onClick={() => setIsMenuOpen(false)} style={{ display: 'block', padding: '12px 24px', textDecoration: 'none', color: 'inherit', fontSize: '0.75rem', letterSpacing: '0.1em', fontWeight: 'bold' }}>{t("home").toUpperCase()}</a>
+                      <Link href="/" onClick={() => setIsMenuOpen(false)} style={{ display: 'block', padding: '12px 24px', textDecoration: 'none', color: 'inherit', fontSize: '0.75rem', letterSpacing: '0.1em', fontWeight: 'bold' }}>{t("home").toUpperCase()}</Link>
                     </li>
                     <li>
-                      <a href="/#artists" onClick={() => setIsMenuOpen(false)} style={{ display: 'block', padding: '12px 24px', textDecoration: 'none', color: 'inherit', fontSize: '0.75rem', letterSpacing: '0.1em', fontWeight: 'bold' }}>{t("artists").toUpperCase()}</a>
+                      <Link href="/#artists" onClick={() => setIsMenuOpen(false)} style={{ display: 'block', padding: '12px 24px', textDecoration: 'none', color: 'inherit', fontSize: '0.75rem', letterSpacing: '0.1em', fontWeight: 'bold' }}>{t("artists").toUpperCase()}</Link>
                     </li>
                     <li>
-                      <a href="/blog" onClick={() => setIsMenuOpen(false)} style={{ display: 'block', padding: '12px 24px', textDecoration: 'none', color: 'inherit', fontSize: '0.75rem', letterSpacing: '0.1em', fontWeight: 'bold' }}>{(t("blog") || "blog").toUpperCase()}</a>
+                      <Link href="/blog" onClick={() => setIsMenuOpen(false)} style={{ display: 'block', padding: '12px 24px', textDecoration: 'none', color: 'inherit', fontSize: '0.75rem', letterSpacing: '0.1em', fontWeight: 'bold' }}>{(t("blog") || "blog").toUpperCase()}</Link>
                     </li>
                   </ul>
                 </div>
@@ -245,7 +274,7 @@ export default function Home() {
           </div>
           
           {/* Right Appointment Link */}
-          <a className="appointment-link" href="/contact" style={{
+          <Link className="appointment-link" href="/contact" style={{
             background: '#ffffff',
             color: '#000000',
             padding: '12px 28px',
@@ -257,7 +286,7 @@ export default function Home() {
             marginBottom: '4px'
           }}>
             {t("booking").toUpperCase()}
-          </a>
+          </Link>
           <div style={{ width: '100px' }}></div>
         </header>
 
@@ -268,14 +297,14 @@ export default function Home() {
             <h1>{t("tagline")}</h1>
             <p className="hero-description">{t("description")}</p>
             <div className="hero-actions">
-              <a className="button" href="/contact">
+              <Link className="button" href="/contact">
                 {t("booking").toUpperCase()}
-              </a>
-              <a className="button-outline" href="">
+              </Link>
+              <Link className="button-outline" href="/shop">
                 SHOP STORE
-              </a>
+              </Link>
             </div>
-          </div> {/* 👈 FIXED: Added missing closing div tag for hero-copy right here */}
+          </div> 
 
           {/* Contact Info Sidebar */}
           <aside className="hero-side">
@@ -330,9 +359,9 @@ export default function Home() {
                     <div className="artist-copy" style={{ textAlign: 'center' }}>
                       <h3>{artist.name}</h3>
                       <p>{t(artist.descKey)}</p>
-                      <a className="view-gallery" href="/contact">
+                      <Link className="view-gallery" href="/contact">
                         {t("bookAppointment").toUpperCase()}
-                      </a>
+                      </Link>
                     </div>
                   </article>
                 </div>
@@ -385,6 +414,8 @@ export default function Home() {
           </div>
         </section>
 
+        <LocationMap />
+
         {/* Aftercare & Marketplace Section */}
         <section className="product-section fade-section">
           <div className="product-copy">
@@ -405,28 +436,26 @@ export default function Home() {
                 gap: "0.75rem"
               }}
             >
-              <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span style={{ color: "var(--accent-color, #ffffff)" }}>✦</span>
+              <li style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <Icons.Gift />
                 {t('giftCards')}
               </li>
-              <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span style={{ color: "var(--accent-color, #ffffff)" }}>✦</span>
+              <li style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <Icons.Machine />
                 {t('flashTattoos')}
               </li>
-              <li style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                <span style={{ color: "var(--accent-color, #ffffff)" }}>✦</span>
+              <li style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                <Icons.Ink />
                 {t('aftercareProduct')}
               </li>
             </ul>
           </div>
           <div className="product-action">
-            <a className="button button-outline" href="">
+            <Link className="button button-outline" href="/shop">
               {t('shopNow')}
-            </a>
+            </Link>
           </div>
         </section>
-
-        <LocationMap />
         <SocialLinks />
       </main>
 
