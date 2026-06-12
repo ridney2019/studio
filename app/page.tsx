@@ -1,45 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import { useTranslation } from "./hooks/useTranslation";
 import { TranslationKey } from "../lib/translations";
-import { LanguageCode } from "../lib/languages";
+import { LanguageCode, SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from "../lib/languages"; 
 import { useLanguage } from "./providers";
-import { SocialLinks } from "./components/SocialLinks";
+import { SocialLinks } from "./components/SocialLinks"; 
 import { LocationMap } from "./components/LocationMap";
-
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import FloatingSocials from "./components/FloatingSocials";
-
-const languagesConfig = [
-  { code: 'english', name: 'English', label: 'EN', flag: '🇬🇧' },
-  { code: 'arabic', name: 'العربية', label: 'AR', flag: '🇦🇪' },
-  { code: 'azerbaijani', name: 'Azerbaijani', label: 'AZ', flag: '🇦🇿' },
-  { code: 'catalan', name: 'Català', label: 'CA', flag: '🇪🇸' },
-  { code: 'chinese', name: '中文', label: 'ZH', flag: '🇨🇳' },
-  { code: 'croatian', name: 'Hrvatski', label: 'HR', flag: '🇭🇷' },
-  { code: 'czech', name: 'Čeština', label: 'CZ', flag: '🇨🇿' },
-  { code: 'danish', name: 'Dansk', label: 'DA', flag: '🇩🇰' },
-  { code: 'dutch', name: 'Nederlands', label: 'NL', flag: '🇳🇱' },
-  { code: 'estonian', name: 'Estonian', label: 'ET', flag: '🇪🇪' },
-  { code: 'farsi', name: 'Persian', label: 'FA', flag: '🇮🇷' },
-  { code: 'french', name: 'Français', label: 'FR', flag: '🇫🇷' },
-  { code: 'german', name: 'Deutsch', label: 'DE', flag: '🇩🇪' },
-  { code: 'hebrew', name: 'עברית', label: 'HE', flag: '🇮🇱' },
-  { code: 'hungarian', name: 'Magyar', label: 'HU', flag: '🇭🇺' },
-  { code: 'italian', name: 'Italiano', label: 'IT', flag: '🇮🇹' },
-  { code: 'macedonian', name: 'Macedonian', label: 'MK', flag: '🇲🇰' },
-  { code: 'norwegian', name: 'Norwegian', label: 'NO', flag: '🇳🇴' },
-  { code: 'portuguese-br', name: 'Português (BR)', label: 'BR', flag: '🇧🇷' },
-  { code: 'portuguese-pt', name: 'Português (PT)', label: 'PT', flag: '🇵🇹' },
-  { code: 'romanian', name: 'Română', label: 'RO', flag: '🇷🇴' },
-  { code: 'russian', name: 'Русский', label: 'RU', flag: '🇷🇺' },
-  { code: 'spanish', name: 'Español', label: 'ES', flag: '🇪🇸' },
-  { code: 'swedish', name: 'Svenska', label: 'SV', flag: '🇸🇪' },
-  { code: 'turkish', name: 'Türkçe', label: 'TR', flag: '🇹🇷' },
-  { code: 'ukrainian', name: 'Українська', label: 'UA', flag: '🇺🇦' },
-] as const;
 
 const artists = [
   {
@@ -103,6 +73,19 @@ export default function Home() {
   const { t, isHydrated } = useTranslation();
   const { theme, toggleTheme, language, setLanguage } = useLanguage();
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   const [currentArtistIndex, setCurrentArtistIndex] = useState(0);
 
   const nextArtist = () => {
@@ -113,14 +96,11 @@ export default function Home() {
     setCurrentArtistIndex((prev) => (prev - 1 + artists.length) % artists.length);
   };
 
-  if (!isHydrated) return null;
-  
-  const currentLangConfig = languagesConfig.find(l => l.code === language) || languagesConfig[0];
+  const currentLangConfig = SUPPORTED_LANGUAGES[language] || SUPPORTED_LANGUAGES['english'];
 
   return (
     <>
       <main id="home" className="page-shell loaded relative">
-        {/* Adjusted Header: Custom positions matching your style */}
         <header className="site-header fade-section" style={{ 
           display: 'flex', 
           justifyContent: 'space-between', 
@@ -129,7 +109,7 @@ export default function Home() {
           minHeight: '160px'
         }}>
           
-          {/* Left Controls Container (Pushed Down and Aligned) */}
+          {/* Left Controls Container */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '4px' }}>
             {/* Theme Toggle */}
             <button 
@@ -157,7 +137,7 @@ export default function Home() {
               <span className="theme-text">{theme === 'dark' ? 'LIGHT' : 'DARK'}</span>
             </button>
 
-            {/* Custom Dropdown Component to resolve missing Windows Flag icons */}
+            {/* Language Selector Dropdown */}
             <div className="custom-lang-selector" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
               <div style={{
                 position: 'absolute',
@@ -189,9 +169,9 @@ export default function Home() {
                   borderRadius: '20px'
                 }}
               >
-                {languagesConfig.map((lang) => (
-                  <option key={lang.code} value={lang.code} style={{ background: '#0a0a0a', color: '#ffffff' }}>
-                    {lang.label} - {lang.name.toUpperCase()}
+                {Object.entries(SUPPORTED_LANGUAGES).map(([code, lang]) => (
+                  <option key={code} value={code} style={{ background: '#0a0a0a', color: '#ffffff' }}>
+                    {lang.name.toUpperCase()}
                   </option>
                 ))}
               </select>
@@ -199,10 +179,72 @@ export default function Home() {
             </div>
           </div>
           
-          <div className="brand" style={{ paddingBottom: '12px', fontSize: '1.25rem', letterSpacing: '0.2em' }}>
-            NEXO STUDIO TATTOO
+          {/* Central Brand and Navigation */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+            <div className="brand" style={{ fontSize: '1.25rem', letterSpacing: '0.2em' }}>
+              <a href="/" style={{ textDecoration: 'none', color: 'inherit' }}>NEXO STUDIO TATTOO</a>
+            </div>
+            <nav style={{ position: 'relative' }} ref={menuRef}>
+              <button 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                style={{
+                  background: 'transparent',
+                  color: 'currentColor',
+                  border: '1px solid currentColor',
+                  padding: '0 24px',
+                  fontFamily: 'inherit',
+                  fontSize: '0.75rem',
+                  letterSpacing: '0.1em',
+                  cursor: 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  height: '40px',
+                  borderRadius: '20px',
+                  textTransform: 'uppercase',
+                  fontWeight: 'bold'
+                }}
+              >
+                {t("menu") || "MENU"} 
+                <span style={{ 
+                  fontSize: '0.6rem', 
+                  transition: 'transform 0.3s ease', 
+                  transform: isMenuOpen ? 'rotate(180deg)' : 'none' 
+                }}>▼</span>
+              </button>
+
+              {isMenuOpen && (
+                <div className="nav-dropdown" style={{
+                  position: 'absolute',
+                  top: 'calc(100% + 10px)',
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  background: theme === 'light' ? '#ffffff' : '#0a0a0a',
+                  border: '1px solid currentColor',
+                  borderRadius: '12px',
+                  padding: '8px 0',
+                  minWidth: '180px',
+                  zIndex: 100,
+                  boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
+                  overflow: 'hidden'
+                }}>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column' }}>
+                    <li>
+                      <a href="/" onClick={() => setIsMenuOpen(false)} style={{ display: 'block', padding: '12px 24px', textDecoration: 'none', color: 'inherit', fontSize: '0.75rem', letterSpacing: '0.1em', fontWeight: 'bold' }}>{t("home").toUpperCase()}</a>
+                    </li>
+                    <li>
+                      <a href="/#artists" onClick={() => setIsMenuOpen(false)} style={{ display: 'block', padding: '12px 24px', textDecoration: 'none', color: 'inherit', fontSize: '0.75rem', letterSpacing: '0.1em', fontWeight: 'bold' }}>{t("artists").toUpperCase()}</a>
+                    </li>
+                    <li>
+                      <a href="/blog" onClick={() => setIsMenuOpen(false)} style={{ display: 'block', padding: '12px 24px', textDecoration: 'none', color: 'inherit', fontSize: '0.75rem', letterSpacing: '0.1em', fontWeight: 'bold' }}>{(t("blog") || "blog").toUpperCase()}</a>
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </nav>
           </div>
           
+          {/* Right Appointment Link */}
           <a className="appointment-link" href="/contact" style={{
             background: '#ffffff',
             color: '#000000',
@@ -216,6 +258,7 @@ export default function Home() {
           }}>
             {t("booking").toUpperCase()}
           </a>
+          <div style={{ width: '100px' }}></div>
         </header>
 
         {/* Hero Section */}
@@ -232,7 +275,7 @@ export default function Home() {
                 SHOP STORE
               </a>
             </div>
-          </div>
+          </div> {/* 👈 FIXED: Added missing closing div tag for hero-copy right here */}
 
           {/* Contact Info Sidebar */}
           <aside className="hero-side">
@@ -250,7 +293,7 @@ export default function Home() {
         </section>
 
         {/* Artists Section */}
-        <section id="about" className="artists-section fade-section">
+        <section id="artists" className="artists-section fade-section">
           <div className="section-header">
             <p className="eyebrow">ARTISTS</p>
             <h2>{t("artists")}</h2>

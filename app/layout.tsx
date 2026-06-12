@@ -1,28 +1,20 @@
-"use client";
-
-import { ReactNode, useEffect } from "react";
-import { LanguageProvider } from "./providers"; 
-import { CookieBanner } from "./components/CookieBanner";
-import { polyfillCountryFlagEmojis } from "country-flag-emoji-polyfill";
+import { ReactNode } from "react";
+import { ClientProviders } from "./ClientProviders";
+import type { Metadata } from "next";
 import "./globals.css";
 
-export default function RootLayout({ children }: { children: ReactNode }) {
-  // Automatically fix missing Windows country flags on system render
-  useEffect(() => {
-    polyfillCountryFlagEmojis();
-  }, []);
+export const metadata: Metadata = {
+  title: "NEXO Studio Tattoo",
+  description: "Tattoo studio in Dublin, Ireland.",
+};
 
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
-      <head>
-        <title>NEXO Studio Tattoo</title>
-        <meta name="description" content="Tattoo studio in Dublin, Ireland." />
-      </head>
       <body>
-        <LanguageProvider>
+        <ClientProviders>
           {children}
-          <CookieBanner />
-        </LanguageProvider>
+        </ClientProviders>
       </body>
     </html>
   );
