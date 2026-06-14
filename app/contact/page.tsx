@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTranslation } from "@/app/hooks/useTranslation";
 import { useLanguage } from "@/app/providers";
 import { SocialLinks } from "@/app/components/SocialLinks";
@@ -14,6 +14,13 @@ export default function ContactPage() {
   // State Management for Form Submission & Popup Overlays
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+
+  // Grid entrance animation state
+  const [animateGrid, setAnimateGrid] = useState(false);
+
+  useEffect(() => {
+    setAnimateGrid(true);
+  }, []);
 
   // Field Validation Error States
   const [errors, setErrors] = useState({
@@ -137,6 +144,12 @@ export default function ContactPage() {
 
         {/* Booking Options Grid Section */}
         <section className="booking-options-section fade-section" style={{ padding: "0 2rem 4rem 2rem" }}>
+          <style dangerouslySetInnerHTML={{ __html: `
+            @keyframes floatingIcon {
+              0%, 100% { transform: translateY(0); }
+              50% { transform: translateY(-6px); }
+            }
+          `}} />
           <div 
             style={{ 
               display: "grid", 
@@ -147,8 +160,20 @@ export default function ContactPage() {
             }}
           >
             {/* 01: Brand Activations */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ 
+              display: "flex", 
+              flexDirection: "column", 
+              gap: "0.75rem",
+              opacity: animateGrid ? 1 : 0,
+              transform: animateGrid ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'opacity 0.8s ease 0.1s, transform 0.8s ease 0.1s'
+            }}>
+              <div style={{ 
+                display: "flex", 
+                justifyContent: "space-between", 
+                alignItems: "center",
+                animation: 'floatingIcon 4s ease-in-out infinite'
+              }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M12 2L2 12l10 10 10-10L12 2z"/>
                   <path d="M12 6l6 6-6 6-6-6 6-6z" opacity="0.5"/>
@@ -162,8 +187,20 @@ export default function ContactPage() {
             </div>
 
             {/* 02: Walk-Ins */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ 
+              display: "flex", 
+              flexDirection: "column", 
+              gap: "0.75rem",
+              opacity: animateGrid ? 1 : 0,
+              transform: animateGrid ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s'
+            }}>
+              <div style={{ 
+                display: "flex", 
+                justifyContent: "space-between", 
+                alignItems: "center",
+                animation: 'floatingIcon 4s ease-in-out infinite 0.5s'
+              }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="10" />
                   <polyline points="12 6 12 12 16 14" />
@@ -177,8 +214,20 @@ export default function ContactPage() {
             </div>
 
             {/* 03: Group Sessions */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ 
+              display: "flex", 
+              flexDirection: "column", 
+              gap: "0.75rem",
+              opacity: animateGrid ? 1 : 0,
+              transform: animateGrid ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s'
+            }}>
+              <div style={{ 
+                display: "flex", 
+                justifyContent: "space-between", 
+                alignItems: "center",
+                animation: 'floatingIcon 4s ease-in-out infinite 1s'
+              }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                   <circle cx="9" cy="7" r="4" />
@@ -194,8 +243,20 @@ export default function ContactPage() {
             </div>
 
             {/* 04: Matching Tattoos */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div style={{ 
+              display: "flex", 
+              flexDirection: "column", 
+              gap: "0.75rem",
+              opacity: animateGrid ? 1 : 0,
+              transform: animateGrid ? 'translateY(0)' : 'translateY(20px)',
+              transition: 'opacity 0.8s ease 0.4s, transform 0.8s ease 0.4s'
+            }}>
+              <div style={{ 
+                display: "flex", 
+                justifyContent: "space-between", 
+                alignItems: "center",
+                animation: 'floatingIcon 4s ease-in-out infinite 1.5s'
+              }}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M4.5 16.5c-1.5-1.5-2.5-3.5-2.5-4.5s1-3 2.5-4.5 3.5-1.5 4.5 0l6 6c1 1.5 3 1.5 4.5 0s2.5-3.5 2.5-4.5-1-3-2.5-4.5-3.5-1.5-4.5 0l-6 6" />
                 </svg>
@@ -255,7 +316,7 @@ export default function ContactPage() {
             <div className="info-block">
               <h3>Booking</h3>
               <p>{t('textPreferred')}</p>
-              <p>nexo@studio-tattoo.com</p>
+              <p>nexostudiosltd@gmail.com</p>
             </div>
           </div>
         </section>
