@@ -130,14 +130,15 @@ export default function Home() {
       <main id="home" className="page-shell loaded relative">
         <header style={{ 
           display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'flex-end', 
-          padding: '80px 4% 24px 4%',
-          minHeight: '160px'
+          flexWrap: 'wrap',
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          padding: '40px 4% 20px 4%',
+          gap: '1.5rem'
         }}>
           
           {/* Left Controls Container */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
             {/* Theme Toggle */}
             <button 
               onClick={toggleTheme}
@@ -282,12 +283,10 @@ export default function Home() {
             fontWeight: '700',
             fontSize: '0.75rem',
             letterSpacing: '0.05em',
-            textDecoration: 'none',
-            marginBottom: '4px'
+            textDecoration: 'none'
           }}>
             {t("booking").toUpperCase()}
           </Link>
-          <div style={{ width: '100px' }}></div>
         </header>
 
         {/* Hero Section */}
