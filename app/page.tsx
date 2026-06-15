@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "./hooks/useTranslation";
@@ -8,6 +8,7 @@ import { TranslationKey } from "../lib/translations";
 import { LanguageCode, SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from "../lib/languages"; 
 import { useLanguage } from "./providers";
 import { SocialLinks } from "./components/SocialLinks"; 
+import { motion } from "framer-motion";
 import { LocationMap } from "./components/LocationMap";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import FloatingSocials from "./components/FloatingSocials";
@@ -36,6 +37,41 @@ const Icons = {
   Menu: () => (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
   )
+};
+
+const InkBlot = ({ variant = 1, style }: { variant?: 1 | 2 | 3; style?: React.CSSProperties }) => {
+  const paths = [
+    "M47.7,-76.4C60.1,-70.2,68.2,-55.1,74.4,-40.4C80.7,-25.7,85.1,-11.3,83.9,2.8C82.7,16.8,75.8,30.5,66.4,42.4C56.9,54.3,44.9,64.4,31.4,70.9C17.9,77.4,2.9,80.3,-12.3,78.8C-27.5,77.2,-42.9,71.2,-55.5,61.4C-68.1,51.6,-77.9,38,-82.1,23.3C-86.4,8.5,-85.1,-7.4,-80.1,-21.5C-75.1,-35.6,-66.4,-47.9,-55.1,-55.1C-43.8,-62.3,-30,-64.3,-17.8,-70.5C-5.6,-76.7,5.1,-87,21.5,-86.3C37.9,-85.6,41.3,-82.6,47.7,-76.4Z",
+    "M39.9,-68.2C50.2,-61.1,56.1,-46.6,62.8,-33.1C69.5,-19.6,77.1,-7.1,78.4,6.4C79.7,19.9,74.7,34.5,66,46.7C57.4,58.9,45,68.7,31.4,73.1C17.8,77.5,2.9,76.5,-11.1,74.3C-25.1,72.1,-38.3,68.7,-49.4,61.1C-60.5,53.5,-69.6,41.7,-74.6,28.6C-79.6,15.5,-80.6,1.1,-78.3,-12.6C-76,-26.3,-70.4,-39.3,-60.9,-46.8C-51.4,-54.3,-38,-56.3,-26.6,-62.9C-15.3,-69.5,-5.9,-80.8,5.1,-88.7C16.1,-96.6,29.5,-75.3,39.9,-68.2Z",
+    "M41.4,-72.1C53.3,-65.4,62.5,-52.8,70.1,-39.5C77.7,-26.2,83.7,-12.1,84.6,2.2C85.5,16.5,81.3,31,73.1,43.2C64.9,55.4,52.7,65.3,39.1,72.4C25.5,79.5,10.5,83.8,-4.2,91C-18.9,98.2,-33.3,108.3,-45.5,106.1C-57.7,103.9,-67.7,89.4,-75.3,74.6C-82.9,59.8,-88.1,44.7,-91.1,29.7C-94.1,14.7,-94.9,-0.2,-91.4,-14.2C-87.9,-28.2,-80.1,-41.3,-69.4,-49.2C-58.7,-57.1,-45.1,-59.8,-33,-66.3C-20.9,-72.8,-10.4,-83.1,2.8,-88.1C16.1,-93.1,32.2,-92.8,41.4,-72.1Z"
+  ];
+
+  return (
+    <motion.svg 
+      viewBox="0 0 200 200" 
+      xmlns="http://www.w3.org/2000/svg" 
+      style={{ 
+        position: 'absolute', 
+        zIndex: -1,
+        pointerEvents: 'none',
+        opacity: 0.15,
+        filter: 'blur(60px)',
+        color: 'var(--accent-color, #f39c12)',
+        ...style 
+      }}
+      animate={{
+        scale: [1, 1.1, 0.95, 1],
+        rotate: [0, 5, -5, 0],
+      }}
+      transition={{
+        duration: 20 + variant * 5,
+        repeat: Infinity,
+        ease: "easeInOut"
+      }}
+    >
+      <path fill="currentColor" d={paths[variant - 1]} transform="translate(100 100)" />
+    </motion.svg>
+  );
 };
 
 const artists = [
@@ -100,8 +136,90 @@ export default function Home() {
   const { t, isHydrated } = useTranslation();
   const { theme, toggleTheme, language, setLanguage } = useLanguage();
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false); // Keep this state for menu
+  const snapContainerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [activeSection, setActiveSection] = useState(0);
+
+  // Framer Motion variants for title animation
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.03, // Adjust stagger time as needed
+      },
+    },
+  };
+
+  const characterVariants = {
+    hidden: { opacity: 0, y: "100%" },
+    visible: { opacity: 1, y: "0%", transition: { ease: [0.16, 1, 0.3, 1], duration: 0.8 } },
+  };
+
+  // Memoize the split tagline to avoid re-splitting on every render
+  const splitTagline = useMemo(() => {
+    if (!isHydrated) return [];
+    const taglineText = t("tagline");
+    // Split by character, preserving spaces with a non-breaking space entity
+    return taglineText.split("").map(char => (char === " " ? "\u00A0" : char));
+  }, [t, isHydrated]);
+
+  useEffect(() => {
+    const container = snapContainerRef.current;
+    if (!container) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-active");
+          }
+        });
+      },
+      { threshold: 0.5 }
+    );
+
+    const sections = container.querySelectorAll('.snap-section, .location-section');
+    sections.forEach((section) => observer.observe(section));
+
+    return () => observer.disconnect();
+  }, [isHydrated]);
+
+  useEffect(() => {
+    const container = snapContainerRef.current;
+    if (!container || window.innerWidth < 1024) return;
+
+    const handleScroll = () => {
+      const sections = container.querySelectorAll('.snap-section, .location-section');
+      sections.forEach((section: any) => {
+        const rect = section.getBoundingClientRect();
+        // The speed multiplier (0.4 means the background moves at 40% scroll speed)
+        const speed = 0.4;
+        const yOffset = rect.top * speed;
+        section.style.setProperty('--parallax-offset', `${yOffset}px`);
+
+        // Calculate scale effect: scale from 0.95 to 1.0
+        const viewportHeight = window.innerHeight;
+        // currentOffset is the absolute distance from the viewport center
+        // We want scale to be 1 when rect.top is 0 (section is centered)
+        // and minScale when rect.top is at the top/bottom edge of the viewport
+        const minScale = 0.95;
+        const maxScale = 1.0;
+        
+        // Normalize currentOffset to a 0-1 range, where 0 is centered and 1 is at viewport edge
+        let normalizedOffset = Math.abs(rect.top) / viewportHeight;
+        if (normalizedOffset > 1) normalizedOffset = 1; // Clamp to 1 if completely out of view
+
+        const scaleValue = maxScale - (normalizedOffset * (maxScale - minScale));
+        section.style.setProperty('--parallax-scale', `${scaleValue}`);
+      });
+    };
+
+    container.addEventListener('scroll', handleScroll);
+    handleScroll(); // Initial position
+    return () => container.removeEventListener('scroll', handleScroll);
+  }, [isHydrated]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -128,17 +246,132 @@ export default function Home() {
   return (
     <>
       <main id="home" className="page-shell loaded relative">
-        <header style={{ 
+        <style dangerouslySetInnerHTML={{ __html: `
+          @media (min-width: 1024px) {
+            .snap-container {
+              height: 100vh;
+              overflow-y: scroll;
+              scroll-snap-type: y mandatory;
+              scroll-behavior: smooth;
+              scrollbar-width: none;
+              -ms-overflow-style: none;
+            }
+            .snap-container::-webkit-scrollbar {
+              display: none;
+            }
+            .snap-section {
+              scroll-snap-align: start;
+              height: 100vh;
+              width: 100%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              position: relative;
+              box-sizing: border-box;
+              overflow: hidden;
+            }
+            .parallax-bg {
+              position: absolute;
+              top: -20%;
+              left: 0;
+              width: 100%;
+              height: 140%;
+              z-index: -1;
+              background-size: cover;
+              background-position: center;
+              transform: translateY(var(--parallax-offset, 0)) scale(calc(var(--parallax-scale, 1) * 1.15));
+              pointer-events: none;
+              opacity: 0.4;
+              filter: grayscale(100%) brightness(0.3);
+              transition: transform 0.3s ease-out; /* Smooth transition for both parallax and scale */
+            }
+            
+            /* Title Animation Styles */
+            .reveal-text {
+              overflow: hidden;
+              display: block;
+            }
+            
+            .reveal-text span {
+              display: block;
+              /* Framer Motion will handle transform and transition */
+            }
+            
+            .is-active .reveal-text span {
+              transform: translateY(0);
+            }
+            
+            .section-number {
+              position: absolute;
+              left: 4%;
+              top: 50%;
+              transform: translateY(-50%);
+              font-size: 12vw;
+              font-weight: 900;
+              opacity: 0.05;
+              line-height: 1;
+              pointer-events: none;
+              color: var(--foreground-color, #fff);
+            }
+
+            .hero-copy h1, .section-header h2, .product-copy h2 {
+              font-size: clamp(2.5rem, 8vw, 5rem);
+              font-weight: 800;
+              line-height: 1;
+              margin-bottom: 2rem;
+            }
+
+            /* Specific fix for LocationMap internal section */
+            .location-section {
+              scroll-snap-align: start;
+              height: 100vh;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              padding-top: 100px !important;
+              position: relative;
+              overflow: hidden;
+            }
+            .site-footer {
+              scroll-snap-align: end;
+            }
+          }
+          .site-header-fixed {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: ${theme === 'dark' ? 'rgba(10, 10, 10, 0.8)' : 'rgba(255, 255, 255, 0.8)'};
+            backdrop-filter: blur(12px);
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--border-color, #33333333);
+          }
+        `}} />
+        <header className="site-header-fixed" style={{ 
           display: 'flex', 
-          flexWrap: 'wrap',
-          justifyContent: 'center', 
+          flexWrap: 'nowrap', // Prevent wrapping to keep elements on one line
+          justifyContent: 'space-between', // Distribute space between items
           alignItems: 'center', 
-          padding: '40px 4% 20px 4%',
+          padding: '20px 4%',
           gap: '1.5rem'
         }}>
           
-          {/* Left Controls Container */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          {/* Placeholder for left alignment to balance the right controls */}
+          <div style={{ flex: 1, minWidth: '80px' }}></div> {/* minWidth to ensure some space */}
+          
+          {/* Central Brand */}
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
+            <div className="brand" style={{ fontSize: '1.25rem', letterSpacing: '0.2em' }}>
+              <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                NEXO STUDIO TATTOO
+              </Link>
+            </div>
+            {/* Navigation (Menu button and dropdown) removed */}
+          </div>
+          
+          {/* Right Controls Container (Theme Toggle and Language Selector) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, justifyContent: 'flex-end' }}>
             {/* Theme Toggle */}
             <button 
               onClick={toggleTheme}
@@ -207,93 +440,21 @@ export default function Home() {
             </div>
           </div>
           
-          {/* Central Brand and Navigation */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-            <div className="brand" style={{ fontSize: '1.25rem', letterSpacing: '0.2em' }}>
-              <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                NEXO STUDIO TATTOO
-              </Link>
-            </div>
-            <nav style={{ position: 'relative' }} ref={menuRef}>
-              <button 
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                style={{
-                  background: 'transparent',
-                  color: 'currentColor',
-                  border: '1px solid currentColor',
-                  padding: '0 24px',
-                  fontFamily: 'inherit',
-                  fontSize: '0.75rem',
-                  letterSpacing: '0.1em',
-                  cursor: 'pointer',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  height: '40px',
-                  borderRadius: '20px',
-                  textTransform: 'uppercase',
-                  fontWeight: 'bold'
-                }}
-              >
-                <Icons.Menu /> {t("menu" as TranslationKey) || "MENU"} 
-                <span style={{ 
-                  fontSize: '0.6rem', 
-                  transition: 'transform 0.3s ease', 
-                  transform: isMenuOpen ? 'rotate(180deg)' : 'none' 
-                }}>▼</span>
-              </button>
-
-              {isMenuOpen && (
-                <div className="nav-dropdown" style={{
-                  position: 'absolute',
-                  top: 'calc(100% + 10px)',
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  background: theme === 'light' ? '#ffffff' : '#0a0a0a',
-                  border: '1px solid currentColor',
-                  borderRadius: '12px',
-                  padding: '8px 0',
-                  minWidth: '180px',
-                  zIndex: 100,
-                  boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
-                  overflow: 'hidden'
-                }}>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column' }}>
-                    <li>
-                      <Link href="/" onClick={() => setIsMenuOpen(false)} style={{ display: 'block', padding: '12px 24px', textDecoration: 'none', color: 'inherit', fontSize: '0.75rem', letterSpacing: '0.1em', fontWeight: 'bold' }}>{t("home").toUpperCase()}</Link>
-                    </li>
-                    <li>
-                      <Link href="/#artists" onClick={() => setIsMenuOpen(false)} style={{ display: 'block', padding: '12px 24px', textDecoration: 'none', color: 'inherit', fontSize: '0.75rem', letterSpacing: '0.1em', fontWeight: 'bold' }}>{t("artists").toUpperCase()}</Link>
-                    </li>
-                    <li>
-                      <Link href="/blog" onClick={() => setIsMenuOpen(false)} style={{ display: 'block', padding: '12px 24px', textDecoration: 'none', color: 'inherit', fontSize: '0.75rem', letterSpacing: '0.1em', fontWeight: 'bold' }}>{(t("blog") || "blog").toUpperCase()}</Link>
-                    </li>
-                  </ul>
-                </div>
-              )}
-            </nav>
-          </div>
-          
-          {/* Right Appointment Link */}
-          <Link className="appointment-link" href="/contact" style={{
-            background: '#ffffff',
-            color: '#000000',
-            padding: '12px 28px',
-            borderRadius: '24px',
-            fontWeight: '700',
-            fontSize: '0.75rem',
-            letterSpacing: '0.05em',
-            textDecoration: 'none'
-          }}>
-            {t("booking").toUpperCase()}
-          </Link>
+          {/* Appointment Link removed */}
         </header>
 
         {/* Hero Section */}
         <section className="hero-section fade-section">
           <div className="hero-copy">
             <p className="eyebrow">STUDIO</p>
-            <h1>{t("tagline")}</h1>
+              <motion.h1
+                variants={containerVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.5 }}
+              >
+                {splitTagline.map((char, index) => (<motion.span key={index} variants={characterVariants}>{char}</motion.span>))}
+              </motion.h1>
             <p className="hero-description">{t("description")}</p>
             <div className="hero-actions">
               <Link className="button" href="/contact">
@@ -322,9 +483,20 @@ export default function Home() {
 
         {/* Artists Section */}
         <section id="artists" className="artists-section fade-section">
+            <div className="section-number">02</div>
+            <InkBlot variant={2} style={{ top: '10%', right: '-15%', width: '90%', height: '90%', transform: 'rotate(45deg)' }} />
+            <InkBlot variant={3} style={{ bottom: '0', left: '-10%', width: '70%', height: '70%', transform: 'rotate(-20deg)' }} />
+            <div 
+              className="parallax-bg" 
+              style={{ 
+                backgroundImage: 'url("/artists-bg.jpg")' 
+              }} 
+            />
           <div className="section-header">
             <p className="eyebrow">ARTISTS</p>
-            <h2>{t("artists")}</h2>
+              <h2 className="reveal-text">
+                <span>{t("artists")}</span>
+              </h2>
           </div>
           
           <div className="carousel-container" style={{ position: 'relative', overflow: 'hidden' }}>
@@ -417,9 +589,20 @@ export default function Home() {
 
         {/* Aftercare & Marketplace Section */}
         <section className="product-section fade-section">
+            <div className="section-number">04</div>
+            <InkBlot variant={3} style={{ top: '-20%', right: '0', width: '100%', height: '100%', transform: 'rotate(10deg)' }} />
+            <InkBlot variant={1} style={{ bottom: '-15%', left: '0', width: '60%', height: '60%', transform: 'rotate(-30deg)' }} />
+            <div 
+              className="parallax-bg" 
+              style={{ 
+                backgroundImage: 'url("/marketplace-bg.jpg")' 
+              }} 
+            />
           <div className="product-copy">
             <p className="eyebrow">{t('marketplace')}</p>
-            <h2>{t('aftercareTitle')}</h2>
+              <h2 className="reveal-text">
+                <span>{t('aftercareTitle')}</span>
+              </h2>
             <p style={{ marginBottom: "1.5rem" }}>
               {t('aftercareDescription')}
             </p>

@@ -180,7 +180,9 @@ export const SocialLinks = () => {
 
       {/* Footer Bottom Metadata */}
       <div className="footer-bottom">
-        <p className="copyright-text">&copy; 2026 Ridney Silva. All rights reserved.</p>
+        <p className="copyright-text">&copy; 2026 Ridney Silva. All rights reserved |
+          Designed & built in-house
+        </p>
         <div className="footer-legal">
           <a href="#privacy">Privacy Policy</a>
           <a href="#terms">Terms</a>
