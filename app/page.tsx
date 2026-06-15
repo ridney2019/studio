@@ -157,12 +157,29 @@ export default function Home() {
     visible: { opacity: 1, y: "0%", transition: { ease: [0.16, 1, 0.3, 1], duration: 0.8 } },
   };
 
+  const fadeInUpVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+  };
+
   // Memoize the split tagline to avoid re-splitting on every render
   const splitTagline = useMemo(() => {
     if (!isHydrated) return [];
     const taglineText = t("tagline");
     // Split by character, preserving spaces with a non-breaking space entity
     return taglineText.split("").map(char => (char === " " ? "\u00A0" : char));
+  }, [t, isHydrated]);
+
+  const splitArtistsTitle = useMemo(() => {
+    if (!isHydrated) return [];
+    const text = t("artists");
+    return text.split("").map(char => (char === " " ? "\u00A0" : char));
+  }, [t, isHydrated]);
+
+  const splitAftercareTitle = useMemo(() => {
+    if (!isHydrated) return [];
+    const text = t("aftercareTitle");
+    return text.split("").map(char => (char === " " ? "\u00A0" : char));
   }, [t, isHydrated]);
 
   useEffect(() => {
@@ -247,6 +264,13 @@ export default function Home() {
     <>
       <main id="home" className="page-shell loaded relative">
         <style dangerouslySetInnerHTML={{ __html: `
+          :root {
+            --text-color: ${theme === 'dark' ? '#ffffff' : '#333333'};
+            --bg-color: ${theme === 'dark' ? '#0a0a0a' : '#ffffff'};
+            --border-color: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'};
+            --card-bg: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)'};
+            --control-bg: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)'};
+          }
           @media (min-width: 1024px) {
             .snap-container {
               height: 100vh;
@@ -281,9 +305,10 @@ export default function Home() {
               background-position: center;
               transform: translateY(var(--parallax-offset, 0)) scale(calc(var(--parallax-scale, 1) * 1.15));
               pointer-events: none;
-              opacity: 0.4;
-              filter: grayscale(100%) brightness(0.3);
-              transition: transform 0.3s ease-out; /* Smooth transition for both parallax and scale */
+              opacity: ${theme === 'dark' ? '0.4' : '0.15'};
+              filter: grayscale(100%) ${theme === 'dark' ? 'brightness(0.3)' : 'brightness(0.9)'};
+              transition: transform 0.3s ease-out, filter 0.3s ease, opacity 0.3s ease;
+              will-change: transform, filter, opacity;
             }
             
             /* Title Animation Styles */
@@ -311,7 +336,7 @@ export default function Home() {
               opacity: 0.05;
               line-height: 1;
               pointer-events: none;
-              color: var(--foreground-color, #fff);
+              color: var(--text-color); /* Use global text color variable */
             }
 
             .hero-copy h1, .section-header h2, .product-copy h2 {
@@ -331,6 +356,9 @@ export default function Home() {
               padding-top: 100px !important;
               position: relative;
               overflow: hidden;
+              background: var(--bg-color);
+              color: var(--text-color);
+              transition: background-color 0.3s ease, color 0.3s ease;
             }
             .site-footer {
               scroll-snap-align: end;
@@ -344,8 +372,67 @@ export default function Home() {
             z-index: 1000;
             background: ${theme === 'dark' ? 'rgba(10, 10, 10, 0.8)' : 'rgba(255, 255, 255, 0.8)'};
             backdrop-filter: blur(12px);
-            transition: all 0.3s ease;
-            border-bottom: 1px solid var(--border-color, #33333333);
+            transition: all 0.3s ease; /* Keep transition for smooth theme change */
+            border-bottom: 1px solid var(--border-color); /* Use global border color variable */
+          }
+          /* Apply global text and background colors to the body */
+          body {
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+          }
+          .custom-lang-selector select option {
+            background: var(--bg-color);
+            color: var(--text-color);
+          }
+          .artist-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            backdrop-filter: blur(10px);
+            transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+          }
+          .info-block {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1.5rem;
+            margin-bottom: 1.5rem;
+          }
+          .info-block:last-child {
+            border-bottom: none;
+          }
+          .button {
+            background: var(--text-color);
+            color: var(--bg-color);
+            padding: 0.8rem 2rem;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.2s ease;
+            display: inline-block;
+          }
+          .button:hover {
+            opacity: 0.9;
+          }
+          .button-outline {
+            border: 1px solid var(--text-color);
+            color: var(--text-color);
+            padding: 0.8rem 2rem;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            display: inline-block;
+          }
+          .button-outline:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+          }
+          .view-gallery {
+            color: var(--text-color);
+            text-decoration: underline;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
           }
         `}} />
         <header className="site-header-fixed" style={{ 
@@ -428,10 +515,10 @@ export default function Home() {
                   appearance: 'none',
                   height: '40px',
                   borderRadius: '20px'
-                }}
+                }} /* Removed inline background/color for options to use CSS variables */
               >
                 {Object.entries(SUPPORTED_LANGUAGES).map(([code, lang]) => (
-                  <option key={code} value={code} style={{ background: '#0a0a0a', color: '#ffffff' }}>
+                  <option key={code} value={code}>
                     {lang.name.toUpperCase()}
                   </option>
                 ))}
@@ -445,39 +532,54 @@ export default function Home() {
 
         {/* Hero Section */}
         <section className="hero-section fade-section">
-          <div className="hero-copy">
-            <p className="eyebrow">STUDIO</p>
-              <motion.h1
-                variants={containerVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.5 }}
-              >
-                {splitTagline.map((char, index) => (<motion.span key={index} variants={characterVariants}>{char}</motion.span>))}
-              </motion.h1>
-            <p className="hero-description">{t("description")}</p>
-            <div className="hero-actions">
+          <motion.div 
+            className="hero-copy"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={{
+              visible: { transition: { staggerChildren: 0.15 } }
+            }}
+          >
+            <motion.p className="eyebrow" variants={fadeInUpVariants}>STUDIO</motion.p>
+            <motion.h1 variants={containerVariants}>
+              {splitTagline.map((char, index) => (
+                <motion.span key={index} variants={characterVariants}>
+                  {char}
+                </motion.span>
+              ))}
+            </motion.h1>
+            <motion.p className="hero-description" variants={fadeInUpVariants}>
+              {t("description")}
+            </motion.p>
+            <motion.div className="hero-actions" variants={fadeInUpVariants}>
               <Link className="button" href="/contact">
                 {t("booking").toUpperCase()}
               </Link>
               <Link className="button-outline" href="/shop">
                 SHOP STORE
               </Link>
-            </div>
-          </div> 
+            </motion.div>
+          </motion.div> 
 
           {/* Contact Info Sidebar */}
           <aside className="hero-side">
-            <div className="info-panel">
+            <motion.div 
+              className="info-panel"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
+            >
               {contacts.map((block) => (
-                <div key={block.title} className="info-block">
+                <motion.div key={block.title} className="info-block" variants={fadeInUpVariants}>
                   <h2>{block.title}</h2>
                   {block.lines.map((line) => (
                     <p key={line}>{line}</p>
                   ))}
-                </div>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </aside>
         </section>
 
@@ -492,12 +594,20 @@ export default function Home() {
                 backgroundImage: 'url("/artists-bg.jpg")' 
               }} 
             />
-          <div className="section-header">
-            <p className="eyebrow">ARTISTS</p>
-              <h2 className="reveal-text">
-                <span>{t("artists")}</span>
-              </h2>
-          </div>
+          <motion.div 
+            className="section-header"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
+          >
+            <motion.p className="eyebrow" variants={fadeInUpVariants}>ARTISTS</motion.p>
+            <motion.h2 variants={containerVariants}>
+              {splitArtistsTitle.map((char, index) => (
+                <motion.span key={index} variants={characterVariants}>{char}</motion.span>
+              ))}
+            </motion.h2>
+          </motion.div>
           
           <div className="carousel-container" style={{ position: 'relative', overflow: 'hidden' }}>
             <div 
@@ -517,8 +627,22 @@ export default function Home() {
                     boxSizing: 'border-box'
                   }}
                 >
-                  <article className="artist-card" style={{ maxWidth: '800px', margin: '0 auto' }}>
-                    <div className="artist-image">
+                  <motion.article 
+                    className="artist-card" 
+                    style={{ maxWidth: '800px', margin: '0 auto' }}
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, amount: 0.2 }}
+                    variants={{
+                      hidden: { scale: 0.92, opacity: 0 },
+                      visible: { 
+                        scale: 1, 
+                        opacity: 1,
+                        transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+                      }
+                    }}
+                  >
+                    <motion.div className="artist-image" variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.6 } } }}>
                       <Image
                         src={artist.image}
                         alt={artist.name}
@@ -526,15 +650,27 @@ export default function Home() {
                         height={800}
                         className="artist-photo"
                       />
-                    </div>
-                    <div className="artist-copy" style={{ textAlign: 'center' }}>
-                      <h3>{artist.name}</h3>
-                      <p>{t(artist.descKey)}</p>
-                      <Link className="view-gallery" href="/contact">
-                        {t("bookAppointment").toUpperCase()}
-                      </Link>
-                    </div>
-                  </article>
+                    </motion.div>
+                    <motion.div 
+                      className="artist-copy" 
+                      style={{ textAlign: 'center' }}
+                      variants={{
+                        hidden: { opacity: 0 },
+                        visible: { 
+                          opacity: 1,
+                          transition: { staggerChildren: 0.15, delayChildren: 0.4 } 
+                        }
+                      }}
+                    >
+                      <motion.h3 variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0 } }}>{artist.name}</motion.h3>
+                      <motion.p variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0 } }}>{t(artist.descKey)}</motion.p>
+                      <motion.div variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0 } }}>
+                        <Link className="view-gallery" href="/contact">
+                          {t("bookAppointment").toUpperCase()}
+                        </Link>
+                      </motion.div>
+                    </motion.div>
+                  </motion.article>
                 </div>
               ))}
             </div>
@@ -546,7 +682,7 @@ export default function Home() {
               aria-label="Previous artist"
               style={{
                 position: 'absolute', left: '0', top: '40%', transform: 'translateY(-50%)',
-                background: 'rgba(255,255,255,0.05)', border: '1px solid currentColor', color: 'currentColor',
+                background: 'var(--control-bg)', border: '1px solid currentColor', color: 'currentColor',
                 width: '44px', height: '44px', borderRadius: '50%', cursor: 'pointer', zIndex: 10,
                 display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem'
               }}
@@ -559,7 +695,7 @@ export default function Home() {
               aria-label="Next artist"
               style={{
                 position: 'absolute', right: '0', top: '40%', transform: 'translateY(-50%)',
-                background: 'rgba(255,255,255,0.05)', border: '1px solid currentColor', color: 'currentColor',
+                background: 'var(--control-bg)', border: '1px solid currentColor', color: 'currentColor',
                 width: '44px', height: '44px', borderRadius: '50%', cursor: 'pointer', zIndex: 10,
                 display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem'
               }}
@@ -598,16 +734,24 @@ export default function Home() {
                 backgroundImage: 'url("/marketplace-bg.jpg")' 
               }} 
             />
-          <div className="product-copy">
-            <p className="eyebrow">{t('marketplace')}</p>
-              <h2 className="reveal-text">
-                <span>{t('aftercareTitle')}</span>
-              </h2>
-            <p style={{ marginBottom: "1.5rem" }}>
+          <motion.div 
+            className="product-copy"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
+          >
+            <motion.p className="eyebrow" variants={fadeInUpVariants}>{t('marketplace')}</motion.p>
+            <motion.h2 variants={containerVariants}>
+              {splitAftercareTitle.map((char, index) => (
+                <motion.span key={index} variants={characterVariants}>{char}</motion.span>
+              ))}
+            </motion.h2>
+            <motion.p style={{ marginBottom: "1.5rem" }} variants={fadeInUpVariants}>
               {t('aftercareDescription')}
-            </p>
+            </motion.p>
             
-            <ul 
+            <motion.ul 
               className="marketplace-list" 
               style={{ 
                 listStyle: "none", 
@@ -617,6 +761,7 @@ export default function Home() {
                 flexDirection: "column",
                 gap: "0.75rem"
               }}
+              variants={fadeInUpVariants}
             >
               <li style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
                 <Icons.Gift />
@@ -630,13 +775,14 @@ export default function Home() {
                 <Icons.Ink />
                 {t('aftercareProduct')}
               </li>
-            </ul>
-          </div>
-          <div className="product-action">
-            <Link className="button button-outline" href="/shop">
-              {t('shopNow')}
-            </Link>
-          </div>
+            </motion.ul>
+            
+            <motion.div className="product-action" variants={fadeInUpVariants}>
+              <Link className="button button-outline" href="/shop">
+                {t('shopNow')}
+              </Link>
+            </motion.div>
+          </motion.div>
         </section>
         <SocialLinks />
       </main>
