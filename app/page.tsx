@@ -8,7 +8,8 @@ import { TranslationKey } from "../lib/translations";
 import { LanguageCode, SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from "../lib/languages"; 
 import { useLanguage } from "./providers";
 import { SocialLinks } from "./components/SocialLinks"; 
-import { motion } from "framer-motion";
+import { motion, useInView, animate } from "framer-motion";
+import { FaUsers, FaPenNib, FaUserCheck, FaPalette, FaLocationDot } from "react-icons/fa6";
 import { LocationMap } from "./components/LocationMap";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import FloatingSocials from "./components/FloatingSocials";
@@ -37,6 +38,38 @@ const Icons = {
   Menu: () => (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
   )
+};
+
+const stats = [
+  { label: "Artists", value: 8, suffix: "", icon: <FaUsers /> },
+  { label: "Designs", value: 1500, suffix: "", icon: <FaPenNib /> },
+  { label: "Customers", value: 5000, suffix: "", icon: <FaUserCheck /> },
+  { label: "Artworks", value: 10000, suffix: "+", icon: <FaPalette /> },
+  { label: "Location", value: 1, suffix: "", icon: <FaLocationDot /> },
+];
+
+const AnimatedNumber = ({ value, suffix = "" }: { value: number; suffix?: string }) => {
+  const [count, setCount] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: "-50px" });
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(0, value, {
+        duration: 2.5,
+        ease: "easeOut",
+        onUpdate: (latest) => setCount(Math.floor(latest)),
+      });
+      return () => controls.stop();
+    }
+  }, [value, isInView]);
+
+  return (
+    <span ref={ref}>
+      {count.toLocaleString()}
+      {suffix}
+    </span>
+  );
 };
 
 const InkBlot = ({ variant = 1, style }: { variant?: 1 | 2 | 3; style?: React.CSSProperties }) => {
@@ -160,6 +193,15 @@ export default function Home() {
   const fadeInUpVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
+  };
+
+  const sectionFadeVariants = {
+    hidden: { opacity: 0, y: 40 },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } 
+    },
   };
 
   // Memoize the split tagline to avoid re-splitting on every render
@@ -339,13 +381,6 @@ export default function Home() {
               color: var(--text-color); /* Use global text color variable */
             }
 
-            .hero-copy h1, .section-header h2, .product-copy h2 {
-              font-size: clamp(2.5rem, 8vw, 5rem);
-              font-weight: 800;
-              line-height: 1;
-              margin-bottom: 2rem;
-            }
-
             /* Specific fix for LocationMap internal section */
             .location-section {
               scroll-snap-align: start;
@@ -362,6 +397,40 @@ export default function Home() {
             }
             .site-footer {
               scroll-snap-align: end;
+            }
+          }
+
+          /* Mobile responsiveness and stacking adjustments */
+          @media (max-width: 1023px) {
+            .site-header-fixed {
+              flex-direction: column !important;
+              padding: 15px 4% !important;
+              gap: 10px !important;
+            }
+            .site-header-fixed > div:first-child {
+              display: none; /* Hide placeholder on mobile */
+            }
+            .hero-section {
+              flex-direction: column;
+              padding-top: 140px !important;
+              height: auto !important;
+              min-height: 100vh;
+              padding-top: 140px !important;
+              padding-bottom: 60px !important;
+            }
+            .hero-side {
+              position: static !important;
+              transform: none !important;
+              max-width: 100% !important;
+              margin-top: 3rem;
+              order: 2; /* Move contact info below the main headline */
+            }
+            .artists-section, .product-section {
+              height: auto !important;
+              min-height: 100vh;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
             }
           }
           .site-header-fixed {
@@ -433,6 +502,46 @@ export default function Home() {
             text-decoration: underline;
             font-size: 0.85rem;
             letter-spacing: 0.1em;
+          }
+          .stats-section {
+            position: relative;
+            min-height: 45vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: var(--bg-color);
+          }
+          .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            width: 100%;
+            max-width: 1400px;
+            gap: clamp(2rem, 5vw, 5rem);
+            z-index: 2;
+            text-align: center;
+          }
+          @media (min-width: 1024px) {
+            .stats-grid {
+              grid-template-columns: repeat(5, 1fr); /* Maintain 5-column layout on larger screens */
+            }
+          }
+          .stat-icon {
+            font-size: clamp(1.4rem, 3vw, 2.5rem);
+            margin-bottom: clamp(1rem, 2vw, 1.5rem);
+            opacity: 0.8;
+            color: var(--text-color);
+          }
+          .stat-number {
+            font-size: clamp(2.2rem, 7.5vw, 4.8rem);
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 0.5rem;
+          }
+          .stat-label {
+            font-size: clamp(0.6rem, 1.2vw, 0.75rem);
+            letter-spacing: 0.2em;
+            opacity: 0.7;
           }
         `}} />
         <header className="site-header-fixed" style={{ 
@@ -531,7 +640,33 @@ export default function Home() {
         </header>
 
         {/* Hero Section */}
-        <section className="hero-section fade-section">
+        <motion.section 
+          className="hero-section fade-section"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={sectionFadeVariants}
+        >
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              zIndex: -1,
+              opacity: theme === 'dark' ? 0.3 : 0.15,
+              filter: 'grayscale(100%)',
+              pointerEvents: 'none'
+            }}
+          >
+            <source src="/videos/hero-background.mp4" type="video/mp4" />
+          </video>
           <motion.div 
             className="hero-copy"
             initial="hidden"
@@ -563,7 +698,7 @@ export default function Home() {
           </motion.div> 
 
           {/* Contact Info Sidebar */}
-          <aside className="hero-side">
+          <motion.aside className="hero-side">
             <motion.div 
               className="info-panel"
               initial="hidden"
@@ -580,20 +715,74 @@ export default function Home() {
                 </motion.div>
               ))}
             </motion.div>
-          </aside>
+          </motion.aside>
+        </motion.section>
+
+        {/* Stats Section */}
+        <section className="stats-section snap-section">
+          <div 
+            className="parallax-bg" 
+            style={{ 
+              backgroundImage: 'url("https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&q=80")',
+              opacity: theme === 'dark' ? 0.3 : 0.1,
+              zIndex: 1
+            }} 
+          />
+          <div className="stats-grid">
+            {stats.map((stat, index) => (
+              <motion.div 
+                key={index} 
+                className="stat-item"
+                whileHover="hover"
+                style={{ cursor: 'default' }}
+              >
+                <motion.div 
+                  className="stat-icon"
+                  variants={{
+                    hover: { scale: 1.3 }
+                  }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  {stat.icon}
+                </motion.div>
+                <div className="stat-number">
+                  <AnimatedNumber value={stat.value} suffix={stat.suffix} />
+                </div>
+                <div className="stat-label">{stat.label.toUpperCase()}</div>
+              </motion.div>
+            ))}
+          </div>
         </section>
 
         {/* Artists Section */}
-        <section id="artists" className="artists-section fade-section">
+        <motion.section 
+          id="artists" 
+          className="artists-section fade-section"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={sectionFadeVariants}
+        >
             <div className="section-number">02</div>
+            <div 
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: -1,
+                opacity: 0.05,
+                backgroundImage: 'url("https://www.svgrepo.com/show/155307/ink-splash.svg")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                filter: theme === 'dark' ? 'invert(1)' : 'none',
+                pointerEvents: 'none'
+              }}
+            />
             <InkBlot variant={2} style={{ top: '10%', right: '-15%', width: '90%', height: '90%', transform: 'rotate(45deg)' }} />
             <InkBlot variant={3} style={{ bottom: '0', left: '-10%', width: '70%', height: '70%', transform: 'rotate(-20deg)' }} />
-            <div 
-              className="parallax-bg" 
-              style={{ 
-                backgroundImage: 'url("/artists-bg.jpg")' 
-              }} 
-            />
           <motion.div 
             className="section-header"
             initial="hidden"
@@ -719,21 +908,63 @@ export default function Home() {
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
-        <LocationMap />
+        <motion.div 
+          style={{ position: 'relative' }}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={sectionFadeVariants}
+        >
+          <div 
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: 0,
+              opacity: 0.05,
+              backgroundImage: 'url("https://www.svgrepo.com/show/532390/ink-splash.svg")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              filter: theme === 'dark' ? 'invert(1)' : 'none',
+              pointerEvents: 'none'
+            }}
+          />
+          <LocationMap />
+        </motion.div>
 
         {/* Aftercare & Marketplace Section */}
-        <section className="product-section fade-section">
+        <motion.section 
+          className="product-section fade-section"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={sectionFadeVariants}
+        >
             <div className="section-number">04</div>
+            <div 
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                zIndex: -1,
+                opacity: 0.05,
+                backgroundImage: 'url("https://www.svgrepo.com/show/532394/ink-splash.svg")',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                filter: theme === 'dark' ? 'invert(1)' : 'none',
+                pointerEvents: 'none'
+              }}
+            />
             <InkBlot variant={3} style={{ top: '-20%', right: '0', width: '100%', height: '100%', transform: 'rotate(10deg)' }} />
             <InkBlot variant={1} style={{ bottom: '-15%', left: '0', width: '60%', height: '60%', transform: 'rotate(-30deg)' }} />
-            <div 
-              className="parallax-bg" 
-              style={{ 
-                backgroundImage: 'url("/marketplace-bg.jpg")' 
-              }} 
-            />
           <motion.div 
             className="product-copy"
             initial="hidden"
@@ -783,7 +1014,7 @@ export default function Home() {
               </Link>
             </motion.div>
           </motion.div>
-        </section>
+        </motion.section>
         <SocialLinks />
       </main>
 
