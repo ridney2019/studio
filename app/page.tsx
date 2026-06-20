@@ -763,7 +763,7 @@ export default function Home() {
           viewport={{ once: true, amount: 0.1 }}
           variants={sectionFadeVariants}
         >
-            <div className="section-number">02</div>
+            <div className="section-number"></div>
             <div 
               style={{
                 position: 'absolute',
@@ -945,7 +945,7 @@ export default function Home() {
           viewport={{ once: true, amount: 0.1 }}
           variants={sectionFadeVariants}
         >
-            <div className="section-number">04</div>
+            <div className="section-number"></div>
             <div 
               style={{
                 position: 'absolute',
