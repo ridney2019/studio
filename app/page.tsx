@@ -194,7 +194,6 @@ export default function Home() {
             letter-spacing: -0.01em;
           }
 
-          /* Nike Premium Spacing & Rigid Containment */
           .fade-section {
             position: relative !important;
             overflow: hidden !important;
@@ -231,7 +230,6 @@ export default function Home() {
             align-items: center;
           }
 
-          /* Micro Eyebrows inspired by Nike Editorial Specs */
           .eyebrow {
             font-size: 10px !important;
             font-weight: 700 !important;
@@ -241,7 +239,6 @@ export default function Home() {
             margin-bottom: 1rem;
           }
 
-          /* High Contrast Nike Typography Style */
           h1, h2 {
             font-weight: 900 !important;
             text-transform: uppercase;
@@ -252,7 +249,6 @@ export default function Home() {
           h1 { font-size: clamp(3rem, 8vw, 6.5rem); }
           h2 { font-size: clamp(2.5rem, 6.5vw, 5rem); margin-bottom: 2.5rem; }
 
-          /* Clean Premium Action Items */
           .nike-btn {
             background: var(--text-color);
             color: var(--bg-color);
@@ -304,7 +300,6 @@ export default function Home() {
             gap: 14px;
           }
 
-          /* Nike Asymmetrical Editorial Structure for Carousel Grid */
           .nike-split-card {
             display: grid;
             grid-template-columns: 1fr;
@@ -353,7 +348,7 @@ export default function Home() {
         
         {/* Navigation Bar */}
         <header className="site-header-fixed">
-          <div className="brand" style={{ fontWeights: 900, fontSize: '1.15rem', letterSpacing: '0.25em' }}>
+          <div className="brand" style={{ fontWeight: 900, fontSize: '1.15rem', letterSpacing: '0.25em' }}>
             <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
               NEXO STUDIO
             </Link>
@@ -499,7 +494,6 @@ export default function Home() {
             </h2>
           </div>
           
-          {/* Nike High-Fidelity Asymmetrical Interaction Container */}
           <div 
             className="carousel-container" 
             style={{ position: 'relative', marginTop: '2rem' }}
