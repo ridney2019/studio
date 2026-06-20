@@ -169,18 +169,32 @@ export default function Home() {
   const { t, isHydrated } = useTranslation();
   const { theme, toggleTheme, language, setLanguage } = useLanguage();
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // Keep this state for menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const snapContainerRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const [activeSection, setActiveSection] = useState(0);
 
-  // Framer Motion variants for title animation
+  // Carousel Autoplay state controls
+  const [currentArtistIndex, setCurrentArtistIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Carousel Autoplay Timer Setup
+  useEffect(() => {
+    if (isHovered) return; // Pause autoplay when mouse leaves to allow user reading
+
+    const timer = setInterval(() => {
+      setCurrentArtistIndex((prevIndex) => (prevIndex + 1) % artists.length);
+    }, 4500); // Transitions slide every 4.5 seconds
+
+    return () => clearInterval(timer);
+  }, [isHovered]);
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.03, // Adjust stagger time as needed
+        staggerChildren: 0.03,
       },
     },
   };
@@ -204,11 +218,9 @@ export default function Home() {
     },
   };
 
-  // Memoize the split tagline to avoid re-splitting on every render
   const splitTagline = useMemo(() => {
     if (!isHydrated) return [];
     const taglineText = t("tagline");
-    // Split by character, preserving spaces with a non-breaking space entity
     return taglineText.split("").map(char => (char === " " ? "\u00A0" : char));
   }, [t, isHydrated]);
 
@@ -253,22 +265,16 @@ export default function Home() {
       const sections = container.querySelectorAll('.snap-section, .location-section');
       sections.forEach((section: any) => {
         const rect = section.getBoundingClientRect();
-        // The speed multiplier (0.4 means the background moves at 40% scroll speed)
         const speed = 0.4;
         const yOffset = rect.top * speed;
         section.style.setProperty('--parallax-offset', `${yOffset}px`);
 
-        // Calculate scale effect: scale from 0.95 to 1.0
         const viewportHeight = window.innerHeight;
-        // currentOffset is the absolute distance from the viewport center
-        // We want scale to be 1 when rect.top is 0 (section is centered)
-        // and minScale when rect.top is at the top/bottom edge of the viewport
         const minScale = 0.95;
         const maxScale = 1.0;
         
-        // Normalize currentOffset to a 0-1 range, where 0 is centered and 1 is at viewport edge
         let normalizedOffset = Math.abs(rect.top) / viewportHeight;
-        if (normalizedOffset > 1) normalizedOffset = 1; // Clamp to 1 if completely out of view
+        if (normalizedOffset > 1) normalizedOffset = 1;
 
         const scaleValue = maxScale - (normalizedOffset * (maxScale - minScale));
         section.style.setProperty('--parallax-scale', `${scaleValue}`);
@@ -276,7 +282,7 @@ export default function Home() {
     };
 
     container.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial position
+    handleScroll();
     return () => container.removeEventListener('scroll', handleScroll);
   }, [isHydrated]);
 
@@ -290,8 +296,6 @@ export default function Home() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const [currentArtistIndex, setCurrentArtistIndex] = useState(0);
-
   const nextArtist = () => {
     setCurrentArtistIndex((prev) => (prev + 1) % artists.length);
   };
@@ -304,7 +308,7 @@ export default function Home() {
 
   return (
     <>
-      <main id="home" className="page-shell loaded relative">
+      <main id="home" className="page-shell loaded relative w-full overflow-hidden">
         <style dangerouslySetInnerHTML={{ __html: `
           :root {
             --text-color: ${theme === 'dark' ? '#ffffff' : '#333333'};
@@ -313,6 +317,17 @@ export default function Home() {
             --card-bg: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)'};
             --control-bg: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)'};
           }
+          
+          /* Enforced Global Body reset to contain layout leaks */
+          body {
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+          }
+
           @media (min-width: 1024px) {
             .snap-container {
               height: 100vh;
@@ -353,7 +368,6 @@ export default function Home() {
               will-change: transform, filter, opacity;
             }
             
-            /* Title Animation Styles */
             .reveal-text {
               overflow: hidden;
               display: block;
@@ -361,7 +375,6 @@ export default function Home() {
             
             .reveal-text span {
               display: block;
-              /* Framer Motion will handle transform and transition */
             }
             
             .is-active .reveal-text span {
@@ -378,10 +391,9 @@ export default function Home() {
               opacity: 0.05;
               line-height: 1;
               pointer-events: none;
-              color: var(--text-color); /* Use global text color variable */
+              color: var(--text-color);
             }
 
-            /* Specific fix for LocationMap internal section */
             .location-section {
               scroll-snap-align: start;
               height: 100vh;
@@ -395,12 +407,14 @@ export default function Home() {
               color: var(--text-color);
               transition: background-color 0.3s ease, color 0.3s ease;
             }
-            .site-footer {
-              scroll-snap-align: end;
-            }
           }
 
-          /* Mobile responsiveness and stacking adjustments */
+          /* General Layout Structure with complete height containment fixes */
+          .artists-section, .product-section {
+            position: relative !important;
+            overflow: hidden !important;
+          }
+
           @media (max-width: 1023px) {
             .site-header-fixed {
               flex-direction: column !important;
@@ -408,14 +422,13 @@ export default function Home() {
               gap: 10px !important;
             }
             .site-header-fixed > div:first-child {
-              display: none; /* Hide placeholder on mobile */
+              display: none;
             }
             .hero-section {
               flex-direction: column;
               padding-top: 140px !important;
               height: auto !important;
               min-height: 100vh;
-              padding-top: 140px !important;
               padding-bottom: 60px !important;
             }
             .hero-side {
@@ -423,7 +436,7 @@ export default function Home() {
               transform: none !important;
               max-width: 100% !important;
               margin-top: 3rem;
-              order: 2; /* Move contact info below the main headline */
+              order: 2;
             }
             .artists-section, .product-section {
               height: auto !important;
@@ -433,6 +446,7 @@ export default function Home() {
               justify-content: center;
             }
           }
+
           .site-header-fixed {
             position: fixed;
             top: 0;
@@ -441,15 +455,10 @@ export default function Home() {
             z-index: 1000;
             background: ${theme === 'dark' ? 'rgba(10, 10, 10, 0.8)' : 'rgba(255, 255, 255, 0.8)'};
             backdrop-filter: blur(12px);
-            transition: all 0.3s ease; /* Keep transition for smooth theme change */
-            border-bottom: 1px solid var(--border-color); /* Use global border color variable */
+            transition: all 0.3s ease;
+            border-bottom: 1px solid var(--border-color);
           }
-          /* Apply global text and background colors to the body */
-          body {
-            color: var(--text-color);
-            background-color: var(--bg-color);
-            transition: background-color 0.3s ease, color 0.3s ease;
-          }
+
           .custom-lang-selector select option {
             background: var(--bg-color);
             color: var(--text-color);
@@ -523,7 +532,7 @@ export default function Home() {
           }
           @media (min-width: 1024px) {
             .stats-grid {
-              grid-template-columns: repeat(5, 1fr); /* Maintain 5-column layout on larger screens */
+              grid-template-columns: repeat(5, 1fr);
             }
           }
           .stat-icon {
@@ -544,31 +553,26 @@ export default function Home() {
             opacity: 0.7;
           }
         `}} />
+        
         <header className="site-header-fixed" style={{ 
           display: 'flex', 
-          flexWrap: 'nowrap', // Prevent wrapping to keep elements on one line
-          justifyContent: 'space-between', // Distribute space between items
+          flexWrap: 'nowrap',
+          justifyContent: 'space-between',
           alignItems: 'center', 
           padding: '20px 4%',
           gap: '1.5rem'
         }}>
+          <div style={{ flex: 1, minWidth: '80px' }}></div>
           
-          {/* Placeholder for left alignment to balance the right controls */}
-          <div style={{ flex: 1, minWidth: '80px' }}></div> {/* minWidth to ensure some space */}
-          
-          {/* Central Brand */}
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
             <div className="brand" style={{ fontSize: '1.25rem', letterSpacing: '0.2em' }}>
               <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
                 NEXO STUDIO TATTOO
               </Link>
             </div>
-            {/* Navigation (Menu button and dropdown) removed */}
           </div>
           
-          {/* Right Controls Container (Theme Toggle and Language Selector) */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, justifyContent: 'flex-end' }}>
-            {/* Theme Toggle */}
             <button 
               onClick={toggleTheme}
               className={`accessibility-toggle theme-${theme}`}
@@ -594,7 +598,6 @@ export default function Home() {
               <span className="theme-text">{theme === 'dark' ? 'LIGHT' : 'DARK'}</span>
             </button>
 
-            {/* Language Selector Dropdown */}
             <div className="custom-lang-selector" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
               <div style={{
                 position: 'absolute',
@@ -624,7 +627,7 @@ export default function Home() {
                   appearance: 'none',
                   height: '40px',
                   borderRadius: '20px'
-                }} /* Removed inline background/color for options to use CSS variables */
+                }}
               >
                 {Object.entries(SUPPORTED_LANGUAGES).map(([code, lang]) => (
                   <option key={code} value={code}>
@@ -635,8 +638,6 @@ export default function Home() {
               <span style={{ position: 'absolute', right: '16px', pointerEvents: 'none', fontSize: '0.55rem' }}>▼</span>
             </div>
           </div>
-          
-          {/* Appointment Link removed */}
         </header>
 
         {/* Hero Section */}
@@ -697,7 +698,6 @@ export default function Home() {
             </motion.div>
           </motion.div> 
 
-          {/* Contact Info Sidebar */}
           <motion.aside className="hero-side">
             <motion.div 
               className="info-panel"
@@ -763,26 +763,27 @@ export default function Home() {
           viewport={{ once: true, amount: 0.1 }}
           variants={sectionFadeVariants}
         >
-            <div className="section-number"></div>
-            <div 
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                zIndex: -1,
-                opacity: 0.05,
-                backgroundImage: 'url("https://www.svgrepo.com/show/155307/ink-splash.svg")',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                filter: theme === 'dark' ? 'invert(1)' : 'none',
-                pointerEvents: 'none'
-              }}
-            />
-            <InkBlot variant={2} style={{ top: '10%', right: '-15%', width: '90%', height: '90%', transform: 'rotate(45deg)' }} />
-            <InkBlot variant={3} style={{ bottom: '0', left: '-10%', width: '70%', height: '70%', transform: 'rotate(-20deg)' }} />
+          <div className="section-number"></div>
+          <div 
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: -1,
+              opacity: 0.05,
+              backgroundImage: 'url("https://www.svgrepo.com/show/155307/ink-splash.svg")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              filter: theme === 'dark' ? 'invert(1)' : 'none',
+              pointerEvents: 'none'
+            }}
+          />
+          <InkBlot variant={2} style={{ top: '10%', right: '-15%', width: '90%', height: '90%', transform: 'rotate(45deg)' }} />
+          <InkBlot variant={3} style={{ bottom: '0', left: '-10%', width: '70%', height: '70%', transform: 'rotate(-20deg)' }} />
+          
           <motion.div 
             className="section-header"
             initial="hidden"
@@ -798,13 +799,20 @@ export default function Home() {
             </motion.h2>
           </motion.div>
           
-          <div className="carousel-container" style={{ position: 'relative', overflow: 'hidden' }}>
+          {/* Autoplay Slider Track Wrapper */}
+          <div 
+            className="carousel-container" 
+            style={{ position: 'relative', overflow: 'hidden' }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
             <div 
               className="artist-carousel-track" 
               style={{ 
                 display: 'flex', 
-                transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-                transform: `translateX(-${currentArtistIndex * 100}%)`
+                transition: 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
+                transform: `translateX(-${currentArtistIndex * 100}%)`,
+                willChange: 'transform'
               }}
             >
               {artists.map((artist) => (
@@ -823,57 +831,47 @@ export default function Home() {
                     whileInView="visible"
                     viewport={{ once: true, amount: 0.2 }}
                     variants={{
-                      hidden: { scale: 0.92, opacity: 0 },
+                      hidden: { scale: 0.95, opacity: 0 },
                       visible: { 
                         scale: 1, 
                         opacity: 1,
-                        transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+                        transition: { duration: 0.6 }
                       }
                     }}
                   >
-                    <motion.div className="artist-image" variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 0.6 } } }}>
+                    <div className="artist-image">
                       <Image
                         src={artist.image}
                         alt={artist.name}
                         width={800}
                         height={800}
-                        className="artist-photo"
+                        className="artist-photo object-cover rounded-lg"
                       />
-                    </motion.div>
-                    <motion.div 
-                      className="artist-copy" 
-                      style={{ textAlign: 'center' }}
-                      variants={{
-                        hidden: { opacity: 0 },
-                        visible: { 
-                          opacity: 1,
-                          transition: { staggerChildren: 0.15, delayChildren: 0.4 } 
-                        }
-                      }}
-                    >
-                      <motion.h3 variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0 } }}>{artist.name}</motion.h3>
-                      <motion.p variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0 } }}>{t(artist.descKey)}</motion.p>
-                      <motion.div variants={{ hidden: { opacity: 0, y: 15 }, visible: { opacity: 1, y: 0 } }}>
-                        <Link className="view-gallery" href="/contact">
+                    </div>
+                    <div className="artist-copy" style={{ textAlign: 'center', marginTop: '1.5rem' }}>
+                      <h3>{artist.name}</h3>
+                      <p className="my-2">{t(artist.descKey)}</p>
+                      <div>
+                        <Link className="view-gallery inline-block mt-2" href="/contact">
                           {t("bookAppointment").toUpperCase()}
                         </Link>
-                      </motion.div>
-                    </motion.div>
+                      </div>
+                    </div>
                   </motion.article>
                 </div>
               ))}
             </div>
 
-            {/* Controls */}
+            {/* Manual navigation buttons */}
             <button 
               onClick={prevArtist}
               className="carousel-control prev"
               aria-label="Previous artist"
               style={{
-                position: 'absolute', left: '0', top: '40%', transform: 'translateY(-50%)',
-                background: 'var(--control-bg)', border: '1px solid currentColor', color: 'currentColor',
+                position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)',
+                background: 'var(--control-bg)', border: '1px solid var(--border-color)', color: 'currentColor',
                 width: '44px', height: '44px', borderRadius: '50%', cursor: 'pointer', zIndex: 10,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem'
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
               }}
             >
               ←
@@ -883,33 +881,34 @@ export default function Home() {
               className="carousel-control next"
               aria-label="Next artist"
               style={{
-                position: 'absolute', right: '0', top: '40%', transform: 'translateY(-50%)',
-                background: 'var(--control-bg)', border: '1px solid currentColor', color: 'currentColor',
+                position: 'absolute', right: '15px', top: '50%', transform: 'translateY(-50%)',
+                background: 'var(--control-bg)', border: '1px solid var(--border-color)', color: 'currentColor',
                 width: '44px', height: '44px', borderRadius: '50%', cursor: 'pointer', zIndex: 10,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1.2rem'
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
               }}
             >
               →
             </button>
 
             {/* Indicators */}
-            <div className="carousel-indicators" style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '40px' }}>
+            <div className="carousel-indicators" style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '30px' }}>
               {artists.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setCurrentArtistIndex(i)}
                   style={{
-                    width: '8px', height: '8px', borderRadius: '50%', border: 'none',
-                    background: i === currentArtistIndex ? 'currentColor' : 'rgba(128,128,128,0.3)',
-                    cursor: 'pointer', padding: 0, transition: 'all 0.3s ease'
+                    width: '10px', height: '10px', borderRadius: '50%', border: 'none',
+                    background: i === currentArtistIndex ? 'var(--text-color)' : 'rgba(128,128,128,0.4)',
+                    cursor: 'pointer', padding: 0, transition: 'background 0.3s'
                   }}
-                  aria-label={`Go to artist ${i + 1}`}
+                  aria-label={`Slide ${i + 1}`}
                 />
               ))}
             </div>
           </div>
         </motion.section>
 
+        {/* Location Section */}
         <motion.div 
           style={{ position: 'relative' }}
           initial="hidden"
@@ -945,26 +944,26 @@ export default function Home() {
           viewport={{ once: true, amount: 0.1 }}
           variants={sectionFadeVariants}
         >
-            <div className="section-number"></div>
-            <div 
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                zIndex: -1,
-                opacity: 0.05,
-                backgroundImage: 'url("https://www.svgrepo.com/show/532394/ink-splash.svg")',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat',
-                filter: theme === 'dark' ? 'invert(1)' : 'none',
-                pointerEvents: 'none'
-              }}
-            />
-            <InkBlot variant={3} style={{ top: '-20%', right: '0', width: '100%', height: '100%', transform: 'rotate(10deg)' }} />
-            <InkBlot variant={1} style={{ bottom: '-15%', left: '0', width: '60%', height: '60%', transform: 'rotate(-30deg)' }} />
+          <div 
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              zIndex: -1,
+              opacity: 0.05,
+              backgroundImage: 'url("https://www.svgrepo.com/show/532394/ink-splash.svg")',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+              filter: theme === 'dark' ? 'invert(1)' : 'none',
+              pointerEvents: 'none'
+            }}
+          />
+          <InkBlot variant={3} style={{ top: '-20%', right: '0', width: '100%', height: '100%', transform: 'rotate(10deg)' }} />
+          <InkBlot variant={1} style={{ bottom: '-15%', left: '0', width: '60%', height: '60%', transform: 'rotate(-30deg)' }} />
+          
           <motion.div 
             className="product-copy"
             initial="hidden"
@@ -1015,6 +1014,7 @@ export default function Home() {
             </motion.div>
           </motion.div>
         </motion.section>
+        
         <SocialLinks />
       </main>
 
