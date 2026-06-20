@@ -14,7 +14,6 @@ import { LocationMap } from "./components/LocationMap";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import FloatingSocials from "./components/FloatingSocials";
 
-// Custom Tattoo Icons for the Marketplace and UI
 const Icons = {
   Machine: () => (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -35,9 +34,6 @@ const Icons = {
       <path d="M12 20V8M3 12h18M12 8c-2-2-5-2-5 2 0 3 5 3 5 3s5 0 5-3c0-4-3-4-5-2z" />
     </svg>
   ),
-  Menu: () => (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-  )
 };
 
 const stats = [
@@ -87,17 +83,17 @@ const InkBlot = ({ variant = 1, style }: { variant?: 1 | 2 | 3; style?: React.CS
         position: 'absolute', 
         zIndex: -1,
         pointerEvents: 'none',
-        opacity: 0.15,
-        filter: 'blur(60px)',
-        color: 'var(--accent-color, #f39c12)',
+        opacity: 0.12,
+        filter: 'blur(50px)',
+        color: 'var(--accent-color, #e0a96d)',
         ...style 
       }}
       animate={{
-        scale: [1, 1.1, 0.95, 1],
-        rotate: [0, 5, -5, 0],
+        scale: [1, 1.08, 0.96, 1],
+        rotate: [0, 4, -4, 0],
       }}
       transition={{
-        duration: 20 + variant * 5,
+        duration: 22 + variant * 4,
         repeat: Infinity,
         ease: "easeInOut"
       }}
@@ -108,95 +104,41 @@ const InkBlot = ({ variant = 1, style }: { variant?: 1 | 2 | 3; style?: React.CS
 };
 
 const artists = [
-  {
-    name: "FELIPE SANTOS",
-    image: "/artists/felipe-santos.jpg",
-    descKey: "artistFelipeDesc" as TranslationKey,
-  },
-  {
-    name: "CARLA MORALES",
-    image: "/artists/carla-morales.jpg",
-    descKey: "artistCarlaDesc" as TranslationKey,
-  },
-  {
-    name: "ZACK",
-    image: "/artists/zack.jpg",
-    descKey: "artistZackDesc" as TranslationKey,
-  },
-  {
-    name: "VICTORIA",
-    image: "/artists/victoria.jpg",
-    descKey: "artistVictoriaDesc" as TranslationKey,
-  },
-  {
-    name: "OWEN",
-    image: "/artists/owen.jpg",
-    descKey: "artistOwenDesc" as TranslationKey,
-  },
-  {
-    name: "CONOR",
-    image: "/artists/conor.jpg",
-    descKey: "artistConorDesc" as TranslationKey,
-  },
-  {
-    name: "SARAH MORGAN",
-    image: "/artists/sarah-morgan.jpg",
-    descKey: "artistSarahDesc" as TranslationKey,
-  },
-  {
-    name: "ELIAS SILVA",
-    image: "/artists/elias-silva.jpg",
-    descKey: "artistEliasDesc" as TranslationKey,
-  },
+  { name: "FELIPE SANTOS", image: "/artists/felipe-santos.jpg", style: "BLACK REALISM", descKey: "artistFelipeDesc" as TranslationKey },
+  { name: "CARLA MORALES", image: "/artists/carla-morales.jpg", style: "FINE LINE & FLORAL", descKey: "artistCarlaDesc" as TranslationKey },
+  { name: "ZACK", image: "/artists/zack.jpg", style: "TRADITIONAL INK", descKey: "artistZackDesc" as TranslationKey },
+  { name: "VICTORIA", image: "/artists/victoria.jpg", style: "NEO-TRADITIONAL", descKey: "artistVictoriaDesc" as TranslationKey },
+  { name: "OWEN", image: "/artists/owen.jpg", style: "GEOMETRIC / DOTWORK", descKey: "artistOwenDesc" as TranslationKey },
+  { name: "CONOR", image: "/artists/conor.jpg", style: "JAPANESE OREINTAL", descKey: "artistConorDesc" as TranslationKey },
+  { name: "SARAH MORGAN", image: "/artists/sarah-morgan.jpg", style: "WATERCOLOR ART", descKey: "artistSarahDesc" as TranslationKey },
+  { name: "ELIAS SILVA", image: "/artists/elias-silva.jpg", style: "CHICANO CULTURE", descKey: "artistEliasDesc" as TranslationKey },
 ];
 
 const contacts = [
-  {
-    title: "LOCATION",
-    lines: ["101-103 Francis St, The Liberties", "Dublin 8, D08 FHP9"],
-  },
-  {
-    title: "HOURS OF OPERATION",
-    lines: ["11AM TO 7PM | MONDAY - SUNDAY", "CLOSED TUESDAY"],
-  },
-  {
-    title: "CONTACT US",
-    lines: ["nexostudiosltd@gmail.com"],
-  },
+  { title: "LOCATION", lines: ["101-103 Francis St, The Liberties", "Dublin 8, D08 FHP9"] },
+  { title: "HOURS OF OPERATION", lines: ["11AM TO 7PM | MON - SUN", "CLOSED TUESDAY"] },
+  { title: "CONTACT US", lines: ["nexostudiosltd@gmail.com"] },
 ];
 
 export default function Home() {
   const { t, isHydrated } = useTranslation();
   const { theme, toggleTheme, language, setLanguage } = useLanguage();
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const snapContainerRef = useRef<HTMLDivElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
-  const [activeSection, setActiveSection] = useState(0);
-
-  // Carousel Autoplay state controls
   const [currentArtistIndex, setCurrentArtistIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Carousel Autoplay Timer Setup
   useEffect(() => {
-    if (isHovered) return; // Pause autoplay when mouse leaves to allow user reading
-
+    if (isHovered) return;
     const timer = setInterval(() => {
-      setCurrentArtistIndex((prevIndex) => (prevIndex + 1) % artists.length);
-    }, 4500); // Transitions slide every 4.5 seconds
-
+      setCurrentArtistIndex((prev) => (prev + 1) % artists.length);
+    }, 5000);
     return () => clearInterval(timer);
   }, [isHovered]);
 
   const containerVariants = {
     hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.03,
-      },
-    },
+    visible: { opacity: 1, transition: { staggerChildren: 0.02 } },
   };
 
   const characterVariants = {
@@ -205,104 +147,29 @@ export default function Home() {
   };
 
   const fadeInUpVariants = {
-    hidden: { opacity: 0, y: 20 },
+    hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] } },
   };
 
   const sectionFadeVariants = {
-    hidden: { opacity: 0, y: 40 },
-    visible: { 
-      opacity: 1, 
-      y: 0, 
-      transition: { duration: 1, ease: [0.16, 1, 0.3, 1] } 
-    },
+    hidden: { opacity: 0, y: 50 },
+    visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } },
   };
 
   const splitTagline = useMemo(() => {
     if (!isHydrated) return [];
-    const taglineText = t("tagline");
-    return taglineText.split("").map(char => (char === " " ? "\u00A0" : char));
+    return t("tagline").split("").map(char => (char === " " ? "\u00A0" : char));
   }, [t, isHydrated]);
 
   const splitArtistsTitle = useMemo(() => {
     if (!isHydrated) return [];
-    const text = t("artists");
-    return text.split("").map(char => (char === " " ? "\u00A0" : char));
+    return t("artists").split("").map(char => (char === " " ? "\u00A0" : char));
   }, [t, isHydrated]);
 
   const splitAftercareTitle = useMemo(() => {
     if (!isHydrated) return [];
-    const text = t("aftercareTitle");
-    return text.split("").map(char => (char === " " ? "\u00A0" : char));
+    return t("aftercareTitle").split("").map(char => (char === " " ? "\u00A0" : char));
   }, [t, isHydrated]);
-
-  useEffect(() => {
-    const container = snapContainerRef.current;
-    if (!container) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-active");
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-
-    const sections = container.querySelectorAll('.snap-section, .location-section');
-    sections.forEach((section) => observer.observe(section));
-
-    return () => observer.disconnect();
-  }, [isHydrated]);
-
-  useEffect(() => {
-    const container = snapContainerRef.current;
-    if (!container || window.innerWidth < 1024) return;
-
-    const handleScroll = () => {
-      const sections = container.querySelectorAll('.snap-section, .location-section');
-      sections.forEach((section: any) => {
-        const rect = section.getBoundingClientRect();
-        const speed = 0.4;
-        const yOffset = rect.top * speed;
-        section.style.setProperty('--parallax-offset', `${yOffset}px`);
-
-        const viewportHeight = window.innerHeight;
-        const minScale = 0.95;
-        const maxScale = 1.0;
-        
-        let normalizedOffset = Math.abs(rect.top) / viewportHeight;
-        if (normalizedOffset > 1) normalizedOffset = 1;
-
-        const scaleValue = maxScale - (normalizedOffset * (maxScale - minScale));
-        section.style.setProperty('--parallax-scale', `${scaleValue}`);
-      });
-    };
-
-    container.addEventListener('scroll', handleScroll);
-    handleScroll();
-    return () => container.removeEventListener('scroll', handleScroll);
-  }, [isHydrated]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setIsMenuOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  const nextArtist = () => {
-    setCurrentArtistIndex((prev) => (prev + 1) % artists.length);
-  };
-
-  const prevArtist = () => {
-    setCurrentArtistIndex((prev) => (prev - 1 + artists.length) % artists.length);
-  };
 
   const currentLangConfig = SUPPORTED_LANGUAGES[language] || SUPPORTED_LANGUAGES['english'];
 
@@ -311,139 +178,41 @@ export default function Home() {
       <main id="home" className="page-shell loaded relative w-full overflow-hidden">
         <style dangerouslySetInnerHTML={{ __html: `
           :root {
-            --text-color: ${theme === 'dark' ? '#ffffff' : '#333333'};
+            --text-color: ${theme === 'dark' ? '#ffffff' : '#0a0a0a'};
             --bg-color: ${theme === 'dark' ? '#0a0a0a' : '#ffffff'};
-            --border-color: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'};
-            --card-bg: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)'};
-            --control-bg: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)'};
+            --border-color: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'};
+            --card-bg: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.01)'};
+            --control-bg: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)'};
           }
           
-          /* Enforced Global Body reset to contain layout leaks */
           body {
             color: var(--text-color);
             background-color: var(--bg-color);
-            transition: background-color 0.3s ease, color 0.3s ease;
             overflow-x: hidden;
             margin: 0;
             padding: 0;
+            letter-spacing: -0.01em;
           }
 
-          @media (min-width: 1024px) {
-            .snap-container {
-              height: 100vh;
-              overflow-y: scroll;
-              scroll-snap-type: y mandatory;
-              scroll-behavior: smooth;
-              scrollbar-width: none;
-              -ms-overflow-style: none;
-            }
-            .snap-container::-webkit-scrollbar {
-              display: none;
-            }
-            .snap-section {
-              scroll-snap-align: start;
-              height: 100vh;
-              width: 100%;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              position: relative;
-              box-sizing: border-box;
-              overflow: hidden;
-            }
-            .parallax-bg {
-              position: absolute;
-              top: -20%;
-              left: 0;
-              width: 100%;
-              height: 140%;
-              z-index: -1;
-              background-size: cover;
-              background-position: center;
-              transform: translateY(var(--parallax-offset, 0)) scale(calc(var(--parallax-scale, 1) * 1.15));
-              pointer-events: none;
-              opacity: ${theme === 'dark' ? '0.4' : '0.15'};
-              filter: grayscale(100%) ${theme === 'dark' ? 'brightness(0.3)' : 'brightness(0.9)'};
-              transition: transform 0.3s ease-out, filter 0.3s ease, opacity 0.3s ease;
-              will-change: transform, filter, opacity;
-            }
-            
-            .reveal-text {
-              overflow: hidden;
-              display: block;
-            }
-            
-            .reveal-text span {
-              display: block;
-            }
-            
-            .is-active .reveal-text span {
-              transform: translateY(0);
-            }
-            
-            .section-number {
-              position: absolute;
-              left: 4%;
-              top: 50%;
-              transform: translateY(-50%);
-              font-size: 12vw;
-              font-weight: 900;
-              opacity: 0.05;
-              line-height: 1;
-              pointer-events: none;
-              color: var(--text-color);
-            }
-
-            .location-section {
-              scroll-snap-align: start;
-              height: 100vh;
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              padding-top: 100px !important;
-              position: relative;
-              overflow: hidden;
-              background: var(--bg-color);
-              color: var(--text-color);
-              transition: background-color 0.3s ease, color 0.3s ease;
-            }
-          }
-
-          /* General Layout Structure with complete height containment fixes */
-          .artists-section, .product-section {
+          /* Nike Premium Spacing & Rigid Containment */
+          .fade-section {
             position: relative !important;
             overflow: hidden !important;
+            padding: 160px 4% !important;
+            box-sizing: border-box;
           }
 
           @media (max-width: 1023px) {
-            .site-header-fixed {
-              flex-direction: column !important;
-              padding: 15px 4% !important;
-              gap: 10px !important;
-            }
-            .site-header-fixed > div:first-child {
-              display: none;
+            .fade-section {
+              padding: 100px 6% !important;
             }
             .hero-section {
               flex-direction: column;
-              padding-top: 140px !important;
-              height: auto !important;
-              min-height: 100vh;
-              padding-bottom: 60px !important;
+              padding-top: 160px !important;
             }
             .hero-side {
-              position: static !important;
-              transform: none !important;
+              margin-top: 4rem;
               max-width: 100% !important;
-              margin-top: 3rem;
-              order: 2;
-            }
-            .artists-section, .product-section {
-              height: auto !important;
-              min-height: 100vh;
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
             }
           }
 
@@ -453,189 +222,191 @@ export default function Home() {
             left: 0;
             width: 100%;
             z-index: 1000;
-            background: ${theme === 'dark' ? 'rgba(10, 10, 10, 0.8)' : 'rgba(255, 255, 255, 0.8)'};
-            backdrop-filter: blur(12px);
-            transition: all 0.3s ease;
+            background: ${theme === 'dark' ? 'rgba(10, 10, 10, 0.75)' : 'rgba(255, 255, 255, 0.75)'};
+            backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border-color);
+            padding: 24px 4%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
           }
 
-          .custom-lang-selector select option {
-            background: var(--bg-color);
-            color: var(--text-color);
+          /* Micro Eyebrows inspired by Nike Editorial Specs */
+          .eyebrow {
+            font-size: 10px !important;
+            font-weight: 700 !important;
+            letter-spacing: 0.35em !important;
+            text-transform: uppercase;
+            opacity: 0.5;
+            margin-bottom: 1rem;
           }
-          .artist-card {
+
+          /* High Contrast Nike Typography Style */
+          h1, h2 {
+            font-weight: 900 !important;
+            text-transform: uppercase;
+            letter-spacing: -0.03em !important;
+            line-height: 0.95 !important;
+          }
+
+          h1 { font-size: clamp(3rem, 8vw, 6.5rem); }
+          h2 { font-size: clamp(2.5rem, 6.5vw, 5rem); margin-bottom: 2.5rem; }
+
+          /* Clean Premium Action Items */
+          .nike-btn {
+            background: var(--text-color);
+            color: var(--bg-color);
+            padding: 1.1rem 2.8rem;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease;
+          }
+          .nike-btn:hover {
+            transform: scale(1.02);
+            opacity: 0.95;
+          }
+
+          .nike-btn-outline {
+            border: 1.5px solid var(--text-color);
+            color: var(--text-color);
+            padding: 1.1rem 2.8rem;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+          }
+          .nike-btn-outline:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+          }
+
+          .nike-link-action {
+            color: var(--text-color);
+            font-weight: 700;
+            font-size: 0.8rem;
+            letter-spacing: 0.15em;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid var(--text-color);
+            padding-bottom: 4px;
+            transition: gap 0.3s ease;
+          }
+          .nike-link-action:hover {
+            gap: 14px;
+          }
+
+          /* Nike Asymmetrical Editorial Structure for Carousel Grid */
+          .nike-split-card {
+            display: grid;
+            grid-template-columns: 1fr;
             background: var(--card-bg);
             border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
-          }
-          .info-block {
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 1.5rem;
-            margin-bottom: 1.5rem;
-          }
-          .info-block:last-child {
-            border-bottom: none;
-          }
-          .button {
-            background: var(--text-color);
-            color: var(--bg-color);
-            padding: 0.8rem 2rem;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: opacity 0.2s ease;
-            display: inline-block;
-          }
-          .button:hover {
-            opacity: 0.9;
-          }
-          .button-outline {
-            border: 1px solid var(--text-color);
-            color: var(--text-color);
-            padding: 0.8rem 2rem;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            display: inline-block;
-          }
-          .button-outline:hover {
-            background: var(--text-color);
-            color: var(--bg-color);
-          }
-          .view-gallery {
-            color: var(--text-color);
-            text-decoration: underline;
-            font-size: 0.85rem;
-            letter-spacing: 0.1em;
-          }
-          .stats-section {
-            position: relative;
-            min-height: 45vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            border-radius: 24px;
             overflow: hidden;
+          }
+          @media (min-width: 1024px) {
+            .nike-split-card {
+              grid-template-columns: 1.1fr 0.9fr;
+            }
+          }
+
+          .stats-section {
             background: var(--bg-color);
+            padding: 120px 4%;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
           }
           .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            width: 100%;
             max-width: 1400px;
-            gap: clamp(2rem, 5vw, 5rem);
-            z-index: 2;
+            margin: 0 auto;
+            gap: 4rem 2rem;
             text-align: center;
           }
           @media (min-width: 1024px) {
-            .stats-grid {
-              grid-template-columns: repeat(5, 1fr);
-            }
-          }
-          .stat-icon {
-            font-size: clamp(1.4rem, 3vw, 2.5rem);
-            margin-bottom: clamp(1rem, 2vw, 1.5rem);
-            opacity: 0.8;
-            color: var(--text-color);
+            .stats-grid { grid-template-columns: repeat(5, 1fr); }
           }
           .stat-number {
-            font-size: clamp(2.2rem, 7.5vw, 4.8rem);
-            font-weight: 800;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 900;
+            letter-spacing: -0.02em;
             line-height: 1;
             margin-bottom: 0.5rem;
           }
           .stat-label {
-            font-size: clamp(0.6rem, 1.2vw, 0.75rem);
+            font-size: 11px;
+            font-weight: 600;
             letter-spacing: 0.2em;
-            opacity: 0.7;
+            opacity: 0.4;
           }
         `}} />
         
-        <header className="site-header-fixed" style={{ 
-          display: 'flex', 
-          flexWrap: 'nowrap',
-          justifyContent: 'space-between',
-          alignItems: 'center', 
-          padding: '20px 4%',
-          gap: '1.5rem'
-        }}>
-          <div style={{ flex: 1, minWidth: '80px' }}></div>
-          
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-            <div className="brand" style={{ fontSize: '1.25rem', letterSpacing: '0.2em' }}>
-              <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-                NEXO STUDIO TATTOO
-              </Link>
-            </div>
+        {/* Navigation Bar */}
+        <header className="site-header-fixed">
+          <div className="brand" style={{ fontWeights: 900, fontSize: '1.15rem', letterSpacing: '0.25em' }}>
+            <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+              NEXO STUDIO
+            </Link>
           </div>
           
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flex: 1, justifyContent: 'flex-end' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <button 
               onClick={toggleTheme}
-              className={`accessibility-toggle theme-${theme}`}
-              aria-label="Toggle Accessibility Theme"
+              className="accessibility-toggle"
               style={{
                 background: 'transparent',
                 color: 'currentColor',
-                border: '1px solid currentColor',
+                border: '1px solid var(--border-color)',
                 padding: '0 16px',
-                fontFamily: 'inherit',
-                fontSize: '0.75rem',
+                fontSize: '0.7rem',
+                fontWeight: 700,
                 letterSpacing: '0.1em',
                 cursor: 'pointer',
-                display: 'inline-flex',
+                height: '38px',
+                borderRadius: '20px',
+                display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
-                gap: '6px',
-                height: '40px',
-                borderRadius: '20px'
+                gap: '6px'
               }}
             >
-              <span className="theme-icon">{theme === 'dark' ? '☀' : '☾'}</span>
-              <span className="theme-text">{theme === 'dark' ? 'LIGHT' : 'DARK'}</span>
+              <span>{theme === 'dark' ? '☀ LIGHT' : '☾ DARK'}</span>
             </button>
 
             <div className="custom-lang-selector" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
-              <div style={{
-                position: 'absolute',
-                left: '14px',
-                pointerEvents: 'none',
-                fontSize: '0.95rem',
-                display: 'flex',
-                alignItems: 'center'
-              }}>
-                {currentLangConfig.flag}
-              </div>
+              <span style={{ position: 'absolute', left: '14px', pointerEvents: 'none' }}>{currentLangConfig.flag}</span>
               <select
                 value={language || 'english'}
                 onChange={(e) => setLanguage(e.target.value as LanguageCode)}
                 style={{
                   background: 'transparent',
                   color: 'currentColor',
-                  border: '1px solid currentColor',
-                  padding: '0 36px 0 42px',
-                  fontFamily: 'inherit',
-                  fontSize: '0.75rem',
+                  border: '1px solid var(--border-color)',
+                  padding: '0 32px 0 40px',
+                  fontSize: '0.7rem',
+                  fontWeight: 700,
                   letterSpacing: '0.1em',
-                  textTransform: 'uppercase',
                   cursor: 'pointer',
-                  WebkitAppearance: 'none',
-                  MozAppearance: 'none',
                   appearance: 'none',
-                  height: '40px',
+                  height: '38px',
                   borderRadius: '20px'
                 }}
               >
                 {Object.entries(SUPPORTED_LANGUAGES).map(([code, lang]) => (
-                  <option key={code} value={code}>
+                  <option key={code} value={code} style={{ background: 'var(--bg-color)' }}>
                     {lang.name.toUpperCase()}
                   </option>
                 ))}
               </select>
-              <span style={{ position: 'absolute', right: '16px', pointerEvents: 'none', fontSize: '0.55rem' }}>▼</span>
             </div>
           </div>
         </header>
@@ -647,268 +418,167 @@ export default function Home() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
           variants={sectionFadeVariants}
+          style={{ display: 'flex', minHeight: '100vh', alignItems: 'center', paddingTop: '200px' }}
         >
           <video
-            autoPlay
-            loop
-            muted
-            playsInline
+            autoPlay loop muted playsInline
             style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-              zIndex: -1,
-              opacity: theme === 'dark' ? 0.3 : 0.15,
-              filter: 'grayscale(100%)',
-              pointerEvents: 'none'
+              position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+              objectFit: 'cover', zIndex: -1, opacity: theme === 'dark' ? 0.25 : 0.08,
+              filter: 'grayscale(100%)', pointerEvents: 'none'
             }}
           >
             <source src="/videos/hero-background.mp4" type="video/mp4" />
           </video>
-          <motion.div 
-            className="hero-copy"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={{
-              visible: { transition: { staggerChildren: 0.15 } }
-            }}
-          >
-            <motion.p className="eyebrow" variants={fadeInUpVariants}>STUDIO</motion.p>
-            <motion.h1 variants={containerVariants}>
-              {splitTagline.map((char, index) => (
-                <motion.span key={index} variants={characterVariants}>
-                  {char}
-                </motion.span>
-              ))}
-            </motion.h1>
-            <motion.p className="hero-description" variants={fadeInUpVariants}>
-              {t("description")}
-            </motion.p>
-            <motion.div className="hero-actions" variants={fadeInUpVariants}>
-              <Link className="button" href="/contact">
-                {t("booking").toUpperCase()}
-              </Link>
-              <Link className="button-outline" href="/shop">
-                SHOP STORE
-              </Link>
-            </motion.div>
-          </motion.div> 
 
-          <motion.aside className="hero-side">
-            <motion.div 
-              className="info-panel"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
-            >
-              {contacts.map((block) => (
-                <motion.div key={block.title} className="info-block" variants={fadeInUpVariants}>
-                  <h2>{block.title}</h2>
-                  {block.lines.map((line) => (
-                    <p key={line}>{line}</p>
-                  ))}
-                </motion.div>
-              ))}
+          <div style={{ flex: '1 1 60%' }}>
+            <motion.div className="hero-copy" variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>
+              <motion.p className="eyebrow" variants={fadeInUpVariants}>EXCEPTIONAL EMBLEM CRAFT</motion.p>
+              <motion.h1 variants={containerVariants}>
+                {splitTagline.map((char, index) => (
+                  <motion.span key={index} style={{ display: 'inline-block' }} variants={characterVariants}>
+                    {char}
+                  </motion.span>
+                ))}
+              </motion.h1>
+              <motion.p style={{ fontSize: '1.15rem', opacity: 0.7, maxWidth: '540px', margin: '2rem 0 3rem 0', lineHeight: 1.6 }} variants={fadeInUpVariants}>
+                {t("description")}
+              </motion.p>
+              <motion.div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }} variants={fadeInUpVariants}>
+                <Link className="nike-btn" href="/contact">{t("booking").toUpperCase()}</Link>
+                <Link className="nike-btn-outline" href="/shop">SHOP METICULOUS PRODUCTS</Link>
+              </motion.div>
             </motion.div>
-          </motion.aside>
+          </div>
+
+          <aside className="hero-side" style={{ flex: '1 1 40%', maxWidth: '400px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+              {contacts.map((block) => (
+                <div key={block.title} style={{ borderLeft: '2px solid var(--border-color)', paddingLeft: '1.5rem' }}>
+                  <h3 style={{ fontSize: '11px', fontWeight: 800, letterSpacing: '0.15em', opacity: 0.4, marginBottom: '0.5rem' }}>{block.title}</h3>
+                  {block.lines.map((line) => (
+                    <p key={line} style={{ fontSize: '0.9rem', margin: '2px 0', fontWeight: 500 }}>{line}</p>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </aside>
         </motion.section>
 
-        {/* Stats Section */}
-        <section className="stats-section snap-section">
-          <div 
-            className="parallax-bg" 
-            style={{ 
-              backgroundImage: 'url("https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&q=80")',
-              opacity: theme === 'dark' ? 0.3 : 0.1,
-              zIndex: 1
-            }} 
-          />
+        {/* Stats Grid Dashboard */}
+        <section className="stats-section">
           <div className="stats-grid">
             {stats.map((stat, index) => (
-              <motion.div 
-                key={index} 
-                className="stat-item"
-                whileHover="hover"
-                style={{ cursor: 'default' }}
-              >
-                <motion.div 
-                  className="stat-icon"
-                  variants={{
-                    hover: { scale: 1.3 }
-                  }}
-                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                >
-                  {stat.icon}
-                </motion.div>
+              <div key={index}>
                 <div className="stat-number">
                   <AnimatedNumber value={stat.value} suffix={stat.suffix} />
                 </div>
                 <div className="stat-label">{stat.label.toUpperCase()}</div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </section>
 
-        {/* Artists Section */}
+        {/* Artists Split-Screen Section */}
         <motion.section 
           id="artists" 
-          className="artists-section fade-section"
+          className="fade-section"
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.1 }}
           variants={sectionFadeVariants}
         >
-          <div className="section-number"></div>
-          <div 
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: -1,
-              opacity: 0.05,
-              backgroundImage: 'url("https://www.svgrepo.com/show/155307/ink-splash.svg")',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              filter: theme === 'dark' ? 'invert(1)' : 'none',
-              pointerEvents: 'none'
-            }}
-          />
-          <InkBlot variant={2} style={{ top: '10%', right: '-15%', width: '90%', height: '90%', transform: 'rotate(45deg)' }} />
-          <InkBlot variant={3} style={{ bottom: '0', left: '-10%', width: '70%', height: '70%', transform: 'rotate(-20deg)' }} />
+          <InkBlot variant={2} style={{ top: '5%', right: '-10%', width: '80%', height: '80%' }} />
           
-          <motion.div 
-            className="section-header"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
-          >
-            <motion.p className="eyebrow" variants={fadeInUpVariants}>ARTISTS</motion.p>
-            <motion.h2 variants={containerVariants}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <p className="eyebrow">THE ROSTER</p>
+            <h2>
               {splitArtistsTitle.map((char, index) => (
-                <motion.span key={index} variants={characterVariants}>{char}</motion.span>
+                <span key={index} style={{ display: 'inline-block' }}>{char}</span>
               ))}
-            </motion.h2>
-          </motion.div>
+            </h2>
+          </div>
           
-          {/* Autoplay Slider Track Wrapper */}
+          {/* Nike High-Fidelity Asymmetrical Interaction Container */}
           <div 
             className="carousel-container" 
-            style={{ position: 'relative', overflow: 'hidden' }}
+            style={{ position: 'relative', marginTop: '2rem' }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
             <div 
-              className="artist-carousel-track" 
               style={{ 
                 display: 'flex', 
-                transition: 'transform 0.6s cubic-bezier(0.25, 1, 0.5, 1)',
+                transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
                 transform: `translateX(-${currentArtistIndex * 100}%)`,
                 willChange: 'transform'
               }}
             >
               {artists.map((artist) => (
-                <div 
-                  key={artist.name} 
-                  style={{ 
-                    minWidth: '100%', 
-                    padding: '0 20px',
-                    boxSizing: 'border-box'
-                  }}
-                >
-                  <motion.article 
-                    className="artist-card" 
-                    style={{ maxWidth: '800px', margin: '0 auto' }}
-                    initial="hidden"
-                    whileInView="visible"
-                    viewport={{ once: true, amount: 0.2 }}
-                    variants={{
-                      hidden: { scale: 0.95, opacity: 0 },
-                      visible: { 
-                        scale: 1, 
-                        opacity: 1,
-                        transition: { duration: 0.6 }
-                      }
-                    }}
-                  >
-                    <div className="artist-image">
-                      <Image
-                        src={artist.image}
-                        alt={artist.name}
-                        width={800}
-                        height={800}
-                        className="artist-photo object-cover rounded-lg"
-                      />
+                <div key={artist.name} style={{ minWidth: '100%', padding: '0 10px', boxSizing: 'border-box' }}>
+                  <div className="nike-split-card">
+                    {/* Media Left Boundary */}
+                    <div style={{ position: 'relative', height: '500px', width: '100%', overflow: 'hidden' }}>
+                      <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} style={{ width: '100%', height: '100%', position: 'relative' }}>
+                        <Image
+                          src={artist.image}
+                          alt={artist.name}
+                          fill
+                          sizes="(max-width: 1024px) 100vw, 50vw"
+                          style={{ objectFit: 'cover' }}
+                          priority
+                        />
+                      </motion.div>
+                      <span style={{ position: 'absolute', bottom: '24px', left: '24px', background: 'var(--bg-color)', fontSize: '10px', fontWeight: 800, padding: '6px 14px', borderRadius: '4px', letterSpacing: '0.1em' }}>
+                        {artist.style}
+                      </span>
                     </div>
-                    <div className="artist-copy" style={{ textAlign: 'center', marginTop: '1.5rem' }}>
-                      <h3>{artist.name}</h3>
-                      <p className="my-2">{t(artist.descKey)}</p>
+                    
+                    {/* Editorial Description Boundary Right */}
+                    <div style={{ padding: '3.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
+                      <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.2em', opacity: 0.4 }}>RESIDENT ELITE</span>
+                      <h3 style={{ fontSize: '2.2rem', fontWeight: 900, margin: '0.5rem 0 1.5rem 0', letterSpacing: '-0.02em' }}>{artist.name}</h3>
+                      <p style={{ opacity: 0.7, lineHeight: 1.6, fontSize: '1rem', marginBottom: '2.5rem' }}>{t(artist.descKey)}</p>
                       <div>
-                        <Link className="view-gallery inline-block mt-2" href="/contact">
-                          {t("bookAppointment").toUpperCase()}
+                        <Link className="nike-link-action" href="/contact">
+                          RESERVE CONSULTATION
                         </Link>
                       </div>
                     </div>
-                  </motion.article>
+                  </div>
                 </div>
               ))}
             </div>
 
-            {/* Manual navigation buttons */}
+            {/* Slider Control Arrows */}
             <button 
-              onClick={prevArtist}
-              className="carousel-control prev"
-              aria-label="Previous artist"
+              onClick={() => setCurrentArtistIndex((prev) => (prev - 1 + artists.length) % artists.length)}
               style={{
-                position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)',
-                background: 'var(--control-bg)', border: '1px solid var(--border-color)', color: 'currentColor',
-                width: '44px', height: '44px', borderRadius: '50%', cursor: 'pointer', zIndex: 10,
-                display: 'flex', alignItems: 'center', justifyContent: 'center'
+                position: 'absolute', left: '-20px', top: '50%', transform: 'translateY(-50%)',
+                background: 'var(--text-color)', border: 'none', color: 'var(--bg-color)',
+                width: '48px', height: '48px', borderRadius: '50%', cursor: 'pointer', zIndex: 10,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
               }}
+              aria-label="Previous Profile"
             >
               ←
             </button>
             <button 
-              onClick={nextArtist}
-              className="carousel-control next"
-              aria-label="Next artist"
+              onClick={() => setCurrentArtistIndex((prev) => (prev + 1) % artists.length)}
               style={{
-                position: 'absolute', right: '15px', top: '50%', transform: 'translateY(-50%)',
-                background: 'var(--control-bg)', border: '1px solid var(--border-color)', color: 'currentColor',
-                width: '44px', height: '44px', borderRadius: '50%', cursor: 'pointer', zIndex: 10,
-                display: 'flex', alignItems: 'center', justifyContent: 'center'
+                position: 'absolute', right: '-20px', top: '50%', transform: 'translateY(-50%)',
+                background: 'var(--text-color)', border: 'none', color: 'var(--bg-color)',
+                width: '48px', height: '48px', borderRadius: '50%', cursor: 'pointer', zIndex: 10,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
               }}
+              aria-label="Next Profile"
             >
               →
             </button>
-
-            {/* Indicators */}
-            <div className="carousel-indicators" style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '30px' }}>
-              {artists.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrentArtistIndex(i)}
-                  style={{
-                    width: '10px', height: '10px', borderRadius: '50%', border: 'none',
-                    background: i === currentArtistIndex ? 'var(--text-color)' : 'rgba(128,128,128,0.4)',
-                    cursor: 'pointer', padding: 0, transition: 'background 0.3s'
-                  }}
-                  aria-label={`Slide ${i + 1}`}
-                />
-              ))}
-            </div>
           </div>
         </motion.section>
 
-        {/* Location Section */}
+        {/* Location Section Wrapper */}
         <motion.div 
           style={{ position: 'relative' }}
           initial="hidden"
@@ -916,27 +586,10 @@ export default function Home() {
           viewport={{ once: true, amount: 0.1 }}
           variants={sectionFadeVariants}
         >
-          <div 
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: 0,
-              opacity: 0.05,
-              backgroundImage: 'url("https://www.svgrepo.com/show/532390/ink-splash.svg")',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              filter: theme === 'dark' ? 'invert(1)' : 'none',
-              pointerEvents: 'none'
-            }}
-          />
           <LocationMap />
         </motion.div>
 
-        {/* Aftercare & Marketplace Section */}
+        {/* Aftercare Store Marketplace Section */}
         <motion.section 
           className="product-section fade-section"
           initial="hidden"
@@ -944,75 +597,37 @@ export default function Home() {
           viewport={{ once: true, amount: 0.1 }}
           variants={sectionFadeVariants}
         >
-          <div 
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              zIndex: -1,
-              opacity: 0.05,
-              backgroundImage: 'url("https://www.svgrepo.com/show/532394/ink-splash.svg")',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              filter: theme === 'dark' ? 'invert(1)' : 'none',
-              pointerEvents: 'none'
-            }}
-          />
-          <InkBlot variant={3} style={{ top: '-20%', right: '0', width: '100%', height: '100%', transform: 'rotate(10deg)' }} />
-          <InkBlot variant={1} style={{ bottom: '-15%', left: '0', width: '60%', height: '60%', transform: 'rotate(-30deg)' }} />
+          <InkBlot variant={3} style={{ bottom: '-10%', left: '-5%', width: '70%', height: '70%' }} />
           
-          <motion.div 
-            className="product-copy"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={{ visible: { transition: { staggerChildren: 0.15 } } }}
-          >
-            <motion.p className="eyebrow" variants={fadeInUpVariants}>{t('marketplace')}</motion.p>
-            <motion.h2 variants={containerVariants}>
+          <div style={{ maxWidth: '640px' }}>
+            <p className="eyebrow">{t('marketplace')}</p>
+            <h2>
               {splitAftercareTitle.map((char, index) => (
-                <motion.span key={index} variants={characterVariants}>{char}</motion.span>
+                <span key={index} style={{ display: 'inline-block' }}>{char}</span>
               ))}
-            </motion.h2>
-            <motion.p style={{ marginBottom: "1.5rem" }} variants={fadeInUpVariants}>
+            </h2>
+            <p style={{ fontSize: '1.1rem', lineHeight: 1.6, opacity: 0.7, marginBottom: '2.5rem' }}>
               {t('aftercareDescription')}
-            </motion.p>
+            </p>
             
-            <motion.ul 
-              className="marketplace-list" 
-              style={{ 
-                listStyle: "none", 
-                padding: 0, 
-                margin: "0 0 2rem 0",
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.75rem"
-              }}
-              variants={fadeInUpVariants}
-            >
-              <li style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                <Icons.Gift />
-                {t('giftCards')}
+            <ul style={{ listStyle: "none", padding: 0, margin: "0 0 3.5rem 0", display: "flex", flexDirection: "column", gap: "1.2rem", fontWeight: 600, fontSize: '0.95rem' }}>
+              <li style={{ display: "flex", alignItems: "center", gap: "1rem", borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
+                <Icons.Gift /> {t('giftCards')}
               </li>
-              <li style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                <Icons.Machine />
-                {t('flashTattoos')}
+              <li style={{ display: "flex", alignItems: "center", gap: "1rem", borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
+                <Icons.Machine /> {t('flashTattoos')}
               </li>
-              <li style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                <Icons.Ink />
-                {t('aftercareProduct')}
+              <li style={{ display: "flex", alignItems: "center", gap: "1rem", borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
+                <Icons.Ink /> {t('aftercareProduct')}
               </li>
-            </motion.ul>
+            </ul>
             
-            <motion.div className="product-action" variants={fadeInUpVariants}>
-              <Link className="button button-outline" href="/shop">
-                {t('shopNow')}
+            <div>
+              <Link className="nike-btn" href="/shop">
+                EXPLORE GALLERY STORE
               </Link>
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </motion.section>
         
         <SocialLinks />
