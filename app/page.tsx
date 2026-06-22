@@ -8,14 +8,188 @@ import { TranslationKey } from "../lib/translations";
 import { LanguageCode, SUPPORTED_LANGUAGES } from "../lib/languages"; 
 import { useLanguage } from "./providers";
 import { SocialLinks } from "./components/SocialLinks"; 
-import { motion, useInView, animate } from "framer-motion";
+// 1. Added useScroll and useSpring here
+import { motion, useInView, animate, useScroll, useSpring } from "framer-motion";
 import { FaUsers, FaPenNib, FaUserCheck, FaPalette, FaLocationDot, FaStar, FaGoogle } from "react-icons/fa6";
 import { LocationMap } from "./components/LocationMap";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import FloatingSocials from "./components/FloatingSocials";
 
-// LIVE GOOGLE BUSINESS REVIEW LINK:
 const GOOGLE_REVIEW_URL = "https://g.page/r/CRIAbJ7AOfOPEBM/review";
+
+// 2. Custom Smooth Tattoo Machine Cursor Component
+const TattooMachineCursor = () => {
+  const [position, setPosition] = useState({ x: -100, y: -100 });
+  const [isHovered, setIsHovered] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    // Disable on touch screens for clean mobile accessibility
+    if (window.matchMedia("(max-width: 1023px)").matches) return;
+
+    const moveCursor = (e: MouseEvent) => {
+      setPosition({ x: e.clientX, y: e.clientY });
+      if (!isVisible) setIsVisible(true);
+    };
+
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (
+        target.closest("a") || 
+        target.closest("button") || 
+        target.closest("select") || 
+        window.getComputedStyle(target).cursor === "pointer"
+      ) {
+        setIsHovered(true);
+      } else {
+        setIsHovered(false);
+      }
+    };
+
+    window.addEventListener("mousemove", moveCursor);
+    window.addEventListener("mouseover", handleMouseOver);
+    return () => {
+      window.removeEventListener("mousemove", moveCursor);
+      window.removeEventListener("mouseover", handleMouseOver);
+    };
+  }, [isVisible]);
+
+  if (!isVisible) return null;
+
+  return (
+    <motion.div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: 48,
+        height: 48,
+        pointerEvents: "none",
+        zIndex: 99999,
+        x: position.x,
+        y: position.y,
+        // Ensures the very tip of the needle at (0,0) matches the real cursor hotspot
+        transform: "translate(0px, 0px)", 
+      }}
+      animate={{
+        // Give a slight structural kick/tilt forward when active
+        rotate: isHovered ? -5 : 0,
+        scale: isHovered ? 1.05 : 1,
+      }}
+      transition={{ type: "spring", stiffness: 550, damping: 32, mass: 0.15 }}
+    >
+      {/* High-fidelity Tattoo Machine Asset */}
+      <svg 
+        width="48" 
+        height="48" 
+        viewBox="0 0 32 32" 
+        fill="none" 
+        style={{ 
+          filter: "drop-shadow(2px 4px 6px rgba(0,0,0,0.3))",
+          overflow: "visible"
+        }}
+      >
+        {/* Dynamic Needle Layer: Vibrates at high frequency on hover links */}
+        <motion.line 
+          x1="0" 
+          y1="0" 
+          x2="8" 
+          y2="8" 
+          stroke="var(--text-color)" 
+          strokeWidth="1.2" 
+          strokeLinecap="round"
+          animate={isHovered ? {
+            x: [0, 0.4, -0.2, 0],
+            y: [0, 0.4, -0.2, 0],
+          } : {}}
+          transition={{
+            repeat: Infinity,
+            duration: 0.05,
+            ease: "linear"
+          }}
+        />
+
+        {/* Needle Tube & Grip Tip */}
+        <path 
+          d="M6 6 L9 9 M5.5 7.5 L7.5 5.5" 
+          stroke="var(--text-color)" 
+          strokeWidth="1.5" 
+          strokeLinecap="round" 
+        />
+        
+        {/* Main Ergonomic Machine Grip Barrel */}
+        <rect 
+          x="7.5" 
+          y="7.5" 
+          width="5" 
+          height="12" 
+          rx="1" 
+          transform="rotate(-45 7.5 7.5)" 
+          fill="var(--bg-color)" 
+          stroke="var(--text-color)" 
+          strokeWidth="1.5" 
+        />
+        {/* Grip Texture Details */}
+        <line x1="10" y1="13" x2="13" y2="10" stroke="var(--text-color)" strokeWidth="1" opacity="0.6" />
+        <line x1="12" y1="15" x2="15" y2="12" stroke="var(--text-color)" strokeWidth="1" opacity="0.6" />
+        <line x1="14" y1="17" x2="17" y2="14" stroke="var(--text-color)" strokeWidth="1" opacity="0.6" />
+
+        {/* Upper Machine Frame & Coil Assembly */}
+        <path 
+          d="M16 16 L22 22 L27 17 L21 11 Z" 
+          fill="var(--text-color)" 
+          stroke="var(--text-color)" 
+          strokeWidth="1" 
+        />
+        
+        {/* Power Unit/Motor Component housing */}
+        <circle 
+          cx="21" 
+          cy="16" 
+          r="3" 
+          fill="var(--bg-color)" 
+          stroke="var(--text-color)" 
+          strokeWidth="1.5" 
+        />
+        <circle 
+          cx="21" 
+          cy="16" 
+          r="1" 
+          fill="var(--text-color)" 
+        />
+        
+        {/* Back Frame Clip Bracket */}
+        <path 
+          d="M22 22 L26 26 L29 23 L25 19" 
+          fill="var(--bg-color)" 
+          stroke="var(--text-color)" 
+          strokeWidth="1.2" 
+        />
+
+        {/* Operational Power Cord (Aesthetic Tail) */}
+        <path 
+          d="M27 25 C 29 27, 31 26, 33 29" 
+          stroke="var(--text-color)" 
+          strokeWidth="1" 
+          strokeLinecap="round"
+          opacity="0.5"
+        />
+
+        {/* Lightning/Electric Resonance FX sparks when hovering actionable targets */}
+        {isHovered && (
+          <motion.g
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            transition={{ repeat: Infinity, duration: 0.1 }}
+          >
+            <path d="M-2 3 L-5 1 L-3 -1" stroke="var(--text-color)" strokeWidth="1" />
+            <path d="M4 -2 L2 -5 L0 -3" stroke="var(--text-color)" strokeWidth="1" />
+          </motion.g>
+        )}
+      </svg>
+    </motion.div>
+  );
+};
 
 const Icons = {
   Machine: () => (
@@ -130,6 +304,14 @@ export default function Home() {
   const [currentArtistIndex, setCurrentArtistIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
+  // 3. Setup Framer Motion scroll tracker inputs
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  });
+
   useEffect(() => {
     if (isHovered) return;
     const timer = setInterval(() => {
@@ -179,6 +361,13 @@ export default function Home() {
             margin: 0;
             padding: 0;
             letter-spacing: -0.01em;
+          }
+
+          /* 4. Hides default browser mouse pointer on desktop screens to allow the tattoo gun to take over */
+          @media (min-width: 1024px) {
+            body, a, button, select, option, input {
+              cursor: none !important;
+            }
           }
 
           .fade-section {
@@ -342,7 +531,6 @@ export default function Home() {
             opacity: 0.4;
           }
 
-          /* Google Reviews Custom Styling */
           .reviews-header-block {
             display: flex;
             flex-direction: column;
@@ -368,96 +556,180 @@ export default function Home() {
             font-weight: 700;
           }
 
-          /* Premium Footer Styling */
-          .site-footer {
-            scroll-snap-align: end;
-            background: var(--bg-color);
-            border-top: 1px solid var(--border-color);
-            padding: 80px 4% 40px 4%;
-          }
-          .footer-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 3rem;
-            max-width: 1400px;
-            margin: 0 auto;
-          }
-          @media (min-width: 768px) {
-            .footer-grid { grid-template-columns: repeat(2, 1fr); }
-          }
-          @media (min-width: 1024px) {
-            .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
-          }
-          .footer-brand-col .footer-logo {
-            font-weight: 900;
-            font-size: 1.4rem;
-            letter-spacing: 0.25em;
-            display: block;
-            margin-bottom: 0.5rem;
-          }
-          .footer-brand-col .footer-tagline {
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.2em;
-            opacity: 0.5;
-          }
-          .footer-grid h4 {
-            font-size: 11px;
-            font-weight: 800;
-            letter-spacing: 0.15em;
-            opacity: 0.4;
-            margin-top: 0;
-            margin-bottom: 1.5rem;
-            text-transform: uppercase;
-          }
-          .footer-grid ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-          }
-          .footer-grid ul li a {
-            color: inherit;
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            opacity: 0.6;
-            text-transform: uppercase;
-            transition: opacity 0.2s ease, padding-left 0.2s ease;
-          }
-          .footer-grid ul li a:hover {
-            opacity: 1;
-            padding-left: 4px;
-          }
-          .footer-info-col p {
-            font-size: 0.85rem;
-            font-weight: 500;
-            margin: 0 0 0.8rem 0;
-            opacity: 0.6;
-            text-transform: uppercase;
-          }
-          .footer-bottom {
-            max-width: 1400px;
-            margin: 60px auto 0 auto;
-            padding-top: 30px;
-            border-top: 1px solid var(--border-color);
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            font-size: 11px;
-            font-weight: 600;
-            opacity: 0.4;
-            letter-spacing: 0.05em;
-          }
-          @media (min-width: 768px) {
-            .footer-bottom {
-              flex-direction: row;
-              justify-content: space-between;
-            }
-          }
+          /* Master Site Footer Element */
+.site-footer {
+  margin-top: 6rem;
+  padding-top: 4rem;
+  padding-bottom: 2rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+  background: var(--bg-color);
+}
+
+.footer-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.footer-description {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--text-color);
+  opacity: 0.6;
+}
+
+.footer-nav-group,
+.footer-social-group {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.footer-heading {
+  font-size: 0.75rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--text-color);
+  opacity: 0.5;
+  font-weight: 600;
+}
+
+.footer-nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  color: var(--text-color);
+}
+
+.footer-nav-links a {
+  opacity: 0.7;
+  transition: all 0.2s ease;
+}
+
+.footer-nav-links a:hover {
+  opacity: 1;
+  color: var(--text-color);
+}
+
+/* Social Media Networks Setup */
+.social-links {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.social-link {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  overflow: hidden;
+}
+
+.social-link:hover {
+  background: var(--control-bg);
+  border-color: var(--text-color);
+  transform: translateY(-4px) scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
+}
+
+.social-icon {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.social-icon svg {
+  width: 100%;
+  height: 100%;
+  stroke-width: 2;
+}
+
+.link-indicator {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: -2px;
+  right: -2px;
+  background: var(--text-color);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0) rotate(-45deg);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.link-indicator svg {
+  width: 7px;
+  height: 7px;
+  color: var(--bg-color);
+  stroke-width: 2.5;
+}
+
+.social-link:hover .social-icon {
+  transform: scale(0.7) rotate(-45deg);
+}
+
+.social-link:hover .link-indicator {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* Lower Base Metadata Section */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.85rem;
+  color: var(--text-color);
+  opacity: 0.4;
+}
         `}} />
+
+        {/* 5. Fixed Top Progress Indicator line */}
+        <motion.div 
+          style={{
+            scaleX,
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '4px',
+            background: 'var(--text-color)',
+            transformOrigin: '0%',
+            zIndex: 99999,
+          }}
+        />
         
         {/* Navigation Bar */}
         <header className="site-header-fixed">
@@ -660,7 +932,7 @@ export default function Home() {
                       <p style={{ opacity: 0.7, lineHeight: 1.6, fontSize: '1rem', marginBottom: '2.5rem' }}>{t(artist.descKey)}</p>
                       <div>
                         <Link className="nike-link-action" href="/contact">
-                          RESERVE CONSULTATION
+                          BOOK A SESSION
                         </Link>
                       </div>
                     </div>
@@ -781,7 +1053,6 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Action Buttons connected directly to Live Google URL */}
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '2rem' }}>
             <a className="nike-btn" href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer">
               WRITE A REVIEW
@@ -797,6 +1068,9 @@ export default function Home() {
           <SocialLinks />
         </footer>
       </main>
+
+      {/* 6. Render Custom Cursor globally over client tree */}
+      <TattooMachineCursor />
 
       <FloatingSocials />
       <ScrollToTopButton />
