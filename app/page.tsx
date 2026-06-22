@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "./hooks/useTranslation";
 import { TranslationKey } from "../lib/translations";
-import { LanguageCode, SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from "../lib/languages"; 
+import { LanguageCode, SUPPORTED_LANGUAGES } from "../lib/languages"; 
 import { useLanguage } from "./providers";
 import { SocialLinks } from "./components/SocialLinks"; 
 import { motion, useInView, animate } from "framer-motion";
@@ -14,8 +14,8 @@ import { LocationMap } from "./components/LocationMap";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import FloatingSocials from "./components/FloatingSocials";
 
-// PLACE YOUR GOOGLE MAPS / GOOGLE BUSINESS REVIEW LINK HERE:
-const GOOGLE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID_HERE";
+// LIVE GOOGLE BUSINESS REVIEW LINK:
+const GOOGLE_REVIEW_URL = "https://g.page/r/CRIAbJ7AOfOPEBM/review";
 
 const Icons = {
   Machine: () => (
@@ -45,12 +45,6 @@ const stats = [
   { label: "Customers", value: 5000, suffix: "", icon: <FaUserCheck /> },
   { label: "Artworks", value: 10000, suffix: "+", icon: <FaPalette /> },
   { label: "Location", value: 1, suffix: "", icon: <FaLocationDot /> },
-];
-
-const mockReviews = [
-  { name: "Liam O'Connor", initials: "LO", text: "Absolutely incredible experience at Nexo Studio. The attention to detail on my fine line tattoo is unmatched. Clean, highly professional, and welcoming environment.", date: "2 weeks ago" },
-  { name: "Emma Smith", initials: "ES", text: "Got a traditional piece done here. The mastery over rich black ink work is insane. The studio layout feels exceptionally premium and modern.", date: "1 month ago" },
-  { name: "Matheus Silva", initials: "MS", text: "The booking process was seamless, and the artists are world-class. Excellent aftercare advice and high-quality product selection available in-store.", date: "3 weeks ago" }
 ];
 
 const AnimatedNumber = ({ value, suffix = "" }: { value: number; suffix?: string }) => {
@@ -133,7 +127,6 @@ export default function Home() {
   const { t, isHydrated } = useTranslation();
   const { theme, toggleTheme, language, setLanguage } = useLanguage();
 
-  const snapContainerRef = useRef<HTMLDivElement>(null);
   const [currentArtistIndex, setCurrentArtistIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -374,50 +367,95 @@ export default function Home() {
             font-size: 0.85rem;
             font-weight: 700;
           }
-          .reviews-grid-display {
+
+          /* Premium Footer Styling */
+          .site-footer {
+            scroll-snap-align: end;
+            background: var(--bg-color);
+            border-top: 1px solid var(--border-color);
+            padding: 80px 4% 40px 4%;
+          }
+          .footer-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 2rem;
-            margin-bottom: 4rem;
+            gap: 3rem;
+            max-width: 1400px;
+            margin: 0 auto;
           }
           @media (min-width: 768px) {
-            .reviews-grid-display { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: repeat(2, 1fr); }
           }
           @media (min-width: 1024px) {
-            .reviews-grid-display { grid-template-columns: repeat(3, 1fr); }
+            .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; }
           }
-          .review-card-item {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 20px;
-            padding: 2.5rem;
-            position: relative;
+          .footer-brand-col .footer-logo {
+            font-weight: 900;
+            font-size: 1.4rem;
+            letter-spacing: 0.25em;
+            display: block;
+            margin-bottom: 0.5rem;
+          }
+          .footer-brand-col .footer-tagline {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            opacity: 0.5;
+          }
+          .footer-grid h4 {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            opacity: 0.4;
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+          }
+          .footer-grid ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            transition: border-color 0.3s ease;
+            gap: 0.8rem;
           }
-          .review-card-item:hover {
-            border-color: var(--text-color);
+          .footer-grid ul li a {
+            color: inherit;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0.6;
+            text-transform: uppercase;
+            transition: opacity 0.2s ease, padding-left 0.2s ease;
           }
-          .review-avatar-circle {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--control-bg);
+          .footer-grid ul li a:hover {
+            opacity: 1;
+            padding-left: 4px;
+          }
+          .footer-info-col p {
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin: 0 0 0.8rem 0;
+            opacity: 0.6;
+            text-transform: uppercase;
+          }
+          .footer-bottom {
+            max-width: 1400px;
+            margin: 60px auto 0 auto;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 800;
-            font-size: 0.8rem;
-            letter-spacing: 0;
+            flex-direction: column;
+            gap: 1rem;
+            font-size: 11px;
+            font-weight: 600;
+            opacity: 0.4;
+            letter-spacing: 0.05em;
           }
-          .review-stars-row {
-            color: #ffc107;
-            display: flex;
-            gap: 3px;
-            margin: 1rem 0 0.75rem 0;
-            font-size: 0.9rem;
+          @media (min-width: 768px) {
+            .footer-bottom {
+              flex-direction: row;
+              justify-content: space-between;
+            }
           }
         `}} />
         
@@ -672,6 +710,7 @@ export default function Home() {
 
         {/* Aftercare Store Marketplace Section */}
         <motion.section 
+          id="marketplace"
           className="product-section fade-section"
           initial="hidden"
           whileInView="visible"
@@ -718,6 +757,7 @@ export default function Home() {
 
         {/* Google Reviews Widget Dashboard Section */}
         <motion.section 
+          id="reviews"
           className="reviews-section fade-section"
           initial="hidden"
           whileInView="visible"
@@ -741,34 +781,8 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="reviews-grid-display">
-            {mockReviews.map((rev, idx) => (
-              <div key={idx} className="review-card-item">
-                <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                      <div className="review-avatar-circle">{rev.initials}</div>
-                      <div>
-                        <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 800 }}>{rev.name.toUpperCase()}</h4>
-                        <span style={{ fontSize: '11px', opacity: 0.4, fontWeight: 600 }}>{rev.date.toUpperCase()}</span>
-                      </div>
-                    </div>
-                    <FaGoogle style={{ opacity: 0.15, fontSize: '1.1rem' }} />
-                  </div>
-
-                  <div className="review-stars-row">
-                    <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
-                  </div>
-
-                  <p style={{ fontSize: '0.95rem', lineHeight: 1.6, opacity: 0.7, margin: '1rem 0 0 0' }}>
-                    "{rev.text}"
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+          {/* Action Buttons connected directly to Live Google URL */}
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center', marginTop: '2rem' }}>
             <a className="nike-btn" href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer">
               WRITE A REVIEW
             </a>
@@ -778,7 +792,10 @@ export default function Home() {
           </div>
         </motion.section>
         
-        <SocialLinks />
+        {/* Studio Modernist Footer */}
+        <footer className="site-footer">
+          <SocialLinks />
+        </footer>
       </main>
 
       <FloatingSocials />
