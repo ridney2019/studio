@@ -156,21 +156,6 @@ export default function Home() {
     visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } },
   };
 
-  const splitTagline = useMemo(() => {
-    if (!isHydrated) return [];
-    return t("tagline").split("").map(char => (char === " " ? "\u00A0" : char));
-  }, [t, isHydrated]);
-
-  const splitArtistsTitle = useMemo(() => {
-    if (!isHydrated) return [];
-    return t("artists").split("").map(char => (char === " " ? "\u00A0" : char));
-  }, [t, isHydrated]);
-
-  const splitAftercareTitle = useMemo(() => {
-    if (!isHydrated) return [];
-    return t("aftercareTitle").split("").map(char => (char === " " ? "\u00A0" : char));
-  }, [t, isHydrated]);
-
   const currentLangConfig = SUPPORTED_LANGUAGES[language] || SUPPORTED_LANGUAGES['english'];
 
   return (
@@ -429,19 +414,25 @@ export default function Home() {
           <div style={{ flex: '1 1 60%' }}>
             <motion.div className="hero-copy" variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>
               <motion.p className="eyebrow" variants={fadeInUpVariants}>EXCEPTIONAL EMBLEM CRAFT</motion.p>
+              
               <motion.h1 variants={containerVariants}>
-                {splitTagline.map((char, index) => (
-                  <motion.span key={index} style={{ display: 'inline-block' }} variants={characterVariants}>
-                    {char}
-                  </motion.span>
+                {isHydrated && t("tagline").split(" ").map((word, wIdx, arr) => (
+                  <span key={wIdx} style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
+                    {word.split("").map((char, cIdx) => (
+                      <motion.span key={cIdx} style={{ display: 'inline-block' }} variants={characterVariants}>
+                        {char}
+                      </motion.span>
+                    ))}
+                    {wIdx < arr.length - 1 && "\u00A0"}
+                  </span>
                 ))}
               </motion.h1>
+
               <motion.p style={{ fontSize: '1.15rem', opacity: 0.7, maxWidth: '540px', margin: '2rem 0 3rem 0', lineHeight: 1.6 }} variants={fadeInUpVariants}>
                 {t("description")}
               </motion.p>
               <motion.div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }} variants={fadeInUpVariants}>
                 <Link className="nike-btn" href="/contact">{t("booking").toUpperCase()}</Link>
-                <Link className="nike-btn-outline" href="/shop">SHOP METICULOUS PRODUCTS</Link>
               </motion.div>
             </motion.div>
           </div>
@@ -488,8 +479,13 @@ export default function Home() {
           <div style={{ display: 'flex', flexDirection: 'column' }}>
             <p className="eyebrow">THE ROSTER</p>
             <h2>
-              {splitArtistsTitle.map((char, index) => (
-                <span key={index} style={{ display: 'inline-block' }}>{char}</span>
+              {isHydrated && t("artists").split(" ").map((word, wIdx, arr) => (
+                <span key={wIdx} style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
+                  {word.split("").map((char, cIdx) => (
+                    <span key={cIdx} style={{ display: 'inline-block' }}>{char}</span>
+                  ))}
+                  {wIdx < arr.length - 1 && "\u00A0"}
+                </span>
               ))}
             </h2>
           </div>
@@ -512,18 +508,18 @@ export default function Home() {
                 <div key={artist.name} style={{ minWidth: '100%', padding: '0 10px', boxSizing: 'border-box' }}>
                   <div className="nike-split-card">
                     {/* Media Left Boundary */}
-                    <div style={{ position: 'relative', height: '500px', width: '100%', overflow: 'hidden' }}>
-                      <motion.div whileHover={{ scale: 1.03 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} style={{ width: '100%', height: '100%', position: 'relative' }}>
+                    <div style={{ position: 'relative', height: '500px', width: '100%', overflow: 'hidden', background: 'var(--border-color)' }}>
+                      <motion.div whileHover={{ scale: 1.01 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} style={{ width: '100%', height: '100%', position: 'relative' }}>
                         <Image
                           src={artist.image}
                           alt={artist.name}
                           fill
                           sizes="(max-width: 1024px) 100vw, 50vw"
-                          style={{ objectFit: 'cover' }}
+                          style={{ objectFit: 'contain' }}
                           priority
                         />
                       </motion.div>
-                      <span style={{ position: 'absolute', bottom: '24px', left: '24px', background: 'var(--bg-color)', fontSize: '10px', fontWeight: 800, padding: '6px 14px', borderRadius: '4px', letterSpacing: '0.1em' }}>
+                      <span style={{ position: 'absolute', bottom: '24px', left: '24px', background: 'var(--bg-color)', fontSize: '10px', fontWeight: 800, padding: '6px 14px', borderRadius: '4px', letterSpacing: '0.1em', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
                         {artist.style}
                       </span>
                     </div>
@@ -596,8 +592,13 @@ export default function Home() {
           <div style={{ maxWidth: '640px' }}>
             <p className="eyebrow">{t('marketplace')}</p>
             <h2>
-              {splitAftercareTitle.map((char, index) => (
-                <span key={index} style={{ display: 'inline-block' }}>{char}</span>
+              {isHydrated && t("aftercareTitle").split(" ").map((word, wIdx, arr) => (
+                <span key={wIdx} style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
+                  {word.split("").map((char, cIdx) => (
+                    <span key={cIdx} style={{ display: 'inline-block' }}>{char}</span>
+                  ))}
+                  {wIdx < arr.length - 1 && "\u00A0"}
+                </span>
               ))}
             </h2>
             <p style={{ fontSize: '1.1rem', lineHeight: 1.6, opacity: 0.7, marginBottom: '2.5rem' }}>
