@@ -9,10 +9,13 @@ import { LanguageCode, SUPPORTED_LANGUAGES, DEFAULT_LANGUAGE } from "../lib/lang
 import { useLanguage } from "./providers";
 import { SocialLinks } from "./components/SocialLinks"; 
 import { motion, useInView, animate } from "framer-motion";
-import { FaUsers, FaPenNib, FaUserCheck, FaPalette, FaLocationDot } from "react-icons/fa6";
+import { FaUsers, FaPenNib, FaUserCheck, FaPalette, FaLocationDot, FaStar, FaGoogle } from "react-icons/fa6";
 import { LocationMap } from "./components/LocationMap";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import FloatingSocials from "./components/FloatingSocials";
+
+// PLACE YOUR GOOGLE MAPS / GOOGLE BUSINESS REVIEW LINK HERE:
+const GOOGLE_REVIEW_URL = "https://search.google.com/local/writereview?placeid=YOUR_PLACE_ID_HERE";
 
 const Icons = {
   Machine: () => (
@@ -42,6 +45,12 @@ const stats = [
   { label: "Customers", value: 5000, suffix: "", icon: <FaUserCheck /> },
   { label: "Artworks", value: 10000, suffix: "+", icon: <FaPalette /> },
   { label: "Location", value: 1, suffix: "", icon: <FaLocationDot /> },
+];
+
+const mockReviews = [
+  { name: "Liam O'Connor", initials: "LO", text: "Absolutely incredible experience at Nexo Studio. The attention to detail on my fine line tattoo is unmatched. Clean, highly professional, and welcoming environment.", date: "2 weeks ago" },
+  { name: "Emma Smith", initials: "ES", text: "Got a traditional piece done here. The mastery over rich black ink work is insane. The studio layout feels exceptionally premium and modern.", date: "1 month ago" },
+  { name: "Matheus Silva", initials: "MS", text: "The booking process was seamless, and the artists are world-class. Excellent aftercare advice and high-quality product selection available in-store.", date: "3 weeks ago" }
 ];
 
 const AnimatedNumber = ({ value, suffix = "" }: { value: number; suffix?: string }) => {
@@ -322,12 +331,93 @@ export default function Home() {
             letter-spacing: -0.02em;
             line-height: 1;
             margin-bottom: 0.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+          }
+          .stat-icon {
+            font-size: 0.6em;
+            opacity: 0.5;
+            display: inline-flex;
+            align-items: center;
           }
           .stat-label {
             font-size: 11px;
             font-weight: 600;
             letter-spacing: 0.2em;
             opacity: 0.4;
+          }
+
+          /* Google Reviews Custom Styling */
+          .reviews-header-block {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-bottom: 4rem;
+          }
+          @media (min-width: 768px) {
+            .reviews-header-block {
+              flex-direction: row;
+              justify-content: space-between;
+              align-items: flex-end;
+            }
+          }
+          .reviews-summary-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.5rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 700;
+          }
+          .reviews-grid-display {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 4rem;
+          }
+          @media (min-width: 768px) {
+            .reviews-grid-display { grid-template-columns: repeat(2, 1fr); }
+          }
+          @media (min-width: 1024px) {
+            .reviews-grid-display { grid-template-columns: repeat(3, 1fr); }
+          }
+          .review-card-item {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 2.5rem;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: border-color 0.3s ease;
+          }
+          .review-card-item:hover {
+            border-color: var(--text-color);
+          }
+          .review-avatar-circle {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--control-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.8rem;
+            letter-spacing: 0;
+          }
+          .review-stars-row {
+            color: #ffc107;
+            display: flex;
+            gap: 3px;
+            margin: 1rem 0 0.75rem 0;
+            font-size: 0.9rem;
           }
         `}} />
         
@@ -457,6 +547,7 @@ export default function Home() {
             {stats.map((stat, index) => (
               <div key={index}>
                 <div className="stat-number">
+                  <span className="stat-icon">{stat.icon}</span>
                   <AnimatedNumber value={stat.value} suffix={stat.suffix} />
                 </div>
                 <div className="stat-label">{stat.label.toUpperCase()}</div>
@@ -622,6 +713,68 @@ export default function Home() {
                 EXPLORE GALLERY STORE
               </Link>
             </div>
+          </div>
+        </motion.section>
+
+        {/* Google Reviews Widget Dashboard Section */}
+        <motion.section 
+          className="reviews-section fade-section"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.15 }}
+          variants={sectionFadeVariants}
+          style={{ borderTop: '1px solid var(--border-color)' }}
+        >
+          <div className="reviews-header-block">
+            <div>
+              <p className="eyebrow">CLIENT VERDICTS</p>
+              <h2 style={{ margin: 0 }}>GOOGLE REVIEWS</h2>
+            </div>
+            
+            <div className="reviews-summary-badge">
+              <FaGoogle style={{ opacity: 0.8 }} />
+              <span>4.9</span>
+              <div style={{ display: "flex", gap: "2px", color: "#ffc107" }}>
+                <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
+              </div>
+              <span style={{ opacity: 0.4, fontWeight: 500 }}>(142 REVIEWS)</span>
+            </div>
+          </div>
+
+          <div className="reviews-grid-display">
+            {mockReviews.map((rev, idx) => (
+              <div key={idx} className="review-card-item">
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      <div className="review-avatar-circle">{rev.initials}</div>
+                      <div>
+                        <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 800 }}>{rev.name.toUpperCase()}</h4>
+                        <span style={{ fontSize: '11px', opacity: 0.4, fontWeight: 600 }}>{rev.date.toUpperCase()}</span>
+                      </div>
+                    </div>
+                    <FaGoogle style={{ opacity: 0.15, fontSize: '1.1rem' }} />
+                  </div>
+
+                  <div className="review-stars-row">
+                    <FaStar /><FaStar /><FaStar /><FaStar /><FaStar />
+                  </div>
+
+                  <p style={{ fontSize: '0.95rem', lineHeight: 1.6, opacity: 0.7, margin: '1rem 0 0 0' }}>
+                    "{rev.text}"
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <a className="nike-btn" href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer">
+              WRITE A REVIEW
+            </a>
+            <a className="nike-btn-outline" href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer">
+              VIEW ALL ON GOOGLE
+            </a>
           </div>
         </motion.section>
         
