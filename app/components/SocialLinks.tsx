@@ -20,57 +20,7 @@ export const SocialLinks = () => {
         </svg>
       ),
     },
-    {
-      name: "TikTok",
-      url: "https://www.tiktok.com", // Replace with your TikTok profile link if needed
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"></path>
-        </svg>
-      ),
-    },
-    {
-      name: "YouTube",
-      url: "https://www.youtube.com", // Replace with your YouTube channel link if needed
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z"></path>
-          <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"></polygon>
-        </svg>
-      ),
-    },
-    {
-      name: "Pinterest",
-      url: "https://www.pinterest.com/nexostudiotattoo/",
-      icon: (
-        <svg
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <line x1="12" y1="8" x2="12" y2="22"></line>
-          <path d="M12 22c0 0 4.5-4.5 4.5-9a4.5 4.5 0 0 0-9 0c0 3.5 2.5 6 4.5 9z"></path>
-          <circle cx="12" cy="11" r="8"></circle>
-        </svg>
-      ),
-    },
+   
     {
       name: "Facebook",
       url: "https://www.facebook.com/felipesantosinked/",
@@ -136,7 +86,7 @@ export const SocialLinks = () => {
           <span className="footer-heading">Navigation</span>
           <ul className="footer-nav-links">
             <li><a href="/">Home</a></li>
-            <li><a href="/blog">Blog</a></li>
+            {/*<li><a href="/blog">Blog</a></li>*/}
             <li><a href="/#artists">Artists</a></li>
             <li><a href="/contact">Book Session</a></li>
           </ul>
@@ -184,8 +134,8 @@ export const SocialLinks = () => {
           Designed & built in-house
         </p>
         <div className="footer-legal">
-          <a href="#privacy">Privacy Policy</a>
-          <a href="#terms">Terms</a>
+          {/*<a href="#privacy">Privacy Policy</a>*/}
+          {/*<a href="#terms">Terms</a>*/}
         </div>
       </div>
     </footer>

@@ -282,13 +282,10 @@ const InkBlot = ({ variant = 1, style }: { variant?: 1 | 2 | 3; style?: React.CS
 
 const artists = [
   { name: "FELIPE SANTOS", image: "/artists/felipe-santos.jpg", style: "BLACK REALISM", descKey: "artistFelipeDesc" as TranslationKey },
-  { name: "CARLA MORALES", image: "/artists/carla-morales.jpg", style: "FINE LINE & FLORAL", descKey: "artistCarlaDesc" as TranslationKey },
-  { name: "ZACK", image: "/artists/zack.jpg", style: "TRADITIONAL INK", descKey: "artistZackDesc" as TranslationKey },
-  { name: "VICTORIA", image: "/artists/victoria.jpg", style: "NEO-TRADITIONAL", descKey: "artistVictoriaDesc" as TranslationKey },
-  { name: "OWEN", image: "/artists/owen.jpg", style: "GEOMETRIC / DOTWORK", descKey: "artistOwenDesc" as TranslationKey },
-  { name: "CONOR", image: "/artists/conor.jpg", style: "JAPANESE OREINTAL", descKey: "artistConorDesc" as TranslationKey },
-  { name: "SARAH MORGAN", image: "/artists/sarah-morgan.jpg", style: "WATERCOLOR ART", descKey: "artistSarahDesc" as TranslationKey },
-  { name: "ELIAS SILVA", image: "/artists/elias-silva.jpg", style: "CHICANO CULTURE", descKey: "artistEliasDesc" as TranslationKey },
+  { name: "JAY SHIN", image: "/artists/jay-shin.svg", style: "FINE LINE & FLORAL", descKey: "artistJayDesc" as TranslationKey },
+  { name: "VICTOR", image: "/artists/victor.svg", style: "TRADITIONAL INK", descKey: "artistVictorDesc" as TranslationKey },
+  { name: "ZEE", image: "/artists/zee.svg", style: "NEO-TRADITIONAL", descKey: "artistZeeDesc" as TranslationKey },
+  { name: "ADRIAN", image: "/artists/adrian.svg", style: "GEOMETRIC / DOTWORK", descKey: "artistAdrianDesc" as TranslationKey },
 ];
 
 const contacts = [
@@ -979,53 +976,6 @@ export default function Home() {
         >
           <LocationMap />
         </motion.div>
-
-        {/* Aftercare Store Marketplace Section */}
-        <motion.section 
-          id="marketplace"
-          className="product-section fade-section"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={sectionFadeVariants}
-        >
-          <InkBlot variant={3} style={{ bottom: '-10%', left: '-5%', width: '70%', height: '70%' }} />
-          
-          <div style={{ maxWidth: '640px' }}>
-            <p className="eyebrow">{t('marketplace')}</p>
-            <h2>
-              {isHydrated && t("aftercareTitle").split(" ").map((word, wIdx, arr) => (
-                <span key={wIdx} style={{ display: 'inline-block', whiteSpace: 'nowrap' }}>
-                  {word.split("").map((char, cIdx) => (
-                    <span key={cIdx} style={{ display: 'inline-block' }}>{char}</span>
-                  ))}
-                  {wIdx < arr.length - 1 && "\u00A0"}
-                </span>
-              ))}
-            </h2>
-            <p style={{ fontSize: '1.1rem', lineHeight: 1.6, opacity: 0.7, marginBottom: '2.5rem' }}>
-              {t('aftercareDescription')}
-            </p>
-            
-            <ul style={{ listStyle: "none", padding: 0, margin: "0 0 3.5rem 0", display: "flex", flexDirection: "column", gap: "1.2rem", fontWeight: 600, fontSize: '0.95rem' }}>
-              <li style={{ display: "flex", alignItems: "center", gap: "1rem", borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
-                <Icons.Gift /> {t('giftCards')}
-              </li>
-              <li style={{ display: "flex", alignItems: "center", gap: "1rem", borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
-                <Icons.Machine /> {t('flashTattoos')}
-              </li>
-              <li style={{ display: "flex", alignItems: "center", gap: "1rem", borderBottom: '1px solid var(--border-color)', paddingBottom: '12px' }}>
-                <Icons.Ink /> {t('aftercareProduct')}
-              </li>
-            </ul>
-            
-            <div>
-              <Link className="nike-btn" href="/shop">
-                EXPLORE GALLERY STORE
-              </Link>
-            </div>
-          </div>
-        </motion.section>
 
         {/* Google Reviews Widget Dashboard Section */}
         <motion.section 
