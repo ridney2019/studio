@@ -85,11 +85,12 @@ export const LocationMap = () => {
           ></iframe>
         </div>
 
-        {/* Right Side: Info Panel */}
+    {/* Right Side: Info Panel */}
         <div className="location-info">
           <div className="location-card">
             <h3>{STUDIO_LOCATION.name}</h3>
 
+            {/* Address Block */}
             <div className="location-detail">
               <svg
                 viewBox="0 0 24 24"
@@ -112,6 +113,7 @@ export const LocationMap = () => {
               </div>
             </div>
 
+            {/* Phone Block */}
             <div className="location-detail">
               <svg
                 viewBox="0 0 24 24"
@@ -129,6 +131,7 @@ export const LocationMap = () => {
               </div>
             </div>
 
+            {/* Email Block */}
             <div className="location-detail">
               <svg
                 viewBox="0 0 24 24"
@@ -147,6 +150,71 @@ export const LocationMap = () => {
               </div>
             </div>
 
+            {/* Brand Colorful Social Media Icons */}
+            <div 
+              className="location-card-socials" 
+              style={{ 
+                display: 'flex', 
+                gap: '12px', 
+                marginTop: '0.5rem', 
+                marginBottom: '0.5rem',
+                alignItems: 'center' 
+              }}
+            >
+              {/* Instagram Icon */}
+              <a 
+                href="https://instagram.com/felipesantostattooartist/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                title="Follow us on Instagram"
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  width: '42px', 
+                  height: '42px', 
+                  borderRadius: '50%', 
+                  background: 'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)', 
+                  color: '#ffffff',
+                  boxShadow: '0 4px 12px rgba(220, 39, 67, 0.25)',
+                  transition: 'transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.12)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              >
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+                </svg>
+              </a>
+
+              {/* Facebook Icon */}
+              <a 
+                href="https://facebook.com/felipesantosinked/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                title="Follow us on Facebook"
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  width: '42px', 
+                  height: '42px', 
+                  borderRadius: '50%', 
+                  backgroundColor: '#1877F2', 
+                  color: '#ffffff',
+                  boxShadow: '0 4px 12px rgba(24, 119, 242, 0.25)',
+                  transition: 'transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.12)'}
+                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+              >
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.8z"/>
+                </svg>
+              </a>
+            </div>
+
+            {/* Actions Block */}
             <div className="location-actions">
               <a
                 href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(
@@ -177,7 +245,7 @@ export const LocationMap = () => {
             )}
           </div>
         </div>
-      </div>
+        </div>
     </section>
   );
 };
