@@ -9,7 +9,7 @@ import { LanguageCode, SUPPORTED_LANGUAGES } from "../lib/languages";
 import { useLanguage } from "./providers";
 import { SocialLinks } from "./components/SocialLinks"; 
 // 1. Added useScroll and useSpring here
-import { motion, useInView, animate, useScroll, useSpring } from "framer-motion";
+import { motion, useInView, animate, useScroll, useSpring, AnimatePresence } from "framer-motion";
 import { FaUsers, FaPenNib, FaUserCheck, FaPalette, FaLocationDot, FaStar, FaGoogle } from "react-icons/fa6";
 import { LocationMap } from "./components/LocationMap";
 import ScrollToTopButton from "./components/ScrollToTopButton";
@@ -301,6 +301,8 @@ export default function Home() {
   const [currentArtistIndex, setCurrentArtistIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   // 3. Setup Framer Motion scroll tracker inputs
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
@@ -349,6 +351,21 @@ export default function Home() {
             --border-color: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'};
             --card-bg: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.01)'};
             --control-bg: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)'};
+          }
+            
+          .menu-overlay-link {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -0.03em;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            opacity: 0.4;
+          }
+
+          .menu-overlay-link:hover {
+            opacity: 1;
           }
           
           body {
@@ -728,65 +745,148 @@ export default function Home() {
           }}
         />
         
-        {/* Navigation Bar */}
-        <header className="site-header-fixed">
-          <div className="brand" style={{ fontWeight: 900, fontSize: '1.15rem', letterSpacing: '0.25em' }}>
-            <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
-              NEXO STUDIO
-            </Link>
-          </div>
-          
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <button 
-              onClick={toggleTheme}
-              className="accessibility-toggle"
+      {/* Navigation Bar */}
+      <header className="site-header-fixed" style={{ zIndex: 100000 }}>
+        <div className="brand" style={{ fontWeight: 900, fontSize: '1.15rem', letterSpacing: '0.25em' }}>
+          <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMenuOpen(false)}>
+            NEXO STUDIO
+          </Link>
+        </div>
+        
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <button 
+            onClick={toggleTheme}
+            className="accessibility-toggle"
+            style={{
+              background: 'transparent',
+              color: 'currentColor',
+              border: '1px solid var(--border-color)',
+              padding: '0 16px',
+              fontSize: '0.7rem',
+              fontWeight: 700,
+              letterSpacing: '0.1em',
+              cursor: 'pointer',
+              height: '38px',
+              borderRadius: '20px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            <span>{theme === 'dark' ? '☀ LIGHT' : '☾ DARK'}</span>
+          </button>
+
+          <div className="custom-lang-selector" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+            <span style={{ position: 'absolute', left: '14px', pointerEvents: 'none' }}>{currentLangConfig.flag}</span>
+            <select
+              value={language || 'english'}
+              onChange={(e) => setLanguage(e.target.value as LanguageCode)}
               style={{
                 background: 'transparent',
                 color: 'currentColor',
                 border: '1px solid var(--border-color)',
-                padding: '0 16px',
+                padding: '0 32px 0 40px',
                 fontSize: '0.7rem',
                 fontWeight: 700,
                 letterSpacing: '0.1em',
                 cursor: 'pointer',
+                appearance: 'none',
                 height: '38px',
-                borderRadius: '20px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
+                borderRadius: '20px'
               }}
             >
-              <span>{theme === 'dark' ? '☀ LIGHT' : '☾ DARK'}</span>
-            </button>
-
-            <div className="custom-lang-selector" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
-              <span style={{ position: 'absolute', left: '14px', pointerEvents: 'none' }}>{currentLangConfig.flag}</span>
-              <select
-                value={language || 'english'}
-                onChange={(e) => setLanguage(e.target.value as LanguageCode)}
-                style={{
-                  background: 'transparent',
-                  color: 'currentColor',
-                  border: '1px solid var(--border-color)',
-                  padding: '0 32px 0 40px',
-                  fontSize: '0.7rem',
-                  fontWeight: 700,
-                  letterSpacing: '0.1em',
-                  cursor: 'pointer',
-                  appearance: 'none',
-                  height: '38px',
-                  borderRadius: '20px'
-                }}
-              >
-                {Object.entries(SUPPORTED_LANGUAGES).map(([code, lang]) => (
-                  <option key={code} value={code} style={{ background: 'var(--bg-color)' }}>
-                    {lang.name.toUpperCase()}
-                  </option>
-                ))}
-              </select>
-            </div>
+              {Object.entries(SUPPORTED_LANGUAGES).map(([code, lang]) => (
+                <option key={code} value={code} style={{ background: 'var(--bg-color)' }}>
+                  {lang.name.toUpperCase()}
+                </option>
+              ))}
+            </select>
           </div>
-        </header>
+
+          {/* Collapsed Menu Trigger Button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle Navigation Menu"
+            style={{
+              background: 'transparent',
+              color: 'currentColor',
+              border: '1px solid var(--border-color)',
+              width: '38px',
+              height: '38px',
+              borderRadius: '50%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '4px',
+              cursor: 'pointer',
+              position: 'relative'
+            }}
+          >
+            <motion.span 
+              animate={isMenuOpen ? { rotate: 45, y: 3 } : { rotate: 0, y: 0 }}
+              style={{ width: '16px', height: '1.5px', background: 'currentColor', display: 'block', transformOrigin: 'center' }} 
+            />
+            <motion.span 
+              animate={isMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+              style={{ width: '16px', height: '1.5px', background: 'currentColor', display: 'block' }} 
+            />
+            <motion.span 
+              animate={isMenuOpen ? { rotate: -45, y: -3 } : { rotate: 0, y: 0 }}
+              style={{ width: '16px', height: '1.5px', background: 'currentColor', display: 'block', transformOrigin: 'center' }} 
+            />
+          </button>
+        </div>
+      </header>
+
+      {/* Collapsed Transparent Overlay Menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              width: '100vw',
+              height: '100vh',
+              backgroundColor: theme === 'dark' ? 'rgba(10, 10, 10, 0.4)' : 'rgba(255, 255, 255, 0.4)',
+              backdropFilter: 'blur(30px)',
+              WebkitBackdropFilter: 'blur(30px)',
+              zIndex: 9999,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            <nav style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', textAlign: 'center' }}>
+              {[
+                { label: 'HOME', href: '#home' },
+                { label: 'ARTISTS', href: '#artists' },
+                { label: 'BOOK', href: '/contact' },
+              ].map((link, index) => (
+                <motion.div
+                  key={link.label}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <Link 
+                    href={link.href} 
+                    className="menu-overlay-link"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {link.label}
+                  </Link>
+                </motion.div>
+              ))}
+            </nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
         {/* Hero Section */}
         <motion.section 
