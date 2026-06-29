@@ -8,7 +8,6 @@ import { TranslationKey } from "../lib/translations";
 import { LanguageCode, SUPPORTED_LANGUAGES } from "../lib/languages"; 
 import { useLanguage } from "./providers";
 import { SocialLinks } from "./components/SocialLinks"; 
-// 1. Added useScroll and useSpring here
 import { motion, useInView, animate, useScroll, useSpring, AnimatePresence } from "framer-motion";
 import { FaUsers, FaPenNib, FaUserCheck, FaPalette, FaLocationDot, FaStar, FaGoogle } from "react-icons/fa6";
 import { LocationMap } from "./components/LocationMap";
@@ -17,14 +16,13 @@ import FloatingSocials from "./components/FloatingSocials";
 
 const GOOGLE_REVIEW_URL = "https://g.page/r/CRIAbJ7AOfOPEBM/review";
 
-// 2. Custom Smooth Tattoo Machine Cursor Component
+// Custom Smooth Tattoo Machine Cursor Component
 const TattooMachineCursor = () => {
   const [position, setPosition] = useState({ x: -100, y: -100 });
   const [isHovered, setIsHovered] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // Disable on touch screens for clean mobile accessibility
     if (window.matchMedia("(max-width: 1023px)").matches) return;
 
     const moveCursor = (e: MouseEvent) => {
@@ -68,17 +66,14 @@ const TattooMachineCursor = () => {
         zIndex: 99999,
         x: position.x,
         y: position.y,
-        // Ensures the very tip of the needle at (0,0) matches the real cursor hotspot
         transform: "translate(0px, 0px)", 
       }}
       animate={{
-        // Give a slight structural kick/tilt forward when active
         rotate: isHovered ? -5 : 0,
         scale: isHovered ? 1.05 : 1,
       }}
       transition={{ type: "spring", stiffness: 550, damping: 32, mass: 0.15 }}
     >
-      {/* High-fidelity Tattoo Machine Asset */}
       <svg 
         width="48" 
         height="48" 
@@ -89,7 +84,6 @@ const TattooMachineCursor = () => {
           overflow: "visible"
         }}
       >
-        {/* Dynamic Needle Layer: Vibrates at high frequency on hover links */}
         <motion.line 
           x1="0" 
           y1="0" 
@@ -108,16 +102,12 @@ const TattooMachineCursor = () => {
             ease: "linear"
           }}
         />
-
-        {/* Needle Tube & Grip Tip */}
         <path 
           d="M6 6 L9 9 M5.5 7.5 L7.5 5.5" 
           stroke="var(--text-color)" 
           strokeWidth="1.5" 
           strokeLinecap="round" 
         />
-        
-        {/* Main Ergonomic Machine Grip Barrel */}
         <rect 
           x="7.5" 
           y="7.5" 
@@ -129,20 +119,15 @@ const TattooMachineCursor = () => {
           stroke="var(--text-color)" 
           strokeWidth="1.5" 
         />
-        {/* Grip Texture Details */}
         <line x1="10" y1="13" x2="13" y2="10" stroke="var(--text-color)" strokeWidth="1" opacity="0.6" />
         <line x1="12" y1="15" x2="15" y2="12" stroke="var(--text-color)" strokeWidth="1" opacity="0.6" />
         <line x1="14" y1="17" x2="17" y2="14" stroke="var(--text-color)" strokeWidth="1" opacity="0.6" />
-
-        {/* Upper Machine Frame & Coil Assembly */}
         <path 
           d="M16 16 L22 22 L27 17 L21 11 Z" 
           fill="var(--text-color)" 
           stroke="var(--text-color)" 
           strokeWidth="1" 
         />
-        
-        {/* Power Unit/Motor Component housing */}
         <circle 
           cx="21" 
           cy="16" 
@@ -157,16 +142,12 @@ const TattooMachineCursor = () => {
           r="1" 
           fill="var(--text-color)" 
         />
-        
-        {/* Back Frame Clip Bracket */}
         <path 
           d="M22 22 L26 26 L29 23 L25 19" 
           fill="var(--bg-color)" 
           stroke="var(--text-color)" 
           strokeWidth="1.2" 
         />
-
-        {/* Operational Power Cord (Aesthetic Tail) */}
         <path 
           d="M27 25 C 29 27, 31 26, 33 29" 
           stroke="var(--text-color)" 
@@ -174,8 +155,6 @@ const TattooMachineCursor = () => {
           strokeLinecap="round"
           opacity="0.5"
         />
-
-        {/* Lightning/Electric Resonance FX sparks when hovering actionable targets */}
         {isHovered && (
           <motion.g
             initial={{ opacity: 0 }}
@@ -189,28 +168,6 @@ const TattooMachineCursor = () => {
       </svg>
     </motion.div>
   );
-};
-
-const Icons = {
-  Machine: () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2v8M9 6h6M8 10h8l-2 12H10l-2-12zM12 15v3" />
-      <path d="M7 10c0-3 2-5 5-5s5 2 5 5" />
-    </svg>
-  ),
-  Ink: () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2s-5 3-5 8c0 2.8 2.2 5 5 5s5-2.2 5-5c0-5-5-8-5-8z" />
-      <path d="M7 10c0-1.5 1-3 1-3" />
-      <path d="M12 15v5M9 22h6" />
-    </svg>
-  ),
-  Gift: () => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="8" width="18" height="12" rx="2" />
-      <path d="M12 20V8M3 12h18M12 8c-2-2-5-2-5 2 0 3 5 3 5 3s5 0 5-3c0-4-3-4-5-2z" />
-    </svg>
-  ),
 };
 
 const stats = [
@@ -300,16 +257,54 @@ export default function Home() {
 
   const [currentArtistIndex, setCurrentArtistIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // 3. Setup Framer Motion scroll tracker inputs
+  // States for the Collapsible Navigation Dock
+  const [activeSection, setActiveSection] = useState("home");
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isNavExpanded, setIsNavExpanded] = useState(false);
+
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 100,
     damping: 30,
     restDelta: 0.001
   });
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Trigger floating state when page scrolls past 120px
+      setIsScrolled(window.scrollY > 120);
+    };
+    window.addEventListener("scroll", handleScroll);
+
+    const sections = ["home", "artists", "reviews", "location"];
+    const observers = sections.map((id) => {
+      const el = document.getElementById(id);
+      if (!el) return null;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setActiveSection(id);
+          }
+        },
+        { 
+          threshold: 0.2, 
+          rootMargin: "-25% 0px -55% 0px"
+        }
+      );
+      observer.observe(el);
+      return { observer, el };
+    });
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      observers.forEach((obs) => {
+        if (obs) obs.observer.unobserve(obs.el);
+      });
+    };
+  }, []);
 
   useEffect(() => {
     if (isHovered) return;
@@ -339,8 +334,6 @@ export default function Home() {
     visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } },
   };
 
-  const currentLangConfig = SUPPORTED_LANGUAGES[language] || SUPPORTED_LANGUAGES['english'];
-
   return (
     <>
       <main id="home" className="page-shell loaded relative w-full overflow-hidden">
@@ -352,21 +345,6 @@ export default function Home() {
             --card-bg: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.01)'};
             --control-bg: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)'};
           }
-            
-          .menu-overlay-link {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: -0.03em;
-            text-decoration: none;
-            color: var(--text-color);
-            transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            opacity: 0.4;
-          }
-
-          .menu-overlay-link:hover {
-            opacity: 1;
-          }
           
           body {
             color: var(--text-color);
@@ -375,12 +353,280 @@ export default function Home() {
             margin: 0;
             padding: 0;
             letter-spacing: -0.01em;
+            scroll-behavior: smooth;
           }
 
-          /* 4. Hides default browser mouse pointer on desktop screens to allow the tattoo gun to take over */
           @media (min-width: 1024px) {
             body, a, button, select, option, input {
               cursor: none !important;
+            }
+          }
+
+          /* --- FIXED TRANSPARENT GLASSMORPHIC NAVIGATION BAR --- */
+          .site-header-centralized {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: transparent;
+            padding: 24px 4%;
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            align-items: center;
+            box-sizing: border-box;
+            transition: padding 0.4s cubic-bezier(0.16, 1, 0.3, 1), background 0.3s ease;
+          }
+
+          .site-header-centralized.header-scrolled {
+            padding: 14px 4%;
+            background: ${theme === 'dark' ? 'rgba(10, 10, 10, 0.4)' : 'rgba(255, 255, 255, 0.4)'};
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
+          }
+
+          .brand-logo {
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            font-size: 1.2rem;
+            color: var(--text-color);
+            text-decoration: none;
+          }
+
+          /* --- COLLAPSIBLE NAVIGATION INTERACTIVE DOCK --- */
+          .header-center-nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
+
+          .central-nav-pill {
+            background: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)'};
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-radius: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+          }
+
+          .central-nav-pill.is-collapsed {
+            width: 140px;
+            height: 44px;
+          }
+
+          .central-nav-pill.is-collapsed:hover {
+            background: ${theme === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'};
+            border-color: var(--text-color);
+            transform: translateY(-1px);
+          }
+
+          .pill-trigger-btn {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            color: var(--text-color);
+          }
+
+          .pill-dot-indicator {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--text-color);
+            box-shadow: 0 0 8px var(--text-color);
+          }
+
+          .pill-label-text {
+            font-size: 0.75rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+          }
+
+          .central-nav-pill.is-expanded {
+            width: 440px;
+            height: 46px;
+            padding: 0 8px 0 24px;
+            background: ${theme === 'dark' ? 'rgba(10, 10, 10, 0.92)' : 'rgba(255, 255, 255, 0.92)'};
+            border-color: var(--text-color);
+          }
+
+          .expanded-links-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          }
+
+          .expanded-nav-list {
+            display: flex;
+            gap: 1.8rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+          }
+
+          .expanded-nav-list a {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-color);
+            text-decoration: none;
+            opacity: 0.4;
+            transition: opacity 0.2s ease;
+          }
+
+          .expanded-nav-list a:hover,
+          .expanded-nav-list a.active-pill {
+            opacity: 1;
+          }
+
+          .pill-close-btn {
+            background: var(--control-bg);
+            border: none;
+            color: var(--text-color);
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            transition: background 0.2s;
+          }
+
+          .pill-close-btn:hover {
+            background: var(--text-color);
+            color: var(--bg-color);
+          }
+
+          /* --- PREMIUM SCROLL-FOLLOWING & FLOATING CTA --- */
+          .header-right-cta {
+            justify-self: end;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+          }
+
+          .premium-rolling-btn {
+            position: relative;
+            overflow: hidden !important;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem !important;
+            font-weight: 800 !important;
+            letter-spacing: 0.1em;
+            height: 44px;
+            padding: 0 1.8rem !important;
+            text-decoration: none;
+            background: transparent !important;
+            border: 1px solid var(--border-color);
+            border-radius: 30px;
+            color: var(--text-color) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+          }
+
+          .premium-rolling-btn:hover {
+            border-color: var(--text-color);
+          }
+
+          /* Global Floating Scroll-Following Class Configuration */
+          .premium-rolling-btn.is-floating {
+            position: fixed !important;
+            bottom: 2.2rem;
+            right: 2.2rem;
+            height: 50px;
+            padding: 0 2.2rem !important;
+            background: var(--text-color) !important;
+            color: var(--bg-color) !important;
+            border-color: transparent;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            animation: ctaPopIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+          }
+
+          .premium-rolling-btn.is-floating:hover {
+            transform: scale(1.04) translateY(-2px);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.45);
+          }
+
+          @keyframes ctaPopIn {
+            from { transform: scale(0.8) translateY(30px); opacity: 0; }
+            to { transform: scale(1) translateY(0); opacity: 1; }
+          }
+
+          .btn-text-roll {
+            display: block;
+            position: relative;
+            height: 100%;
+            transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+            transform-style: preserve-3d;
+          }
+
+          .premium-rolling-btn.is-floating .btn-text-roll {
+            line-height: 50px;
+          }
+
+          .primary-text, .hover-text {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            backface-visibility: hidden;
+          }
+
+          .hover-text {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            transform: rotateX(-90deg);
+            transform-origin: top;
+          }
+
+          .premium-rolling-btn:hover .btn-text-roll {
+            transform: translateY(-100%);
+          }
+
+          .premium-rolling-btn:hover .hover-text {
+            transform: rotateX(0deg);
+          }
+
+          @media (max-width: 1023px) {
+            .header-center-nav {
+              display: none;
+            }
+            .premium-rolling-btn {
+              display: none;
+            }
+            /* Retain visible floating CTA access for mobile engagement */
+            .premium-rolling-btn.is-floating {
+              display: inline-flex !important;
+              bottom: 1.5rem;
+              right: 1.5rem;
+              height: 48px;
+              padding: 0 1.8rem !important;
+            }
+            .site-header-centralized {
+              grid-template-columns: 1fr auto;
             }
           }
 
@@ -403,21 +649,6 @@ export default function Home() {
               margin-top: 4rem;
               max-width: 100% !important;
             }
-          }
-
-          .site-header-fixed {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            background: ${theme === 'dark' ? 'rgba(10, 10, 10, 0.75)' : 'rgba(255, 255, 255, 0.75)'};
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 24px 4%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
           }
 
           .eyebrow {
@@ -570,167 +801,19 @@ export default function Home() {
             font-weight: 700;
           }
 
-          /* Master Site Footer Element */
-.site-footer {
-  margin-top: 6rem;
-  padding-top: 4rem;
-  padding-bottom: 2rem;
-  border-top: 1px solid var(--border-color);
-  display: flex;
-  flex-direction: column;
-  gap: 4rem;
-  background: var(--bg-color);
-}
-
-.footer-main {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 3rem;
-  align-items: start;
-}
-
-.footer-brand {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.footer-description {
-  margin: 0;
-  font-size: 0.95rem;
-  color: var(--text-color);
-  opacity: 0.6;
-}
-
-.footer-nav-group,
-.footer-social-group {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-}
-
-.footer-heading {
-  font-size: 0.75rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: var(--text-color);
-  opacity: 0.5;
-  font-weight: 600;
-}
-
-.footer-nav-links {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  font-size: 0.95rem;
-  color: var(--text-color);
-}
-
-.footer-nav-links a {
-  opacity: 0.7;
-  transition: all 0.2s ease;
-}
-
-.footer-nav-links a:hover {
-  opacity: 1;
-  color: var(--text-color);
-}
-
-/* Social Media Networks Setup */
-.social-links {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.social-link {
-  position: relative;
-  width: 44px;
-  height: 44px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  color: var(--text-color);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  overflow: hidden;
-}
-
-.social-link:hover {
-  background: var(--control-bg);
-  border-color: var(--text-color);
-  transform: translateY(-4px) scale(1.08);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-}
-
-.social-icon {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.social-icon svg {
-  width: 100%;
-  height: 100%;
-  stroke-width: 2;
-}
-
-.link-indicator {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  bottom: -2px;
-  right: -2px;
-  background: var(--text-color);
-  border-radius: 50%;
-  opacity: 0;
-  transform: scale(0) rotate(-45deg);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.link-indicator svg {
-  width: 7px;
-  height: 7px;
-  color: var(--bg-color);
-  stroke-width: 2.5;
-}
-
-.social-link:hover .social-icon {
-  transform: scale(0.7) rotate(-45deg);
-}
-
-.social-link:hover .link-indicator {
-  opacity: 1;
-  transform: scale(1) rotate(0deg);
-}
-
-/* Lower Base Metadata Section */
-.footer-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
-  font-size: 0.85rem;
-  color: var(--text-color);
-  opacity: 0.4;
-}
+          .site-footer {
+            margin-top: 6rem;
+            padding-top: 4rem;
+            padding-bottom: 2rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            gap: 4rem;
+            background: var(--bg-color);
+          }
         `}} />
 
-        {/* 5. Fixed Top Progress Indicator line */}
+        {/* Top Progress Bar */}
         <motion.div 
           style={{
             scaleX,
@@ -745,148 +828,65 @@ export default function Home() {
           }}
         />
         
-      {/* Navigation Bar */}
-      <header className="site-header-fixed" style={{ zIndex: 100000 }}>
-        <div className="brand" style={{ fontWeight: 900, fontSize: '1.15rem', letterSpacing: '0.25em' }}>
-          <Link href="/" style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => setIsMenuOpen(false)}>
-            NEXO STUDIO
-          </Link>
-        </div>
-        
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <button 
-            onClick={toggleTheme}
-            className="accessibility-toggle"
-            style={{
-              background: 'transparent',
-              color: 'currentColor',
-              border: '1px solid var(--border-color)',
-              padding: '0 16px',
-              fontSize: '0.7rem',
-              fontWeight: 700,
-              letterSpacing: '0.1em',
-              cursor: 'pointer',
-              height: '38px',
-              borderRadius: '20px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px'
-            }}
-          >
-            <span>{theme === 'dark' ? '☀ LIGHT' : '☾ DARK'}</span>
-          </button>
-
-          <div className="custom-lang-selector" style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
-            <span style={{ position: 'absolute', left: '14px', pointerEvents: 'none' }}>{currentLangConfig.flag}</span>
-            <select
-              value={language || 'english'}
-              onChange={(e) => setLanguage(e.target.value as LanguageCode)}
-              style={{
-                background: 'transparent',
-                color: 'currentColor',
-                border: '1px solid var(--border-color)',
-                padding: '0 32px 0 40px',
-                fontSize: '0.7rem',
-                fontWeight: 700,
-                letterSpacing: '0.1em',
-                cursor: 'pointer',
-                appearance: 'none',
-                height: '38px',
-                borderRadius: '20px'
-              }}
-            >
-              {Object.entries(SUPPORTED_LANGUAGES).map(([code, lang]) => (
-                <option key={code} value={code} style={{ background: 'var(--bg-color)' }}>
-                  {lang.name.toUpperCase()}
-                </option>
-              ))}
-            </select>
+        {/* Centralized Grid Navigation Header */}
+        <header className={`site-header-centralized ${isScrolled ? 'header-scrolled' : ''}`}>
+          <div className="header-left">
+            <Link href="#home" onClick={() => setActiveSection("home")} className="brand-logo">
+              NEXO TATTOO
+            </Link>
           </div>
 
-          {/* Collapsed Menu Trigger Button */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle Navigation Menu"
-            style={{
-              background: 'transparent',
-              color: 'currentColor',
-              border: '1px solid var(--border-color)',
-              width: '38px',
-              height: '38px',
-              borderRadius: '50%',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              gap: '4px',
-              cursor: 'pointer',
-              position: 'relative'
-            }}
-          >
-            <motion.span 
-              animate={isMenuOpen ? { rotate: 45, y: 3 } : { rotate: 0, y: 0 }}
-              style={{ width: '16px', height: '1.5px', background: 'currentColor', display: 'block', transformOrigin: 'center' }} 
-            />
-            <motion.span 
-              animate={isMenuOpen ? { opacity: 0 } : { opacity: 1 }}
-              style={{ width: '16px', height: '1.5px', background: 'currentColor', display: 'block' }} 
-            />
-            <motion.span 
-              animate={isMenuOpen ? { rotate: -45, y: -3 } : { rotate: 0, y: 0 }}
-              style={{ width: '16px', height: '1.5px', background: 'currentColor', display: 'block', transformOrigin: 'center' }} 
-            />
-          </button>
-        </div>
-      </header>
+          {/* Centralized Collapsible Pill Menu Container */}
+          <nav className="header-center-nav">
+            <div className={`central-nav-pill ${isNavExpanded ? 'is-expanded' : 'is-collapsed'}`}>
+              {!isNavExpanded ? (
+                <button className="pill-trigger-btn" onClick={() => setIsNavExpanded(true)}>
+                  <span className="pill-dot-indicator"></span>
+                  <span className="pill-label-text">
+                    {activeSection === "home" ? "MENU" : activeSection.toUpperCase()}
+                  </span>
+                </button>
+              ) : (
+                <div className="expanded-links-container">
+                  <ul className="expanded-nav-list">
+                    {["home", "artists", "reviews", "location"].map((sec) => (
+                      <li key={sec}>
+                        <a 
+                          href={`#${sec}`} 
+                          className={activeSection === sec ? "active-pill" : ""}
+                          onClick={() => {
+                            setActiveSection(sec);
+                            setIsNavExpanded(false);
+                          }}
+                        >
+                          {sec}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                  <button className="pill-close-btn" onClick={() => setIsNavExpanded(false)}>✕</button>
+                </div>
+              )}
+            </div>
+          </nav>
 
-      {/* Collapsed Transparent Overlay Menu */}
-      <AnimatePresence>
-        {isMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            style={{
-              position: 'fixed',
-              top: 0,
-              left: 0,
-              width: '100vw',
-              height: '100vh',
-              backgroundColor: theme === 'dark' ? 'rgba(10, 10, 10, 0.4)' : 'rgba(255, 255, 255, 0.4)',
-              backdropFilter: 'blur(30px)',
-              WebkitBackdropFilter: 'blur(30px)',
-              zIndex: 9999,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center'
-            }}
-          >
-            <nav style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', textAlign: 'center' }}>
-              {[
-                { label: 'HOME', href: '#home' },
-                { label: 'ARTISTS', href: '#artists' },
-                { label: 'BOOK', href: '/contact' },
-              ].map((link, index) => (
-                <motion.div
-                  key={link.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  <Link 
-                    href={link.href} 
-                    className="menu-overlay-link"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {link.label}
-                  </Link>
-                </motion.div>
-              ))}
-            </nav>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          <div className="header-right-cta">
+            {/* The Floating Scroll-Following Booking button tracks layout status contextually */}
+            <Link href="/contact" className={`premium-rolling-btn ${isScrolled ? 'is-floating' : ''}`}>
+              <span className="btn-text-roll">
+                <span className="primary-text">BOOK SESSION</span>
+                <span className="hover-text">GET INKED NOW</span>
+              </span>
+            </Link>
+
+            <button 
+              className="mobile-menu-trigger" 
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <span className={isMenuOpen ? "line-open" : ""}></span>
+            </button>
+          </div>
+        </header>
 
         {/* Hero Section */}
         <motion.section 
@@ -910,7 +910,7 @@ export default function Home() {
 
           <div style={{ flex: '1 1 60%' }}>
             <motion.div className="hero-copy" variants={{ visible: { transition: { staggerChildren: 0.1 } } }}>
-              <motion.p className="eyebrow" variants={fadeInUpVariants}>EXCEPTIONAL EMBLEM CRAFT</motion.p>
+              <motion.p className="eyebrow">EXCEPTIONAL EMBLEM CRAFT</motion.p>
               
               <motion.h1 variants={containerVariants}>
                 {isHydrated && t("tagline").split(" ").map((word, wIdx, arr) => (
@@ -948,7 +948,7 @@ export default function Home() {
           </aside>
         </motion.section>
 
-        {/* Stats Grid Dashboard */}
+        {/* Stats Dashboard */}
         <section className="stats-section">
           <div className="stats-grid">
             {stats.map((stat, index) => (
@@ -963,7 +963,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Artists Split-Screen Section */}
+        {/* Artists Section */}
         <motion.section 
           id="artists" 
           className="fade-section"
@@ -1005,7 +1005,6 @@ export default function Home() {
               {artists.map((artist) => (
                 <div key={artist.name} style={{ minWidth: '100%', padding: '0 10px', boxSizing: 'border-box' }}>
                   <div className="nike-split-card">
-                    {/* Media Left Boundary */}
                     <div style={{ position: 'relative', height: '500px', width: '100%', overflow: 'hidden', background: 'var(--border-color)' }}>
                       <motion.div whileHover={{ scale: 1.01 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} style={{ width: '100%', height: '100%', position: 'relative' }}>
                         <Image
@@ -1022,7 +1021,6 @@ export default function Home() {
                       </span>
                     </div>
                     
-                    {/* Editorial Description Boundary Right */}
                     <div style={{ padding: '3.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
                       <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.2em', opacity: 0.4 }}>RESIDENT ELITE</span>
                       <h3 style={{ fontSize: '2.2rem', fontWeight: 900, margin: '0.5rem 0 1.5rem 0', letterSpacing: '-0.02em' }}>{artist.name}</h3>
@@ -1038,7 +1036,6 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Slider Control Arrows */}
             <button 
               onClick={() => setCurrentArtistIndex((prev) => (prev - 1 + artists.length) % artists.length)}
               style={{
@@ -1066,8 +1063,9 @@ export default function Home() {
           </div>
         </motion.section>
 
-        {/* Location Section Wrapper */}
+        {/* Location Section */}
         <motion.div 
+          id="location"
           style={{ position: 'relative' }}
           initial="hidden"
           whileInView="visible"
@@ -1077,9 +1075,7 @@ export default function Home() {
           <LocationMap />
         </motion.div>
 
-        
-
-        {/* Google Reviews Widget Dashboard Section */}
+        {/* Google Reviews Widget */}
         <motion.section 
           id="reviews"
           className="reviews-section fade-section"
@@ -1115,15 +1111,13 @@ export default function Home() {
           </div>
         </motion.section>
         
-        {/* Studio Modernist Footer */}
+        {/* Footer */}
         <footer className="site-footer">
           <SocialLinks />
         </footer>
       </main>
 
-      {/* 6. Render Custom Cursor globally over client tree */}
       <TattooMachineCursor />
-
       <FloatingSocials />
       <ScrollToTopButton />
     </>

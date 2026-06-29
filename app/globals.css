@@ -910,6 +910,101 @@ body, select, option, button {
   font-family: "Twemoji Country Flags", inherit, sans-serif !important;
 }
 
+/* Base styling for Desktop Header Alignment */
+.premium-rolling-btn {
+  display: inline-block;
+  height: 46px;
+  padding: 0 1.5rem;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.btn-text-roll {
+  display: block;
+  position: relative;
+  height: 100%;
+  line-height: 46px;
+  transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.primary-text, .hover-text {
+  display: block;
+  height: 100%;
+}
+.hover-text {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+}
+
+.premium-rolling-btn:hover .btn-text-roll {
+  transform: translateY(-100%);
+}
+
+/* MOBILE CONVERSION FLYOUT BAR */
+@media (max-width: 700px) {
+  .header-right-cta {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1rem 1.5rem;
+    background: linear-gradient(0deg, var(--bg-color) 80%, transparent);
+    z-index: 999;
+    display: flex;
+    justify-content: center;
+  }
+
+  .premium-rolling-btn {
+    width: 100%; /* Spans across screen width nicely */
+    height: 54px;
+    text-align: center;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.5);
+  }
+
+  .btn-text-roll {
+    line-height: 54px;
+  }
+}
+
+/* Standard Desktop Header Placement */
+.header-right-cta {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Animated Transition State when scrolled past threshold */
+.header-right-cta.is-floating {
+  position: fixed;
+  bottom: 2.5rem;
+  right: 2.5rem;
+  z-index: 999;
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.header-right-cta.is-floating .premium-rolling-btn {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.15);
+  background: #f5f5f5;
+  color: #050505;
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(0.8) translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
 @keyframes slideUp {
   from {
     opacity: 0;
