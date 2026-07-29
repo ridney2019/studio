@@ -7,6 +7,7 @@ import { useLanguage } from "@/app/providers";
 import { SocialLinks } from "@/app/components/SocialLinks";
 import ScrollToTopButton from "@/app/components/ScrollToTopButton";
 import FloatingSocials from "@/app/components/FloatingSocials";
+import GlobalMenu from "@/app/components/GlobalMenu";
 
 // Mock Database for Studio Blog Articles
 const BLOG_POSTS = [
@@ -122,9 +123,7 @@ export default function BlogPage() {
             NEXO STUDIO JOURNAL
           </a>
           
-          <a className="appointment-link" href="/">
-            RETURN HOME
-          </a>
+          <GlobalMenu />
         </header>
 
         {/* SECTION 1: HERO FEATURED ARTICLE COLUMN */}

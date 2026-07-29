@@ -127,6 +127,62 @@ button {
   background: var(--header-gradient);
 }
 
+.global-menu-shell {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.global-menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.65rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.global-menu-panel {
+  position: absolute;
+  top: calc(100% + 0.7rem);
+  right: 0;
+  min-width: min(260px, calc(100vw - 2rem));
+  padding: 0.85rem;
+  border: 1px solid var(--border-color);
+  border-radius: 1rem;
+  background: var(--bg-color);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+  z-index: 30;
+}
+
+.global-menu-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.global-menu-link {
+  padding: 0.65rem 0.8rem;
+  border-radius: 0.75rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 0.74rem;
+  letter-spacing: 0.12em;
+  font-weight: 700;
+}
+
+.global-menu-link:hover,
+.global-menu-link.active {
+  background: var(--card-bg);
+}
+
 .brand {
   font-size: 1.1rem;
   letter-spacing: 0.4em;

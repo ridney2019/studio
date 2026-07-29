@@ -8,6 +8,7 @@ import { SocialLinks } from "@/app/components/SocialLinks";
 import ScrollToTopButton from "@/app/components/ScrollToTopButton";
 import FloatingSocials from "@/app/components/FloatingSocials";
 import TrainingIntakeForm from "@/app/components/TrainingIntakeForm";
+import GlobalMenu from "@/app/components/GlobalMenu";
 
 export default function WorkshopPage() {
   const { t, isHydrated } = useTranslation();
@@ -31,9 +32,7 @@ export default function WorkshopPage() {
             NEXO STUDIO TATTOO
           </a>
 
-          <Link className="appointment-link" href="/contact">
-            CONTACT STUDIO
-          </Link>
+          <GlobalMenu />
         </header>
 
         <section className="contact-hero fade-section" style={{ paddingBottom: "2rem" }}>

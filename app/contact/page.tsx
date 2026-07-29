@@ -6,12 +6,13 @@ import { useLanguage } from "@/app/providers";
 import { SocialLinks } from "@/app/components/SocialLinks";
 import ScrollToTopButton from "@/app/components/ScrollToTopButton";
 import FloatingSocials from "@/app/components/FloatingSocials";
+import GlobalMenu from "@/app/components/GlobalMenu";
 
 export default function ContactPage() {
   const { t, isHydrated } = useTranslation();
   const { theme, toggleTheme } = useLanguage();
 
-  const formspreeEndpoint = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT || "";
+  const formspreeEndpoint = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT || "https://formspree.io/f/xkoarkao";
 
   // State Management for Form Submission & Popup Overlays
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -62,6 +63,7 @@ export default function ContactPage() {
 
       if (response.ok) {
         setShowPopup(true);
+        setContactFeedback("Thanks! Your message has been sent. We’ll be in touch soon.");
         setContactForm({ name: "", email: "", message: "" });
       } else {
         setContactFeedback("Your message could not be sent right now. Please try again later.");
@@ -94,9 +96,7 @@ export default function ContactPage() {
             NEXO STUDIO TATTOO
           </a>
           
-          <a className="appointment-link" href="/">
-            RETURN HOME
-          </a>
+          <GlobalMenu />
         </header>
 
         {/* Contact Hero Section */}
@@ -356,7 +356,7 @@ export default function ContactPage() {
             <div>
               <h3 style={{ textTransform: "uppercase", fontSize: "1.2rem", margin: "0 0 0.5rem 0", letterSpacing: "1px" }}>Thank You</h3>
               <p style={{ opacity: 0.8, fontSize: "0.95rem", margin: 0, lineHeight: "1.5" }}>
-                Your message has been sent successfully. We will review your event configuration and get back to you shortly.
+                Your message has been sent successfully. We’ll review it and get back to you shortly.
               </p>
             </div>
 

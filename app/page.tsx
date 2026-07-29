@@ -468,27 +468,32 @@ export default function Home() {
           }
 
           .central-nav-pill.is-expanded {
-            width: 440px;
-            height: 46px;
-            padding: 0 8px 0 24px;
+            width: min(700px, calc(100vw - 80px));
+            min-height: 46px;
+            height: auto;
+            padding: 10px 10px 10px 18px;
             background: ${theme === 'dark' ? 'rgba(10, 10, 10, 0.92)' : 'rgba(255, 255, 255, 0.92)'};
             border-color: var(--text-color);
           }
 
           .expanded-links-container {
             width: 100%;
-            height: 100%;
+            min-height: 46px;
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 0.75rem;
+            flex-wrap: wrap;
           }
 
           .expanded-nav-list {
             display: flex;
-            gap: 1.8rem;
+            flex-wrap: wrap;
+            gap: 0.7rem 1.2rem;
             list-style: none;
             margin: 0;
             padding: 0;
+            align-items: center;
           }
 
           .expanded-nav-list a {
@@ -863,32 +868,40 @@ export default function Home() {
               ) : (
                 <div className="expanded-links-container">
                   <ul className="expanded-nav-list">
-                    {["home", "artists", "reviews", "location"].map((sec) => (
-                      <li key={sec}>
-                        <a 
-                          href={`#${sec}`} 
-                          className={activeSection === sec ? "active-pill" : ""}
-                          onClick={() => {
-                            setActiveSection(sec);
-                            setIsNavExpanded(false);
-                          }}
-                        >
-                          {sec}
-                        </a>
+                    {[
+                      { id: "home", href: "#home", label: "home" },
+                      { id: "artists", href: "#artists", label: "artists" },
+                      { id: "reviews", href: "#reviews", label: "reviews" },
+                      { id: "location", href: "#location", label: "location" },
+                      { id: "contact", href: "/contact", label: "contact" },
+                      { id: "workshop", href: "/workshop", label: "workshop" },
+                    ].map((item) => (
+                      <li key={item.id}>
+                        {item.href.startsWith("#") ? (
+                          <a 
+                            href={item.href} 
+                            className={activeSection === item.id ? "active-pill" : ""}
+                            onClick={() => {
+                              setActiveSection(item.id);
+                              setIsNavExpanded(false);
+                            }}
+                          >
+                            {item.label}
+                          </a>
+                        ) : (
+                          <Link
+                            href={item.href}
+                            className={activeSection === item.id ? "active-pill" : ""}
+                            onClick={() => {
+                              setActiveSection(item.id);
+                              setIsNavExpanded(false);
+                            }}
+                          >
+                            {item.label}
+                          </Link>
+                        )}
                       </li>
                     ))}
-                    <li>
-                      <Link
-                        href="/workshop"
-                        className={activeSection === "workshop" ? "active-pill" : ""}
-                        onClick={() => {
-                          setActiveSection("workshop");
-                          setIsNavExpanded(false);
-                        }}
-                      >
-                        workshop
-                      </Link>
-                    </li>
                   </ul>
                   <button className="pill-close-btn" onClick={() => setIsNavExpanded(false)}>✕</button>
                 </div>
