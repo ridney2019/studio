@@ -25,9 +25,12 @@ const TattooMachineCursor = () => {
   useEffect(() => {
     if (window.matchMedia("(max-width: 1023px)").matches) return;
 
+    const showCursor = () => setIsVisible(true);
+    const hideCursor = () => setIsVisible(false);
+
     const moveCursor = (e: MouseEvent) => {
       setPosition({ x: e.clientX, y: e.clientY });
-      if (!isVisible) setIsVisible(true);
+      setIsVisible(true);
     };
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -44,15 +47,26 @@ const TattooMachineCursor = () => {
       }
     };
 
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "hidden") {
+        setIsVisible(false);
+      }
+    };
+
     window.addEventListener("mousemove", moveCursor);
     window.addEventListener("mouseover", handleMouseOver);
+    window.addEventListener("mouseenter", showCursor);
+    window.addEventListener("mouseleave", hideCursor);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     return () => {
       window.removeEventListener("mousemove", moveCursor);
       window.removeEventListener("mouseover", handleMouseOver);
+      window.removeEventListener("mouseenter", showCursor);
+      window.removeEventListener("mouseleave", hideCursor);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [isVisible]);
-
-  if (!isVisible) return null;
+  }, []);
 
   return (
     <motion.div
