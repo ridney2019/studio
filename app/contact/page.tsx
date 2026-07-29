@@ -294,10 +294,10 @@ export default function ContactPage() {
     setFeedback("");
   };
 
-  const handleCopyAnswers = async () => {
+  const handleWhatsApp = () => {
     const summary = intakeSections
       .map((section) => {
-        const lines = [section.category, section.title, ""] as string[];
+        const lines = [`${section.category}: ${section.title}`];
         if (section.fields) {
           section.fields.forEach((field) => {
             const key = slugify(field.label);
@@ -306,7 +306,6 @@ export default function ContactPage() {
             lines.push(`${field.label}: ${formattedValue}`);
           });
         }
-
         if (section.skills) {
           section.skills.forEach((skill) => {
             const key = slugify(skill);
@@ -314,30 +313,34 @@ export default function ContactPage() {
             lines.push(`${skill}: ${value}`);
           });
         }
-
         if (section.subcategories) {
           section.subcategories.forEach((subcategory) => {
             const selected = (formData[slugify(subcategory.title)] as string[]) || [];
             lines.push(`${subcategory.title}: ${selected.length ? selected.join(", ") : "—"}`);
           });
         }
-
         return lines.join("\n");
       })
       .join("\n\n");
 
-    try {
-      await navigator.clipboard.writeText(summary);
-      setFeedback("Answers copied to clipboard.");
-    } catch {
-      setFeedback("Copy failed. Please copy manually.");
-    }
-  };
+    const whatsappText = encodeURIComponent(`NEXO STUDIOS TRAINING INTAKE\n\n${summary}`);
+    const whatsappUrl = `https://api.whatsapp.com/send/?phone=353831757502&text=${whatsappText}&type=phone_number&app_absent=0`;
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
 
-  const handleWhatsApp = () => {
-    const url = "https://api.whatsapp.com/send/?phone=353831757502&text=Hello%21+I%27m+looking+to+get+a+new+tattoo%2C+how+can+I+get+a+quote%3F&type=phone_number&app_absent=0";
-    window.open(url, "_blank", "noopener,noreferrer");
-    setFeedback("Opening WhatsApp link.");
+    const emailRecipient = typeof formData.email === "string" ? formData.email.trim() : "";
+    const studioEmail = "nexostudiosltd@gmail.com";
+    const emailSubject = encodeURIComponent("NEXO Studios training intake");
+    const emailBody = encodeURIComponent(summary);
+
+    if (emailRecipient) {
+      const emailUrl = `mailto:${emailRecipient}?cc=${studioEmail}&subject=${emailSubject}&body=${emailBody}`;
+      window.open(emailUrl, "_blank", "noopener,noreferrer");
+      setFeedback("WhatsApp opened and copies were prepared for you and the studio.");
+    } else {
+      const emailUrl = `mailto:${studioEmail}?subject=${emailSubject}&body=${emailBody}`;
+      window.open(emailUrl, "_blank", "noopener,noreferrer");
+      setFeedback("WhatsApp opened and a copy was prepared for the studio.");
+    }
   };
 
   const handleClear = () => {
@@ -754,10 +757,7 @@ export default function ContactPage() {
 
               <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", marginTop: "1rem" }}>
                 <button type="button" onClick={handleWhatsApp} className="button" style={{ background: "#25D366", color: "#07120b" }}>
-                  Send on WhatsApp
-                </button>
-                <button type="button" onClick={handleCopyAnswers} className="button">
-                  Copy answers
+                  Send on WhatsApp + Email
                 </button>
                 <button type="button" onClick={handleClear} className="button">
                   Clear form
