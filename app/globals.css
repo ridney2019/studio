@@ -47,6 +47,12 @@ body {
 body {
   background: var(--bg-color);
   overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.workshop-page-shell {
+  min-height: 100vh;
+  padding-bottom: 6rem;
 }
 
 a {

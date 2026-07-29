@@ -877,6 +877,18 @@ export default function Home() {
                         </a>
                       </li>
                     ))}
+                    <li>
+                      <Link
+                        href="/workshop"
+                        className={activeSection === "workshop" ? "active-pill" : ""}
+                        onClick={() => {
+                          setActiveSection("workshop");
+                          setIsNavExpanded(false);
+                        }}
+                      >
+                        workshop
+                      </Link>
+                    </li>
                   </ul>
                   <button className="pill-close-btn" onClick={() => setIsNavExpanded(false)}>✕</button>
                 </div>

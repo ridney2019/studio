@@ -88,6 +88,7 @@ export const SocialLinks = () => {
             <li><a href="/">Home</a></li>
             {/*<li><a href="/blog">Blog</a></li>*/}
             <li><a href="/#artists">Artists</a></li>
+            <li><a href="/workshop">Workshop</a></li>
             <li><a href="/contact">Book Session</a></li>
           </ul>
         </div>
