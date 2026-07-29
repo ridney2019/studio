@@ -335,38 +335,9 @@ export default function ContactPage() {
   };
 
   const handleWhatsApp = () => {
-    const summary = intakeSections
-      .map((section) => {
-        const lines = [`${section.category}: ${section.title}`];
-        if (section.fields) {
-          section.fields.forEach((field) => {
-            const key = slugify(field.label);
-            const value = formData[key];
-            const formattedValue = Array.isArray(value) ? value.join(", ") : value || "—";
-            lines.push(`${field.label}: ${formattedValue}`);
-          });
-        }
-        if (section.skills) {
-          section.skills.forEach((skill) => {
-            const key = slugify(skill);
-            const value = formData[key] || "—";
-            lines.push(`${skill}: ${value}`);
-          });
-        }
-        if (section.subcategories) {
-          section.subcategories.forEach((subcategory) => {
-            const selected = (formData[slugify(subcategory.title)] as string[]) || [];
-            lines.push(`${subcategory.title}: ${selected.length ? selected.join(", ") : "—"}`);
-          });
-        }
-        return lines.join("\n");
-      })
-      .join("\n\n");
-
-    const message = `NEXO STUDIOS TRAINING INTAKE\n\n${summary}`;
-    const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+    const url = "https://api.whatsapp.com/send/?phone=353831757502&text=Hello%21+I%27m+looking+to+get+a+new+tattoo%2C+how+can+I+get+a+quote%3F&type=phone_number&app_absent=0";
     window.open(url, "_blank", "noopener,noreferrer");
-    setFeedback("WhatsApp draft opened.");
+    setFeedback("Opening WhatsApp link.");
   };
 
   const handleClear = () => {
