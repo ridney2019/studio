@@ -11,9 +11,17 @@ export default function ContactPage() {
   const { t, isHydrated } = useTranslation();
   const { theme, toggleTheme } = useLanguage();
 
+  const formspreeEndpoint = process.env.NEXT_PUBLIC_FORMSPREE_ENDPOINT || "";
+
   // State Management for Form Submission & Popup Overlays
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [contactFeedback, setContactFeedback] = useState("");
+  const [contactForm, setContactForm] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
 
   // Grid entrance animation state
   const [animateGrid, setAnimateGrid] = useState(false);
@@ -21,6 +29,49 @@ export default function ContactPage() {
   useEffect(() => {
     setAnimateGrid(true);
   }, []);
+
+  const handleContactSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!contactForm.name.trim() || !contactForm.email.trim() || !contactForm.message.trim()) {
+      setContactFeedback("Please fill in your name, email, and message.");
+      return;
+    }
+
+    if (!formspreeEndpoint) {
+      setContactFeedback("Formspree endpoint is not configured yet. Add NEXT_PUBLIC_FORMSPREE_ENDPOINT to enable submissions.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setContactFeedback("");
+
+    try {
+      const formData = new FormData();
+      formData.append("name", contactForm.name);
+      formData.append("email", contactForm.email);
+      formData.append("message", contactForm.message);
+
+      const response = await fetch(formspreeEndpoint, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+        },
+        body: formData,
+      });
+
+      if (response.ok) {
+        setShowPopup(true);
+        setContactForm({ name: "", email: "", message: "" });
+      } else {
+        setContactFeedback("Your message could not be sent right now. Please try again later.");
+      }
+    } catch (error) {
+      setContactFeedback("Your message could not be sent right now. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (!isHydrated) return null;
 
@@ -192,14 +243,52 @@ export default function ContactPage() {
         {/* Contact Form & Info Grid */}
         <section className="contact-grid fade-section" style={{ display: "flex", flexDirection: "column", gap: "2rem" }}>
           <div className="contact-card" style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-            <p className="eyebrow" style={{ marginBottom: "0.25rem" }}>WORKSHOP PATH</p>
-            <h2 style={{ margin: 0, textTransform: "uppercase" }}>Ready for a more structured tattoo training experience?</h2>
+            <p className="eyebrow" style={{ marginBottom: "0.25rem" }}>CLIENT ENQUIRIES</p>
+            <h2 style={{ margin: 0, textTransform: "uppercase" }}>General questions, bookings, or studio visits</h2>
             <p style={{ margin: 0, opacity: 0.8, lineHeight: 1.6 }}>
-              The full workshop intake now lives on its own page so it feels more focused, easier to return to, and better suited for long-form mentorship conversations.
+              This form is for clients and general enquiries. Tattoo artist training is now handled on the dedicated workshop page.
             </p>
-            <a href="/workshop" className="button" style={{ width: "fit-content", textDecoration: "none" }}>
-              Open workshop intake
-            </a>
+
+            <form onSubmit={handleContactSubmit} style={{ display: "grid", gap: "0.9rem" }}>
+              <label style={{ display: "grid", gap: "0.35rem" }}>
+                <span style={{ fontSize: "0.95rem", fontWeight: 600 }}>Name</span>
+                <input
+                  type="text"
+                  value={contactForm.name}
+                  onChange={(event) => setContactForm((prev) => ({ ...prev, name: event.target.value }))}
+                  required
+                  style={{ padding: "0.9rem", borderRadius: "14px", border: "1px solid var(--border-color, #333)", background: "rgba(255,255,255,0.03)", color: "inherit" }}
+                />
+              </label>
+
+              <label style={{ display: "grid", gap: "0.35rem" }}>
+                <span style={{ fontSize: "0.95rem", fontWeight: 600 }}>Email</span>
+                <input
+                  type="email"
+                  value={contactForm.email}
+                  onChange={(event) => setContactForm((prev) => ({ ...prev, email: event.target.value }))}
+                  required
+                  style={{ padding: "0.9rem", borderRadius: "14px", border: "1px solid var(--border-color, #333)", background: "rgba(255,255,255,0.03)", color: "inherit" }}
+                />
+              </label>
+
+              <label style={{ display: "grid", gap: "0.35rem" }}>
+                <span style={{ fontSize: "0.95rem", fontWeight: 600 }}>Message</span>
+                <textarea
+                  rows={5}
+                  value={contactForm.message}
+                  onChange={(event) => setContactForm((prev) => ({ ...prev, message: event.target.value }))}
+                  required
+                  style={{ minHeight: "120px", padding: "0.9rem", borderRadius: "14px", border: "1px solid var(--border-color, #333)", background: "rgba(255,255,255,0.03)", color: "inherit" }}
+                />
+              </label>
+
+              <button type="submit" className="button" disabled={isSubmitting} style={{ width: "fit-content" }}>
+                {isSubmitting ? "Sending..." : "Send message"}
+              </button>
+
+              {contactFeedback ? <p style={{ margin: 0, opacity: 0.9, fontSize: "0.95rem" }}>{contactFeedback}</p> : null}
+            </form>
           </div>
 
           <div className="contact-card contact-info-card">
