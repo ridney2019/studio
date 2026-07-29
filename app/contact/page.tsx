@@ -749,8 +749,8 @@ export default function ContactPage() {
                     Next
                   </button>
                 ) : (
-                  <button type="button" onClick={handleNext} className="button">
-                    Review
+                  <button type="button" onClick={handleWhatsApp} className="button" style={{ background: "#25D366", color: "#07120b" }}>
+                    Send on WhatsApp + Email
                   </button>
                 )}
               </div>
