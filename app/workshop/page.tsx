@@ -65,7 +65,7 @@ export default function WorkshopPage() {
             </div>
             <div className="info-block">
               <h3>Booking</h3>
-              <p>{t("textPreferred")}</p>
+              <p>Text: +353833300832</p>
               <p>nexostudiosltd@gmail.com</p>
             </div>
           </div>

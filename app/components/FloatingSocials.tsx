@@ -6,7 +6,7 @@ import { FaInstagram, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
 const FloatingSocials = () => {
   const buttons = [
     {
-      href: "https://api.whatsapp.com/send/?phone=353831757502&text=Hello%21+I%27m+looking+to+get+a+new+tattoo%2C+how+can+I+get+a+quote%3F&type=phone_number&app_absent=0",
+      href: "https://wa.me/message/WBIQIE64UGJ3J1",
       icon: <FaWhatsapp size={18} />,
       color: "#25D366",
       tooltip: "WhatsApp",

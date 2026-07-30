@@ -302,7 +302,7 @@ export default function TrainingIntakeForm() {
       .join("\n\n");
 
     const whatsappText = encodeURIComponent(`NEXO STUDIOS TRAINING INTAKE\n\n${summary}`);
-    const whatsappUrl = `https://api.whatsapp.com/send/?phone=353831757502&text=${whatsappText}&type=phone_number&app_absent=0`;
+    const whatsappUrl = `https://wa.me/message/WBIQIE64UGJ3J1?text=${whatsappText}`;
     window.open(whatsappUrl, "_blank", "noopener,noreferrer");
 
     const emailRecipient = typeof formData.email === "string" ? formData.email.trim() : "";

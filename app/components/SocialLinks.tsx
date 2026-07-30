@@ -39,7 +39,7 @@ export const SocialLinks = () => {
     },
     {
       name: "WhatsApp",
-      url: "https://api.whatsapp.com/send/?phone=353831757502&text=Hello%21+I%27m+looking+to+get+a+new+tattoo%2C+how+can+I+get+a+quote%3F&type=phone_number&app_absent=0",
+      url: "https://wa.me/message/WBIQIE64UGJ3J1",
       icon: (
         <svg
           viewBox="0 0 24 24"
