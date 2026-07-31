@@ -183,6 +183,73 @@ button {
   background: var(--card-bg);
 }
 
+.global-menu-divider {
+  height: 1px;
+  background: var(--border-color);
+  margin: 0.35rem 0;
+}
+
+.global-menu-subtoggle {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 0.4rem 0.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.66rem;
+  font-weight: 700;
+}
+
+.global-menu-submenu {
+  display: grid;
+  gap: 0.25rem;
+  padding-left: 0.4rem;
+}
+
+.global-menu-sublink {
+  padding: 0.45rem 0.8rem;
+  border-radius: 0.65rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-size: 0.67rem;
+  letter-spacing: 0.11em;
+  font-weight: 600;
+}
+
+.global-menu-sublink:hover,
+.global-menu-sublink.active {
+  background: var(--card-bg);
+  color: var(--text-primary);
+}
+
+.global-menu-utility-row {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.global-menu-utility-link {
+  flex: 1;
+  text-align: center;
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.65rem;
+  border: 1px solid var(--border-color);
+  text-transform: uppercase;
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.global-menu-utility-link:hover,
+.global-menu-utility-link.active {
+  color: var(--text-primary);
+  border-color: var(--text-primary);
+}
+
 .brand {
   font-size: 1.1rem;
   letter-spacing: 0.4em;

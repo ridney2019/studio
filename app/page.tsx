@@ -292,7 +292,7 @@ export default function Home() {
     };
     window.addEventListener("scroll", handleScroll);
 
-    const sections = ["home", "artists", "reviews", "location"];
+    const sections = ["home", "services", "artists", "reviews", "location"];
     const observers = sections.map((id) => {
       const el = document.getElementById(id);
       if (!el) return null;
@@ -347,6 +347,30 @@ export default function Home() {
     hidden: { opacity: 0, y: 50 },
     visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease: [0.16, 1, 0.3, 1] } },
   };
+
+  const servicePreviews = [
+    {
+      title: t("homeServiceCoverTitle"),
+      subtitle: t("homeServiceCoverSubtitle"),
+      description: t("homeServiceCoverDescription"),
+      href: "/cover-up",
+      cta: t("homeServiceCoverCta"),
+    },
+    {
+      title: t("homeServiceNewTitle"),
+      subtitle: t("homeServiceNewSubtitle"),
+      description: t("homeServiceNewDescription"),
+      href: "/new-tattoo",
+      cta: t("homeServiceNewCta"),
+    },
+    {
+      title: t("homeServiceScalpTitle"),
+      subtitle: t("homeServiceScalpSubtitle"),
+      description: t("homeServiceScalpDescription"),
+      href: "/scalp-micropigmentation",
+      cta: t("homeServiceScalpCta"),
+    },
+  ];
 
   return (
     <>
@@ -552,17 +576,19 @@ export default function Home() {
             height: 44px;
             padding: 0 1.8rem !important;
             text-decoration: none;
-            background: transparent !important;
-            border: 1px solid var(--border-color);
+            background: linear-gradient(135deg, #5c0000 0%, #a30015 50%, #e63946 100%) !important;
+            border: 1px solid rgba(255, 255, 255, 0.16);
             border-radius: 30px;
-            color: var(--text-color) !important;
+            color: #ffffff !important;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 10px 28px rgba(108, 4, 12, 0.35);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s ease;
           }
 
           .premium-rolling-btn:hover {
-            border-color: var(--text-color);
+            filter: brightness(1.08);
+            border-color: rgba(255, 255, 255, 0.24);
           }
 
           /* Global Floating Scroll-Following Class Configuration */
@@ -572,10 +598,10 @@ export default function Home() {
             right: 2.2rem;
             height: 50px;
             padding: 0 2.2rem !important;
-            background: var(--text-color) !important;
-            color: var(--bg-color) !important;
-            border-color: transparent;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+            background: linear-gradient(135deg, #6f0000 0%, #b2001a 55%, #ff4d4d 100%) !important;
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 16px 44px rgba(109, 6, 17, 0.45);
             z-index: 1001;
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
@@ -690,8 +716,8 @@ export default function Home() {
           h2 { font-size: clamp(2.5rem, 6.5vw, 5rem); margin-bottom: 2.5rem; }
 
           .nike-btn {
-            background: var(--text-color);
-            color: var(--bg-color);
+            background: linear-gradient(135deg, #5c0000 0%, #a30015 50%, #e63946 100%);
+            color: #ffffff;
             padding: 1.1rem 2.8rem;
             border-radius: 100px;
             font-weight: 700;
@@ -699,11 +725,13 @@ export default function Home() {
             letter-spacing: 0.05em;
             text-decoration: none;
             display: inline-block;
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease;
+            box-shadow: 0 10px 26px rgba(108, 4, 12, 0.32);
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.2s ease, filter 0.2s ease;
           }
           .nike-btn:hover {
             transform: scale(1.02);
-            opacity: 0.95;
+            opacity: 0.98;
+            filter: brightness(1.08);
           }
 
           .nike-btn-outline {
@@ -760,6 +788,82 @@ export default function Home() {
             border-top: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
           }
+
+          .services-preview-section {
+            padding: 70px 4% 30px;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+          }
+
+          .services-preview-head {
+            max-width: 900px;
+            margin: 0 auto 2rem;
+            display: grid;
+            gap: 0.8rem;
+          }
+
+          .services-preview-head h2 {
+            margin: 0;
+          }
+
+          .services-preview-grid {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            gap: 1rem;
+            grid-template-columns: 1fr;
+          }
+
+          .service-preview-card {
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 1.6rem;
+            background: var(--card-bg);
+            display: grid;
+            gap: 1rem;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease;
+          }
+
+          .service-preview-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--text-color);
+          }
+
+          .service-preview-eyebrow {
+            margin: 0;
+            font-size: 10px;
+            letter-spacing: 0.2em;
+            opacity: 0.5;
+            font-weight: 700;
+          }
+
+          .service-preview-title {
+            margin: 0;
+            font-size: clamp(1.3rem, 2.7vw, 1.85rem);
+            letter-spacing: -0.02em;
+            font-weight: 900;
+          }
+
+          .service-preview-desc {
+            margin: 0;
+            line-height: 1.7;
+            opacity: 0.72;
+          }
+
+          .service-preview-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+          }
+
+          @media (min-width: 1024px) {
+            .services-preview-grid {
+              grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+          }
+
           .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -870,8 +974,7 @@ export default function Home() {
                   <ul className="expanded-nav-list">
                     {[
                       { id: "home", href: "#home", label: "home" },
-                      { id: "artists", href: "#artists", label: "artists" },
-                      { id: "reviews", href: "#reviews", label: "reviews" },
+                      { id: "services", href: "#services", label: "services" },
                       { id: "location", href: "#location", label: "location" },
                       { id: "contact", href: "/contact", label: "contact" },
                       { id: "workshop", href: "/workshop", label: "workshop" },
@@ -985,6 +1088,39 @@ export default function Home() {
               ))}
             </div>
           </aside>
+        </motion.section>
+
+        {/* Services Preview */}
+        <motion.section
+          id="services"
+          className="services-preview-section"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={sectionFadeVariants}
+        >
+          <div className="services-preview-head">
+            <p className="eyebrow">{t("homeServiceEyebrow")}</p>
+            <h2>{t("homeServiceHeading")}</h2>
+            <p style={{ maxWidth: "760px", margin: 0, opacity: 0.72, lineHeight: 1.7 }}>
+              {t("homeServiceLead")}
+            </p>
+          </div>
+
+          <div className="services-preview-grid">
+            {servicePreviews.map((service) => (
+              <article key={service.title} className="service-preview-card">
+                <p className="service-preview-eyebrow">{service.subtitle.toUpperCase()}</p>
+                <h3 className="service-preview-title">{service.title}</h3>
+                <p className="service-preview-desc">{service.description}</p>
+                <div className="service-preview-actions">
+                  <Link className="nike-btn-outline" href={service.href}>
+                    {service.cta}
+                  </Link>
+                </div>
+              </article>
+            ))}
+          </div>
         </motion.section>
 
         {/* Stats Dashboard */}
