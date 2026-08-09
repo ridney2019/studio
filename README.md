@@ -19,6 +19,30 @@ A Next.js tattoo studio website inspired by the Bang Bang homepage layout.
 
 - Visit `/contact` to see the booking and contact form page.
 
+## Owner Admin (Google Login)
+
+The artist admin route is protected with Google OAuth and owner email allowlist:
+
+- Route: `/admin/artists`
+- Sign in provider: Google
+- Access is allowed only for emails listed in `OWNER_ADMIN_EMAILS`
+
+Create a `.env.local` file with:
+
+```bash
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+OWNER_ADMIN_EMAILS=owner1@gmail.com,owner2@gmail.com
+AUTH_SECRET=replace-with-a-long-random-secret
+AUTH_URL=http://localhost:3000
+```
+
+Also add this redirect URI in Google Cloud OAuth app settings:
+
+```text
+http://localhost:3000/api/auth/callback/google
+```
+
 ## Deploy
 
 - Push this repository to GitHub.

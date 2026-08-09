@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "./hooks/useTranslation";
-import { TranslationKey } from "../lib/translations";
+import { TranslationKey, translations } from "../lib/translations";
 import { LanguageCode, SUPPORTED_LANGUAGES } from "../lib/languages"; 
 import { useLanguage } from "./providers";
 import { SocialLinks } from "./components/SocialLinks"; 
@@ -13,6 +12,7 @@ import { FaUsers, FaPenNib, FaUserCheck, FaPalette, FaLocationDot, FaStar, FaGoo
 import { LocationMap } from "./components/LocationMap";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import FloatingSocials from "./components/FloatingSocials";
+import { ArtistProfile, ARTISTS_UPDATED_EVENT, DEFAULT_ARTISTS, getArtistsFromStorage } from "../lib/artists";
 
 const GOOGLE_REVIEW_URL = "https://g.page/r/CRIAbJ7AOfOPEBM/review";
 
@@ -251,14 +251,6 @@ const InkBlot = ({ variant = 1, style }: { variant?: 1 | 2 | 3; style?: React.CS
   );
 };
 
-const artists = [
-  { name: "FELIPE SANTOS", image: "/artists/felipe-santos.jpg", style: "BLACK REALISM", descKey: "artistFelipeDesc" as TranslationKey },
-  { name: "JAY SHIN", image: "/artists/jay-shin.svg", style: "FINE LINE & FLORAL", descKey: "artistJayDesc" as TranslationKey },
-  { name: "VICTOR", image: "/artists/victor.svg", style: "TRADITIONAL INK", descKey: "artistVictorDesc" as TranslationKey },
-  { name: "ZEE", image: "/artists/zee.svg", style: "NEO-TRADITIONAL", descKey: "artistZeeDesc" as TranslationKey },
-  { name: "ADRIAN", image: "/artists/adrian.svg", style: "GEOMETRIC / DOTWORK", descKey: "artistAdrianDesc" as TranslationKey },
-];
-
 const contacts = [
   { title: "LOCATION", lines: ["101-103 Francis St, The Liberties", "Dublin 8, D08 FHP9"] },
   { title: "HOURS OF OPERATION", lines: ["11AM TO 7PM | MON - SUN", "CLOSED TUESDAY"] },
@@ -269,6 +261,7 @@ export default function Home() {
   const { t, isHydrated } = useTranslation();
   const { theme, toggleTheme, language, setLanguage } = useLanguage();
 
+  const [artists, setArtists] = useState<ArtistProfile[]>(DEFAULT_ARTISTS);
   const [currentArtistIndex, setCurrentArtistIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -284,6 +277,35 @@ export default function Home() {
     damping: 30,
     restDelta: 0.001
   });
+
+  useEffect(() => {
+    const syncArtists = () => {
+      setArtists(getArtistsFromStorage());
+    };
+
+    syncArtists();
+    window.addEventListener(ARTISTS_UPDATED_EVENT, syncArtists);
+
+    return () => {
+      window.removeEventListener(ARTISTS_UPDATED_EVENT, syncArtists);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (artists.length === 0) {
+      return;
+    }
+
+    setCurrentArtistIndex((prev) => prev % artists.length);
+  }, [artists.length]);
+
+  useEffect(() => {
+    if (isHovered || artists.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentArtistIndex((prev) => (prev + 1) % artists.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [isHovered, artists.length]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -320,13 +342,13 @@ export default function Home() {
     };
   }, []);
 
-  useEffect(() => {
-    if (isHovered) return;
-    const timer = setInterval(() => {
-      setCurrentArtistIndex((prev) => (prev + 1) % artists.length);
-    }, 5000);
-    return () => clearInterval(timer);
-  }, [isHovered]);
+  const isTranslationKey = (key: string): key is TranslationKey => {
+    return Object.prototype.hasOwnProperty.call(translations.english, key);
+  };
+
+  const getArtistDescription = (descKey: string): string => {
+    return isTranslationKey(descKey) ? t(descKey) : descKey;
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -564,6 +586,31 @@ export default function Home() {
             gap: 1.5rem;
           }
 
+          .admin-header-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 40px;
+            padding: 0 1rem;
+            border-radius: 999px;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transition: border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+            opacity: 0.8;
+          }
+
+          .admin-header-link:hover {
+            border-color: var(--text-color);
+            transform: translateY(-1px);
+            opacity: 1;
+          }
+
           .premium-rolling-btn {
             position: relative;
             overflow: hidden !important;
@@ -661,6 +708,12 @@ export default function Home() {
             }
             .premium-rolling-btn {
               display: none;
+            }
+            .admin-header-link {
+              height: 36px;
+              padding: 0 0.85rem;
+              font-size: 0.62rem;
+              letter-spacing: 0.1em;
             }
             /* Retain visible floating CTA access for mobile engagement */
             .premium-rolling-btn.is-floating {
@@ -1021,6 +1074,10 @@ export default function Home() {
               </span>
             </Link>
 
+            <Link href="/admin" className="admin-header-link">
+              Admin Login
+            </Link>
+
             <button 
               className="mobile-menu-trigger" 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -1178,17 +1235,14 @@ export default function Home() {
               }}
             >
               {artists.map((artist) => (
-                <div key={artist.name} style={{ minWidth: '100%', padding: '0 10px', boxSizing: 'border-box' }}>
+                <div key={artist.id} style={{ minWidth: '100%', padding: '0 10px', boxSizing: 'border-box' }}>
                   <div className="nike-split-card">
                     <div style={{ position: 'relative', height: '500px', width: '100%', overflow: 'hidden', background: 'var(--border-color)' }}>
                       <motion.div whileHover={{ scale: 1.01 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} style={{ width: '100%', height: '100%', position: 'relative' }}>
-                        <Image
+                        <img
                           src={artist.image}
                           alt={artist.name}
-                          fill
-                          sizes="(max-width: 1024px) 100vw, 50vw"
-                          style={{ objectFit: 'contain' }}
-                          priority
+                          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                         />
                       </motion.div>
                       <span style={{ position: 'absolute', bottom: '24px', left: '24px', background: 'var(--bg-color)', fontSize: '10px', fontWeight: 800, padding: '6px 14px', borderRadius: '4px', letterSpacing: '0.1em', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
@@ -1199,7 +1253,7 @@ export default function Home() {
                     <div style={{ padding: '3.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
                       <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.2em', opacity: 0.4 }}>RESIDENT ELITE</span>
                       <h3 style={{ fontSize: '2.2rem', fontWeight: 900, margin: '0.5rem 0 1.5rem 0', letterSpacing: '-0.02em' }}>{artist.name}</h3>
-                      <p style={{ opacity: 0.7, lineHeight: 1.6, fontSize: '1rem', marginBottom: '2.5rem' }}>{t(artist.descKey)}</p>
+                      <p style={{ opacity: 0.7, lineHeight: 1.6, fontSize: '1rem', marginBottom: '2.5rem' }}>{getArtistDescription(artist.descKey)}</p>
                       <div>
                         <Link className="nike-link-action" href="/contact">
                           BOOK A SESSION
@@ -1212,7 +1266,10 @@ export default function Home() {
             </div>
 
             <button 
-              onClick={() => setCurrentArtistIndex((prev) => (prev - 1 + artists.length) % artists.length)}
+              onClick={() => {
+                if (artists.length === 0) return;
+                setCurrentArtistIndex((prev) => (prev - 1 + artists.length) % artists.length);
+              }}
               style={{
                 position: 'absolute', left: '-20px', top: '50%', transform: 'translateY(-50%)',
                 background: 'var(--text-color)', border: 'none', color: 'var(--bg-color)',
@@ -1220,11 +1277,15 @@ export default function Home() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
               }}
               aria-label="Previous Profile"
+              disabled={artists.length <= 1}
             >
               ←
             </button>
             <button 
-              onClick={() => setCurrentArtistIndex((prev) => (prev + 1) % artists.length)}
+              onClick={() => {
+                if (artists.length === 0) return;
+                setCurrentArtistIndex((prev) => (prev + 1) % artists.length);
+              }}
               style={{
                 position: 'absolute', right: '-20px', top: '50%', transform: 'translateY(-50%)',
                 background: 'var(--text-color)', border: 'none', color: 'var(--bg-color)',
@@ -1232,6 +1293,7 @@ export default function Home() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
               }}
               aria-label="Next Profile"
+              disabled={artists.length <= 1}
             >
               →
             </button>
@@ -1289,6 +1351,21 @@ export default function Home() {
         {/* Footer */}
         <footer className="site-footer">
           <SocialLinks />
+          <div style={{ textAlign: "center", paddingTop: "0.5rem" }}>
+            <Link
+              href="/admin"
+              style={{
+                fontSize: "0.75rem",
+                letterSpacing: "0.12em",
+                textTransform: "uppercase",
+                opacity: 0.5,
+                textDecoration: "none",
+                color: "var(--text-color)",
+              }}
+            >
+              Owner Admin
+            </Link>
+          </div>
         </footer>
       </main>
 
