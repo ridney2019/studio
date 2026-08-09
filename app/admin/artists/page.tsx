@@ -5,20 +5,45 @@ import Link from "next/link";
 import { signOut, useSession } from "next-auth/react";
 import ArtistAdminClient from "./ArtistAdminClient";
 
+type AuthTestResponse = {
+  ok: boolean;
+  notes?: string[];
+};
+
 export default function ArtistAdminPage() {
   const { data: session, status } = useSession();
   const [authError, setAuthError] = useState<string | null>(null);
+  const [authConfigOk, setAuthConfigOk] = useState<boolean | null>(null);
+  const [authConfigNotes, setAuthConfigNotes] = useState<string[]>([]);
 
   const authErrorMessage =
     authError === "AccessDenied"
       ? "Access denied for this Google account. Use the approved owner email."
+      : authError && authConfigOk === false
+        ? `Google login is not configured correctly yet: ${authConfigNotes.join(", ") || "missing required auth environment variables"}.`
+      : authError && authConfigOk === true
+        ? "Google login failed even though environment variables are loaded. Confirm Google OAuth redirect URIs include /api/auth/callback/google for this domain."
       : authError
-        ? "Google login is not configured correctly yet. Please check NEXTAUTH_URL, NEXTAUTH_SECRET, GOOGLE_CLIENT_ID, and GOOGLE_CLIENT_SECRET."
+        ? "Google login failed. If this keeps happening, check /api/auth/test."
         : null;
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     setAuthError(params.get("error"));
+
+    const loadAuthConfigStatus = async () => {
+      try {
+        const response = await fetch("/api/auth/test", { cache: "no-store" });
+        const data: AuthTestResponse = await response.json();
+        setAuthConfigOk(Boolean(data.ok));
+        setAuthConfigNotes(Array.isArray(data.notes) ? data.notes : []);
+      } catch {
+        setAuthConfigOk(null);
+        setAuthConfigNotes([]);
+      }
+    };
+
+    loadAuthConfigStatus();
   }, []);
 
   if (status === "loading") {
@@ -29,7 +54,7 @@ export default function ArtistAdminPage() {
     );
   }
 
-  if (!session?.user?.email) {
+  if (!session?.user?.email || !session.user.isAdmin) {
     return (
       <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: "2rem" }}>
         <div
@@ -47,9 +72,24 @@ export default function ArtistAdminPage() {
           <p style={{ margin: 0, opacity: 0.75 }}>
             Sign in with your Google owner account to manage artists.
           </p>
+          {session?.user?.email && !session.user.isAdmin ? (
+            <p style={{ margin: 0, color: "#8a0017", background: "rgba(176, 0, 32, 0.08)", border: "1px solid rgba(176, 0, 32, 0.3)", borderRadius: "10px", padding: "0.7rem 0.8rem" }}>
+              Signed in account is not authorized for owner admin access.
+            </p>
+          ) : null}
           {authErrorMessage ? (
             <p style={{ margin: 0, color: "#8a0017", background: "rgba(176, 0, 32, 0.08)", border: "1px solid rgba(176, 0, 32, 0.3)", borderRadius: "10px", padding: "0.7rem 0.8rem" }}>
               {authErrorMessage}
+            </p>
+          ) : null}
+          {authConfigOk === true ? (
+            <p style={{ margin: 0, color: "#0c5a2a", background: "rgba(15, 130, 68, 0.08)", border: "1px solid rgba(15, 130, 68, 0.28)", borderRadius: "10px", padding: "0.7rem 0.8rem" }}>
+              Auth environment detected correctly.
+            </p>
+          ) : null}
+          {authConfigOk === false && !authErrorMessage ? (
+            <p style={{ margin: 0, color: "#8a0017", background: "rgba(176, 0, 32, 0.08)", border: "1px solid rgba(176, 0, 32, 0.3)", borderRadius: "10px", padding: "0.7rem 0.8rem" }}>
+              Missing auth configuration: {authConfigNotes.join(", ") || "unknown issue"}.
             </p>
           ) : null}
           <a

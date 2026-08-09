@@ -47,7 +47,16 @@ Also add this redirect URI in Google Cloud OAuth app settings:
 
 ```text
 http://localhost:3000/api/auth/callback/google
+https://your-domain.com/api/auth/callback/google
 ```
+
+Use this endpoint to test your NextAuth configuration in both local and production:
+
+```text
+/api/auth/test
+```
+
+It returns which required variables are missing without exposing secrets.
 
 ## Deploy
 
