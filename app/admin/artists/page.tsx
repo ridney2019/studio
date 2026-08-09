@@ -2,12 +2,19 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import ArtistAdminClient from "./ArtistAdminClient";
 
 export default function ArtistAdminPage() {
   const { data: session, status } = useSession();
   const [authError, setAuthError] = useState<string | null>(null);
+
+  const authErrorMessage =
+    authError === "AccessDenied"
+      ? "Access denied for this Google account. Use the approved owner email."
+      : authError
+        ? "Google login is not configured correctly yet. Please check NEXTAUTH_URL, NEXTAUTH_SECRET, GOOGLE_CLIENT_ID, and GOOGLE_CLIENT_SECRET."
+        : null;
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -40,15 +47,17 @@ export default function ArtistAdminPage() {
           <p style={{ margin: 0, opacity: 0.75 }}>
             Sign in with your Google owner account to manage artists.
           </p>
-          {authError ? (
+          {authErrorMessage ? (
             <p style={{ margin: 0, color: "#8a0017", background: "rgba(176, 0, 32, 0.08)", border: "1px solid rgba(176, 0, 32, 0.3)", borderRadius: "10px", padding: "0.7rem 0.8rem" }}>
-              Access denied for this Google account. Use the approved owner email.
+              {authErrorMessage}
             </p>
           ) : null}
-          <button
-            type="button"
-            onClick={() => signIn("google", { callbackUrl: "/admin/artists" })}
+          <a
+            href="/api/auth/signin/google?callbackUrl=%2Fadmin%2Fartists"
             style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
               border: 0,
               borderRadius: "999px",
               padding: "0.75rem 1rem",
@@ -56,10 +65,11 @@ export default function ArtistAdminPage() {
               background: "#111",
               color: "#fff",
               cursor: "pointer",
+              textDecoration: "none",
             }}
           >
             Continue with Google
-          </button>
+          </a>
           <Link href="/" style={{ opacity: 0.7, textDecoration: "none", color: "inherit" }}>
             Back to site
           </Link>
