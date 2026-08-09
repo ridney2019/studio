@@ -33,8 +33,14 @@ Create a `.env.local` file with:
 GOOGLE_CLIENT_ID=your-google-client-id
 GOOGLE_CLIENT_SECRET=your-google-client-secret
 OWNER_ADMIN_EMAILS=owner1@gmail.com,owner2@gmail.com
-AUTH_SECRET=replace-with-a-long-random-secret
-AUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=replace-with-a-long-random-secret
+NEXTAUTH_URL=http://localhost:3000
+```
+
+For production, set `NEXTAUTH_URL` to your live domain, for example:
+
+```bash
+NEXTAUTH_URL=https://your-domain.com
 ```
 
 Also add this redirect URI in Google Cloud OAuth app settings:
