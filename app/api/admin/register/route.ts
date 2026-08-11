@@ -102,7 +102,10 @@ export async function POST(request: Request) {
         "Registration started. Check your email for the verification link before signing in.",
     });
   } catch (error) {
-    console.error("[owner-admin][register]", error);
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    console.error("[owner-admin][register] Error:", errorMessage);
+    console.error("[owner-admin][register] Stack:", error instanceof Error ? error.stack : "N/A");
+    console.error("[owner-admin][register] Full error:", error);
     return NextResponse.json(
       { ok: false, message: "Registration failed on the server. Check env setup and server logs." },
       { status: 500 }
