@@ -20,7 +20,8 @@ export async function GET() {
   if (!checks.hasOwnerAllowlist) notes.push("Missing OWNER_ADMIN_EMAILS");
   if (!checks.hasDatabaseUrl) notes.push("Missing DATABASE_URL");
   if (!checks.hasEmailFrom) notes.push("Missing EMAIL_FROM");
-  if (!checks.hasSmtpConfig && process.env.NODE_ENV === "production") notes.push("Missing SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASSWORD");
+  if (!checks.hasSmtpConfig && !checks.hasResendApiKey && process.env.NODE_ENV === "production") 
+    notes.push("Missing RESEND_API_KEY or SMTP config (SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASSWORD)");
   if (!checks.hasNextAuthSecret) notes.push("Missing NEXTAUTH_SECRET");
   if (!checks.hasNextAuthUrl) notes.push("Missing NEXTAUTH_URL");
 

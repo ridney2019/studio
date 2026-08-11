@@ -67,6 +67,7 @@ export const ownerAuthConfigChecks = {
       process.env.SMTP_USER &&
       process.env.SMTP_PASSWORD
   ),
+  hasResendApiKey: Boolean(process.env.RESEND_API_KEY),
   hasNextAuthSecret: Boolean(process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET),
   hasNextAuthUrl: Boolean(process.env.NEXTAUTH_URL),
   ownerAllowlistCount: ownerEmailSet.size,
@@ -74,7 +75,7 @@ export const ownerAuthConfigChecks = {
 
 export const ownerEmailDeliveryAvailable = (): boolean =>
   Boolean(process.env.EMAIL_FROM) &&
-  (ownerAuthConfigChecks.hasSmtpConfig || process.env.NODE_ENV !== "production");
+  (ownerAuthConfigChecks.hasSmtpConfig || ownerAuthConfigChecks.hasResendApiKey || process.env.NODE_ENV !== "production");
 
 export const passwordResetExpiresAt = (): Date => createExpiryDate(PASSWORD_RESET_TTL_MS);
 
