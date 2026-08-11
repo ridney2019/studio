@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer";
 
+const resendApiKey = process.env.RESEND_API_KEY;
 const smtpHost = process.env.SMTP_HOST;
 const smtpPort = Number(process.env.SMTP_PORT || 587);
 const smtpUser = process.env.SMTP_USER;
@@ -28,17 +29,46 @@ const sendMail = async ({ to, subject, text, html }: MailPayload): Promise<void>
     throw new Error("Missing EMAIL_FROM");
   }
 
+  // Priority 1: Resend API
+  if (resendApiKey) {
+    try {
+      const response = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${resendApiKey}`,
+        },
+        body: JSON.stringify({
+          from: emailFrom,
+          to,
+          subject,
+          html,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Resend API error: ${response.statusText}`);
+      }
+      return;
+    } catch (error) {
+      console.error("Resend API failed:", error);
+      // Fall through to SMTP
+    }
+  }
+
+  // Priority 2: SMTP
   if (smtpConfigured) {
     await getTransporter().sendMail({ from: emailFrom, to, subject, text, html });
     return;
   }
 
+  // Priority 3: Dev logging (only in non-production)
   if (process.env.NODE_ENV !== "production") {
     console.info("[mail][dev-fallback]", { to, subject, text });
     return;
   }
 
-  throw new Error("SMTP is not configured for production email delivery.");
+  throw new Error("Missing auth configuration: Missing RESEND_API_KEY or SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASSWORD.");
 };
 
 export const sendOwnerVerificationEmail = async (email: string, verificationUrl: string) => {
