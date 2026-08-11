@@ -1,45 +1,101 @@
 import { NextAuthOptions } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
+import CredentialsProvider from "next-auth/providers/credentials";
+import { prisma } from "@/lib/prisma";
+import {
+  isAllowedAdminEmail,
+  normalizeEmail,
+  ownerAuthConfigChecks,
+  verifyPassword,
+} from "@/lib/owner-auth";
 
-const ownerEmails = (process.env.OWNER_ADMIN_EMAILS || "")
-  .split(",")
-  .map((email) => email.trim().replace(/^"|"$/g, "").toLowerCase())
-  .filter(Boolean);
-const ownerEmailSet = new Set(ownerEmails);
+const providers = [
+  CredentialsProvider({
+    name: "Owner Admin",
+    credentials: {
+      email: { label: "Email", type: "email" },
+      password: { label: "Password", type: "password" },
+    },
+    async authorize(credentials) {
+      const email = normalizeEmail(credentials?.email);
+      const password = credentials?.password;
 
-const isAllowedAdminEmail = (email?: string | null): boolean => {
-  if (!email) {
-    return false;
-  }
-  return ownerEmailSet.has(email.trim().toLowerCase());
-};
+      if (!email || !password) {
+        if (process.env.NODE_ENV === "development") {
+          console.warn("[next-auth][credentials-denied]", {
+            reason: "missing_credentials",
+            email: email ?? null,
+          });
+        }
+        return null;
+      }
 
-const googleClientId = process.env.GOOGLE_CLIENT_ID;
-const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET;
-const nextAuthUrl = process.env.NEXTAUTH_URL;
+      const owner = await prisma.ownerUser.findUnique({
+        where: { email },
+      });
 
-const providers = [];
-if (googleClientId && googleClientSecret) {
-  providers.push(
-    GoogleProvider({
-      clientId: googleClientId,
-      clientSecret: googleClientSecret,
-    })
-  );
-}
+      if (!owner) {
+        if (process.env.NODE_ENV === "development") {
+          console.warn("[next-auth][credentials-denied]", {
+            reason: "owner_not_found",
+            email,
+          });
+        }
+        return null;
+      }
 
-export const authConfigChecks = {
-  hasGoogleClientId: Boolean(googleClientId),
-  hasGoogleClientSecret: Boolean(googleClientSecret),
-  hasOwnerAllowlist: ownerEmailSet.size > 0,
-  hasNextAuthSecret: Boolean(process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET),
-  hasNextAuthUrl: Boolean(nextAuthUrl),
-  ownerAllowlistCount: ownerEmailSet.size,
-};
+      if (!isAllowedAdminEmail(owner.email)) {
+        if (process.env.NODE_ENV === "development") {
+          console.warn("[next-auth][credentials-denied]", {
+            reason: "email_not_allowed",
+            email,
+          });
+        }
+        return null;
+      }
+
+      if (!owner.emailVerifiedAt) {
+        if (process.env.NODE_ENV === "development") {
+          console.warn("[next-auth][credentials-denied]", {
+            reason: "email_not_verified",
+            email,
+          });
+        }
+        return null;
+      }
+
+      const passwordMatches = await verifyPassword(password, owner.passwordHash);
+      if (!passwordMatches) {
+        if (process.env.NODE_ENV === "development") {
+          console.warn("[next-auth][credentials-denied]", {
+            reason: "password_mismatch",
+            email,
+          });
+        }
+        return null;
+      }
+
+      return {
+        id: owner.id,
+        email: owner.email,
+        name: owner.email,
+      };
+    },
+  }),
+];
+
+export const authConfigChecks = ownerAuthConfigChecks;
 
 export const authOptions: NextAuthOptions = {
   providers,
   secret: process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET,
+  logger:
+    process.env.NODE_ENV === "development"
+      ? {
+          error(code, metadata) {
+            console.error("[next-auth][error]", code, metadata);
+          },
+        }
+      : undefined,
   session: { strategy: "jwt" },
   pages: {
     signIn: "/admin/artists",
@@ -47,7 +103,11 @@ export const authOptions: NextAuthOptions = {
   },
   callbacks: {
     signIn({ user }) {
-      return isAllowedAdminEmail(user.email);
+      const allowed = isAllowedAdminEmail(user.email);
+      if (!allowed && process.env.NODE_ENV === "development") {
+        console.warn("[next-auth][signIn-denied]", { email: user.email ?? null });
+      }
+      return allowed;
     },
     jwt({ token, user }) {
       const email = user?.email ?? token.email;

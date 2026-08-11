@@ -1,38 +1,26 @@
 import { NextResponse } from "next/server";
+import { ownerAuthConfigChecks, ownerEmailDeliveryAvailable } from "@/lib/owner-auth";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export async function GET() {
-  const ownerEmails = (process.env.OWNER_ADMIN_EMAILS || "")
-    .split(",")
-    .map((email) => email.trim().replace(/^"|"$/g, "").toLowerCase())
-    .filter(Boolean);
-
-  const checks = {
-    hasGoogleClientId: Boolean(process.env.GOOGLE_CLIENT_ID),
-    hasGoogleClientSecret: Boolean(process.env.GOOGLE_CLIENT_SECRET),
-    hasOwnerAllowlist: ownerEmails.length > 0,
-    hasNextAuthSecret: Boolean(process.env.NEXTAUTH_SECRET || process.env.AUTH_SECRET),
-    hasNextAuthUrl: Boolean(process.env.NEXTAUTH_URL),
-    ownerAllowlistCount: ownerEmails.length,
-  };
-
-  const callbackPath = "/api/auth/callback/google";
+  const checks = ownerAuthConfigChecks;
   const nextAuthUrl = process.env.NEXTAUTH_URL || null;
-  const expectedGoogleRedirectUri = nextAuthUrl ? `${nextAuthUrl}${callbackPath}` : null;
+  const hasEmailDelivery = ownerEmailDeliveryAvailable();
 
   const ok =
-    checks.hasGoogleClientId &&
-    checks.hasGoogleClientSecret &&
     checks.hasOwnerAllowlist &&
+    checks.hasDatabaseUrl &&
     checks.hasNextAuthSecret &&
-    checks.hasNextAuthUrl;
+    checks.hasNextAuthUrl &&
+    hasEmailDelivery;
 
   const notes: string[] = [];
-  if (!checks.hasGoogleClientId) notes.push("Missing GOOGLE_CLIENT_ID");
-  if (!checks.hasGoogleClientSecret) notes.push("Missing GOOGLE_CLIENT_SECRET");
   if (!checks.hasOwnerAllowlist) notes.push("Missing OWNER_ADMIN_EMAILS");
+  if (!checks.hasDatabaseUrl) notes.push("Missing DATABASE_URL");
+  if (!checks.hasEmailFrom) notes.push("Missing EMAIL_FROM");
+  if (!checks.hasSmtpConfig && process.env.NODE_ENV === "production") notes.push("Missing SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASSWORD");
   if (!checks.hasNextAuthSecret) notes.push("Missing NEXTAUTH_SECRET");
   if (!checks.hasNextAuthUrl) notes.push("Missing NEXTAUTH_URL");
 
@@ -40,10 +28,9 @@ export async function GET() {
     {
       ok,
       checks,
-      providerConfigured: checks.hasGoogleClientId && checks.hasGoogleClientSecret,
+      hasEmailDelivery,
+      providerConfigured: checks.hasOwnerAllowlist && checks.hasDatabaseUrl,
       nextAuthUrl,
-      expectedGoogleRedirectUri,
-      callbackPath,
       notes,
     },
     { status: ok ? 200 : 500 }

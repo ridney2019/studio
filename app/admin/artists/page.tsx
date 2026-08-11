@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { signOut, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import ArtistAdminClient from "./ArtistAdminClient";
 
 type AuthTestResponse = {
@@ -15,17 +15,49 @@ export default function ArtistAdminPage() {
   const [authError, setAuthError] = useState<string | null>(null);
   const [authConfigOk, setAuthConfigOk] = useState<boolean | null>(null);
   const [authConfigNotes, setAuthConfigNotes] = useState<string[]>([]);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const authErrorMessage =
-    authError === "AccessDenied"
-      ? "Access denied for this Google account. Use the approved owner email."
+    authError === "CredentialsSignin"
+      ? "Invalid owner credentials. Check the approved email and admin password."
+      : authError === "AccessDenied"
+        ? "Access denied for this owner account. Use an approved owner email."
       : authError && authConfigOk === false
-        ? `Google login is not configured correctly yet: ${authConfigNotes.join(", ") || "missing required auth environment variables"}.`
+        ? `Owner admin login is not configured correctly yet: ${authConfigNotes.join(", ") || "missing required auth environment variables"}.`
       : authError && authConfigOk === true
-        ? "Google login failed even though environment variables are loaded. Confirm Google OAuth redirect URIs include /api/auth/callback/google for this domain."
+        ? "Owner admin login failed even though the environment looks correct. Check the server console for the raw NextAuth error."
       : authError
-        ? "Google login failed. If this keeps happening, check /api/auth/test."
+        ? "Owner admin login failed. If this keeps happening, check /api/auth/test."
         : null;
+
+  const handleCredentialsSignIn = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setAuthError(null);
+
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+      callbackUrl: "/admin/artists",
+    });
+
+    setIsSubmitting(false);
+
+    if (!result) {
+      setAuthError("UnknownError");
+      return;
+    }
+
+    if (result.error) {
+      setAuthError(result.error);
+      return;
+    }
+
+    window.location.href = result.url || "/admin/artists";
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -70,7 +102,10 @@ export default function ArtistAdminPage() {
         >
           <h1 style={{ margin: 0, fontSize: "1.4rem" }}>Owner Artist Admin</h1>
           <p style={{ margin: 0, opacity: 0.75 }}>
-            Sign in with your Google owner account to manage artists.
+            Sign in with your owner email and admin password to manage artists.
+          </p>
+          <p style={{ margin: 0, fontSize: "0.85rem", opacity: 0.65 }}>
+            First time here? Register your owner account, verify it from email, then sign in.
           </p>
           {session?.user?.email && !session.user.isAdmin ? (
             <p style={{ margin: 0, color: "#8a0017", background: "rgba(176, 0, 32, 0.08)", border: "1px solid rgba(176, 0, 32, 0.3)", borderRadius: "10px", padding: "0.7rem 0.8rem" }}>
@@ -92,24 +127,69 @@ export default function ArtistAdminPage() {
               Missing auth configuration: {authConfigNotes.join(", ") || "unknown issue"}.
             </p>
           ) : null}
-          <a
-            href="/api/auth/signin/google?callbackUrl=%2Fadmin%2Fartists"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              border: 0,
-              borderRadius: "999px",
-              padding: "0.75rem 1rem",
-              fontWeight: 700,
-              background: "#111",
-              color: "#fff",
-              cursor: "pointer",
-              textDecoration: "none",
-            }}
-          >
-            Continue with Google
-          </a>
+          <form onSubmit={handleCredentialsSignIn} style={{ display: "grid", gap: "0.85rem" }}>
+            <label style={{ display: "grid", gap: "0.4rem" }}>
+              <span style={{ fontSize: "0.8rem", fontWeight: 600 }}>Owner Email</span>
+              <input
+                type="email"
+                autoComplete="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                required
+                style={{
+                  width: "100%",
+                  border: "1px solid rgba(0,0,0,0.16)",
+                  borderRadius: "12px",
+                  padding: "0.8rem 0.9rem",
+                  font: "inherit",
+                }}
+              />
+            </label>
+            <label style={{ display: "grid", gap: "0.4rem" }}>
+              <span style={{ fontSize: "0.8rem", fontWeight: 600 }}>Admin Password</span>
+              <input
+                type="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                required
+                style={{
+                  width: "100%",
+                  border: "1px solid rgba(0,0,0,0.16)",
+                  borderRadius: "12px",
+                  padding: "0.8rem 0.9rem",
+                  font: "inherit",
+                }}
+              />
+            </label>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border: 0,
+                borderRadius: "999px",
+                padding: "0.75rem 1rem",
+                fontWeight: 700,
+                background: "#111",
+                color: "#fff",
+                cursor: isSubmitting ? "wait" : "pointer",
+                opacity: isSubmitting ? 0.7 : 1,
+              }}
+            >
+              {isSubmitting ? "Signing in..." : "Sign in"}
+            </button>
+          </form>
+          <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+            <Link href="/admin/register" style={{ opacity: 0.7, textDecoration: "none", color: "inherit" }}>
+              Register owner account
+            </Link>
+            <Link href="/admin/forgot-password" style={{ opacity: 0.7, textDecoration: "none", color: "inherit" }}>
+              Forgot password?
+            </Link>
+          </div>
           <Link href="/" style={{ opacity: 0.7, textDecoration: "none", color: "inherit" }}>
             Back to site
           </Link>

@@ -1,0 +1,40 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model OwnerUser {
+  id                String                   @id @default(cuid())
+  email             String                   @unique
+  passwordHash      String
+  emailVerifiedAt   DateTime?
+  createdAt         DateTime                 @default(now())
+  updatedAt         DateTime                 @updatedAt
+  verificationTokens OwnerVerificationToken[]
+  resetTokens       OwnerPasswordResetToken[]
+}
+
+model OwnerVerificationToken {
+  id         String    @id @default(cuid())
+  tokenHash  String    @unique
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+  userId     String
+  user       OwnerUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model OwnerPasswordResetToken {
+  id         String    @id @default(cuid())
+  tokenHash  String    @unique
+  expiresAt  DateTime
+  consumedAt DateTime?
+  createdAt  DateTime  @default(now())
+  userId     String
+  user       OwnerUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
