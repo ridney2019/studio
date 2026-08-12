@@ -589,21 +589,22 @@ export default function Home() {
             height: 40px;
             padding: 0 1rem;
             border-radius: 999px;
-            border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, #6f0000 0%, #b2001a 55%, #ff4d4d 100%);
+            color: #ffffff;
             text-decoration: none;
             font-size: 0.68rem;
             font-weight: 800;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            transition: border-color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
-            opacity: 0.8;
+            transition: transform 0.2s ease, opacity 0.2s ease, filter 0.2s ease;
+            opacity: 0.95;
+            box-shadow: 0 10px 26px rgba(109, 6, 17, 0.35);
           }
 
           .admin-header-link:hover {
-            border-color: var(--text-color);
             transform: translateY(-1px);
+            filter: brightness(1.08);
             opacity: 1;
           }
 

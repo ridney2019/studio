@@ -93,11 +93,13 @@ export default function ArtistAdminPage() {
           style={{
             width: "100%",
             maxWidth: "460px",
-            border: "1px solid rgba(0,0,0,0.12)",
-            borderRadius: "16px",
+            border: "1px solid rgba(0,0,0,0.1)",
+            borderRadius: "18px",
             padding: "2rem",
             display: "grid",
             gap: "1rem",
+            background: "linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(248,248,248,0.97) 100%)",
+            boxShadow: "0 14px 34px rgba(0,0,0,0.1)",
           }}
         >
           <h1 style={{ margin: 0, fontSize: "1.4rem" }}>Owner Artist Admin</h1>
@@ -138,10 +140,11 @@ export default function ArtistAdminPage() {
                 required
                 style={{
                   width: "100%",
-                  border: "1px solid rgba(0,0,0,0.16)",
+                  border: "1px solid rgba(0,0,0,0.14)",
                   borderRadius: "12px",
                   padding: "0.8rem 0.9rem",
                   font: "inherit",
+                  background: "#fff",
                 }}
               />
             </label>
@@ -155,10 +158,11 @@ export default function ArtistAdminPage() {
                 required
                 style={{
                   width: "100%",
-                  border: "1px solid rgba(0,0,0,0.16)",
+                  border: "1px solid rgba(0,0,0,0.14)",
                   borderRadius: "12px",
                   padding: "0.8rem 0.9rem",
                   font: "inherit",
+                  background: "#fff",
                 }}
               />
             </label>
@@ -173,10 +177,11 @@ export default function ArtistAdminPage() {
                 borderRadius: "999px",
                 padding: "0.75rem 1rem",
                 fontWeight: 700,
-                background: "#111",
+                background: "linear-gradient(135deg, #6f0000 0%, #b2001a 55%, #ff4d4d 100%)",
                 color: "#fff",
                 cursor: isSubmitting ? "wait" : "pointer",
                 opacity: isSubmitting ? 0.7 : 1,
+                boxShadow: "0 10px 24px rgba(109, 6, 17, 0.28)",
               }}
             >
               {isSubmitting ? "Signing in..." : "Sign in"}
@@ -211,13 +216,13 @@ export default function ArtistAdminPage() {
           <Link
             href="/admin/content"
             style={{
-              border: "1px solid rgba(0,0,0,0.2)",
+              border: "1px solid rgba(255,255,255,0.2)",
               borderRadius: "999px",
               padding: "0.55rem 0.9rem",
-              background: "transparent",
+              background: "linear-gradient(135deg, #5c0000 0%, #a30015 55%, #ff4d4d 100%)",
               cursor: "pointer",
               textDecoration: "none",
-              color: "inherit",
+              color: "#fff",
             }}
           >
             Content Admin
@@ -226,10 +231,11 @@ export default function ArtistAdminPage() {
             type="button"
             onClick={() => signOut({ callbackUrl: "/admin/artists" })}
             style={{
-              border: "1px solid rgba(0,0,0,0.2)",
+              border: "1px solid rgba(255,255,255,0.2)",
               borderRadius: "999px",
               padding: "0.55rem 0.9rem",
-              background: "transparent",
+              background: "linear-gradient(135deg, #2f2f2f 0%, #111 100%)",
+              color: "#fff",
               cursor: "pointer",
             }}
           >

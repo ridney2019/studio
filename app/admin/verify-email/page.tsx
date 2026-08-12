@@ -42,7 +42,7 @@ function OwnerVerifyEmailPageContent() {
 
   return (
     <main style={{ minHeight: "100vh", display: "grid", placeItems: "center", padding: "2rem" }}>
-      <div style={{ width: "100%", maxWidth: "460px", border: "1px solid rgba(0,0,0,0.12)", borderRadius: "16px", padding: "2rem", display: "grid", gap: "1rem" }}>
+      <div style={{ width: "100%", maxWidth: "460px", border: "1px solid rgba(0,0,0,0.1)", borderRadius: "18px", padding: "2rem", display: "grid", gap: "1rem", background: "linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(248,248,248,0.97) 100%)", boxShadow: "0 14px 34px rgba(0,0,0,0.1)" }}>
         <h1 style={{ margin: 0, fontSize: "1.4rem" }}>Verify Owner Email</h1>
         <p style={{ margin: 0, opacity: 0.75 }}>
           {isLoading ? "Verifying your email now..." : "Your verification result is below."}

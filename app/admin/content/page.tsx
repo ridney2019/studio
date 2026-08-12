@@ -276,11 +276,6 @@ export default function AdminContentPage() {
     }
   };
 
-  const restoreDefaultPosts = () => {
-    persistPosts(DEFAULT_BLOG_POSTS);
-    resetBlogEditor();
-  };
-
   const handleServiceProcessText = (value: string) => {
     setServiceForms((prev) => ({
       ...prev,
@@ -419,35 +414,35 @@ export default function AdminContentPage() {
           <p style={{ margin: "0.35rem 0 0", opacity: 0.75 }}>Manage blog posts and service image/process content.</p>
         </div>
         <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
-          <Link href="/admin/artists" style={{ border: "1px solid rgba(0,0,0,0.2)", borderRadius: "999px", padding: "0.55rem 0.9rem", textDecoration: "none", color: "inherit" }}>
+          <Link href="/admin/artists" style={{ border: "1px solid rgba(255,255,255,0.2)", borderRadius: "999px", padding: "0.55rem 0.9rem", textDecoration: "none", color: "#fff", background: "linear-gradient(135deg, #5c0000 0%, #a30015 55%, #ff4d4d 100%)" }}>
             Artist Admin
           </Link>
           <button
             type="button"
             onClick={() => signOut({ callbackUrl: "/admin/artists" })}
-            style={{ border: "1px solid rgba(0,0,0,0.2)", borderRadius: "999px", padding: "0.55rem 0.9rem", background: "transparent", cursor: "pointer" }}
+            style={{ border: "1px solid rgba(255,255,255,0.2)", borderRadius: "999px", padding: "0.55rem 0.9rem", background: "linear-gradient(135deg, #2f2f2f 0%, #111 100%)", color: "#fff", cursor: "pointer" }}
           >
             Sign out
           </button>
         </div>
       </header>
 
-      <section style={{ border: "1px solid rgba(0,0,0,0.15)", borderRadius: "16px", padding: "1rem", display: "grid", gap: "0.9rem" }}>
+      <section style={{ border: "1px solid rgba(0,0,0,0.12)", borderRadius: "18px", padding: "1.2rem", display: "grid", gap: "0.9rem", background: "linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(248,248,248,0.97) 100%)", boxShadow: "0 12px 32px rgba(0,0,0,0.08)" }}>
         <h2 style={{ margin: 0 }}>Blog Admin</h2>
         <form onSubmit={handleBlogSubmit} style={{ display: "grid", gap: "0.8rem" }}>
           <div style={{ display: "grid", gap: "0.7rem", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))" }}>
-            <input name="title" value={blogForm.title} onChange={handleBlogField} placeholder="Title" />
-            <input name="author" value={blogForm.author} onChange={handleBlogField} placeholder="Written by" />
-            <input name="readTime" value={blogForm.readTime} onChange={handleBlogField} placeholder="Min read (e.g. 5 MIN READ)" />
-            <input name="category" value={blogForm.category} onChange={handleBlogField} placeholder="Category (INSIGHTS, FINE LINE...)" />
-            <input name="date" value={blogForm.date} onChange={handleBlogField} placeholder="Date (JUNE 12, 2026)" />
+            <input name="title" value={blogForm.title} onChange={handleBlogField} placeholder="Title" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }} />
+            <input name="author" value={blogForm.author} onChange={handleBlogField} placeholder="Written by" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }} />
+            <input name="readTime" value={blogForm.readTime} onChange={handleBlogField} placeholder="Min read (e.g. 5 MIN READ)" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }} />
+            <input name="category" value={blogForm.category} onChange={handleBlogField} placeholder="Category (INSIGHTS, FINE LINE...)" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }} />
+            <input name="date" value={blogForm.date} onChange={handleBlogField} placeholder="Date (JUNE 12, 2026)" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }} />
           </div>
 
-          <input name="image" value={blogForm.image} onChange={handleBlogField} placeholder="Image URL or upload" />
+          <input name="image" value={blogForm.image} onChange={handleBlogField} placeholder="Image URL or upload" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }} />
           <input type="file" accept="image/*" onChange={handleBlogImageUpload} />
 
-          <textarea name="description" value={blogForm.description} onChange={handleBlogField} placeholder="Short description" rows={2} />
-          <textarea name="content" value={blogForm.content} onChange={handleBlogField} placeholder="Full post content" rows={5} />
+          <textarea name="description" value={blogForm.description} onChange={handleBlogField} placeholder="Short description" rows={2} style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff", resize: "vertical" }} />
+          <textarea name="content" value={blogForm.content} onChange={handleBlogField} placeholder="Full post content" rows={5} style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff", resize: "vertical" }} />
 
           <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
             <input
@@ -459,17 +454,14 @@ export default function AdminContentPage() {
           </label>
 
           <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
-            <button type="submit" style={{ border: 0, borderRadius: "999px", padding: "0.6rem 1rem", background: "#111", color: "#fff", cursor: "pointer" }}>
+            <button type="submit" style={{ border: 0, borderRadius: "999px", padding: "0.6rem 1rem", background: "linear-gradient(135deg, #6f0000 0%, #b2001a 55%, #ff4d4d 100%)", color: "#fff", cursor: "pointer", boxShadow: "0 10px 22px rgba(109, 6, 17, 0.24)" }}>
               {blogButtonLabel}
             </button>
             {editingPostId ? (
-              <button type="button" onClick={resetBlogEditor} style={{ border: "1px solid rgba(0,0,0,0.25)", borderRadius: "999px", padding: "0.6rem 1rem", background: "transparent", cursor: "pointer" }}>
+              <button type="button" onClick={resetBlogEditor} style={{ border: "1px solid rgba(255,255,255,0.2)", borderRadius: "999px", padding: "0.6rem 1rem", background: "linear-gradient(135deg, #2f2f2f 0%, #111 100%)", color: "#fff", cursor: "pointer" }}>
                 Cancel Edit
               </button>
             ) : null}
-            <button type="button" onClick={restoreDefaultPosts} style={{ border: "1px solid rgba(0,0,0,0.25)", borderRadius: "999px", padding: "0.6rem 1rem", background: "transparent", cursor: "pointer" }}>
-              Restore Blog Defaults
-            </button>
           </div>
         </form>
 
@@ -487,10 +479,10 @@ export default function AdminContentPage() {
                 <p style={{ margin: 0, opacity: 0.65, fontSize: "0.9rem" }}>{post.description}</p>
               </div>
               <div style={{ display: "flex", gap: "0.45rem", flexWrap: "wrap", justifyContent: "flex-end" }}>
-                <button type="button" onClick={() => editPost(post)} style={{ border: "1px solid rgba(0,0,0,0.22)", borderRadius: "999px", padding: "0.45rem 0.8rem", background: "transparent", cursor: "pointer" }}>
+                <button type="button" onClick={() => editPost(post)} style={{ border: "1px solid rgba(255,255,255,0.2)", borderRadius: "999px", padding: "0.45rem 0.8rem", background: "linear-gradient(135deg, #2f2f2f 0%, #111 100%)", color: "#fff", cursor: "pointer" }}>
                   Edit
                 </button>
-                <button type="button" onClick={() => removePost(post.id)} style={{ border: "1px solid rgba(176, 0, 32, 0.4)", borderRadius: "999px", padding: "0.45rem 0.8rem", background: "rgba(176, 0, 32, 0.08)", color: "#8a0017", cursor: "pointer" }}>
+                <button type="button" onClick={() => removePost(post.id)} style={{ border: "1px solid rgba(255,255,255,0.2)", borderRadius: "999px", padding: "0.45rem 0.8rem", background: "linear-gradient(135deg, #7a0012 0%, #b2001a 60%, #f14b61 100%)", color: "#fff", cursor: "pointer" }}>
                   Remove
                 </button>
               </div>
@@ -499,7 +491,7 @@ export default function AdminContentPage() {
         </div>
       </section>
 
-      <section style={{ border: "1px solid rgba(0,0,0,0.15)", borderRadius: "16px", padding: "1rem", display: "grid", gap: "0.9rem" }}>
+      <section style={{ border: "1px solid rgba(0,0,0,0.12)", borderRadius: "18px", padding: "1.2rem", display: "grid", gap: "0.9rem", background: "linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(248,248,248,0.97) 100%)", boxShadow: "0 12px 32px rgba(0,0,0,0.08)" }}>
         <h2 style={{ margin: 0 }}>Service Admin</h2>
         <p style={{ margin: 0, opacity: 0.72 }}>
           Manage cover-up, new tattoo, and scalp micro visuals: before/after, fresh/healed, process slides, and process steps.
@@ -507,7 +499,7 @@ export default function AdminContentPage() {
 
         <label style={{ display: "grid", gap: "0.3rem", maxWidth: "280px" }}>
           <span style={{ fontSize: "0.82rem", fontWeight: 600 }}>Service</span>
-          <select value={serviceKey} onChange={(event) => setServiceKey(event.target.value as ServiceKey)}>
+          <select value={serviceKey} onChange={(event) => setServiceKey(event.target.value as ServiceKey)} style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }}>
             {serviceOptions.map((option) => (
               <option key={option.key} value={option.key}>
                 {option.label}
@@ -524,6 +516,7 @@ export default function AdminContentPage() {
             value={currentServiceForm.processStepsText}
             onChange={(event) => handleServiceProcessText(event.target.value)}
             placeholder="Consultation | We review your references and goals"
+            style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff", resize: "vertical" }}
           />
         </label>
 
@@ -534,12 +527,14 @@ export default function AdminContentPage() {
               value={block.title}
               onChange={(event) => handleServiceBlockField(blockIndex, "title", event.target.value)}
               placeholder="Block title (e.g. Fresh vs. Healed)"
+                style={{ padding: "0.7rem 0.8rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }}
             />
             <textarea
               rows={2}
               value={block.intro}
               onChange={(event) => handleServiceBlockField(blockIndex, "intro", event.target.value)}
               placeholder="Block intro"
+                style={{ padding: "0.7rem 0.8rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff", resize: "vertical" }}
             />
 
             {block.slides.map((slide, slideIndex) => (
@@ -549,21 +544,25 @@ export default function AdminContentPage() {
                   value={slide.label}
                   onChange={(event) => handleServiceSlideField(blockIndex, slideIndex, "label", event.target.value)}
                   placeholder="Label"
+                    style={{ padding: "0.65rem 0.75rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }}
                 />
                 <input
                   value={slide.caption}
                   onChange={(event) => handleServiceSlideField(blockIndex, slideIndex, "caption", event.target.value)}
                   placeholder="Caption"
+                    style={{ padding: "0.65rem 0.75rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }}
                 />
                 <input
                   value={slide.imageSrc}
                   onChange={(event) => handleServiceSlideField(blockIndex, slideIndex, "imageSrc", event.target.value)}
                   placeholder="Image URL or upload"
+                    style={{ padding: "0.65rem 0.75rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }}
                 />
                 <input
                   value={slide.imageAlt}
                   onChange={(event) => handleServiceSlideField(blockIndex, slideIndex, "imageAlt", event.target.value)}
                   placeholder="Image alt"
+                    style={{ padding: "0.65rem 0.75rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }}
                 />
                 <input type="file" accept="image/*" onChange={(event) => handleServiceSlideImageUpload(blockIndex, slideIndex, event)} />
               </div>
@@ -572,10 +571,10 @@ export default function AdminContentPage() {
         ))}
 
         <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
-          <button type="button" onClick={saveCurrentServiceOverride} style={{ border: 0, borderRadius: "999px", padding: "0.6rem 1rem", background: "#111", color: "#fff", cursor: "pointer" }}>
+          <button type="button" onClick={saveCurrentServiceOverride} style={{ border: 0, borderRadius: "999px", padding: "0.6rem 1rem", background: "linear-gradient(135deg, #6f0000 0%, #b2001a 55%, #ff4d4d 100%)", color: "#fff", cursor: "pointer", boxShadow: "0 10px 22px rgba(109, 6, 17, 0.24)" }}>
             Save {serviceOptions.find((item) => item.key === serviceKey)?.label}
           </button>
-          <button type="button" onClick={clearCurrentServiceOverride} style={{ border: "1px solid rgba(0,0,0,0.25)", borderRadius: "999px", padding: "0.6rem 1rem", background: "transparent", cursor: "pointer" }}>
+          <button type="button" onClick={clearCurrentServiceOverride} style={{ border: "1px solid rgba(255,255,255,0.2)", borderRadius: "999px", padding: "0.6rem 1rem", background: "linear-gradient(135deg, #2f2f2f 0%, #111 100%)", color: "#fff", cursor: "pointer" }}>
             Clear {serviceOptions.find((item) => item.key === serviceKey)?.label} Overrides
           </button>
         </div>

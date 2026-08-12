@@ -116,11 +116,6 @@ export default function ArtistAdminClient() {
     }
   };
 
-  const restoreDefaults = () => {
-    persistArtists(DEFAULT_ARTISTS);
-    resetEditor();
-  };
-
   return (
     <>
       <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
@@ -128,27 +123,16 @@ export default function ArtistAdminClient() {
           Add, edit, or remove artist profiles shown on the homepage.
         </p>
         <div style={{ display: "flex", gap: "0.7rem", flexWrap: "wrap" }}>
-          <button
-            type="button"
-            onClick={restoreDefaults}
-            style={{
-              border: "1px solid rgba(0,0,0,0.2)",
-              borderRadius: "999px",
-              padding: "0.55rem 0.9rem",
-              background: "transparent",
-              cursor: "pointer",
-            }}
-          >
-            Restore Defaults
-          </button>
           <Link
             href="/admin/content"
             style={{
-              border: "1px solid rgba(0,0,0,0.2)",
+              border: "1px solid rgba(255,255,255,0.2)",
               borderRadius: "999px",
               padding: "0.55rem 0.9rem",
               textDecoration: "none",
-              color: "inherit",
+              color: "#fff",
+              background: "linear-gradient(135deg, #5c0000 0%, #a30015 55%, #ff4d4d 100%)",
+              boxShadow: "0 8px 22px rgba(109, 6, 17, 0.28)",
             }}
           >
             Content Admin
@@ -156,11 +140,12 @@ export default function ArtistAdminClient() {
           <Link
             href="/"
             style={{
-              border: "1px solid rgba(0,0,0,0.2)",
+              border: "1px solid rgba(255,255,255,0.2)",
               borderRadius: "999px",
               padding: "0.55rem 0.9rem",
               textDecoration: "none",
-              color: "inherit",
+              color: "#fff",
+              background: "linear-gradient(135deg, #2f2f2f 0%, #111 100%)",
             }}
           >
             Back to Site
@@ -168,7 +153,7 @@ export default function ArtistAdminClient() {
         </div>
       </header>
 
-      <section style={{ border: "1px solid rgba(0,0,0,0.15)", borderRadius: "16px", padding: "1rem" }}>
+      <section style={{ border: "1px solid rgba(0,0,0,0.12)", borderRadius: "18px", padding: "1.2rem", background: "linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(248,248,248,0.96) 100%)", boxShadow: "0 12px 32px rgba(0,0,0,0.08)" }}>
         <form onSubmit={handleSubmit} style={{ display: "grid", gap: "0.9rem" }}>
           <div style={{ display: "grid", gap: "0.8rem", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))" }}>
             <input
@@ -176,14 +161,14 @@ export default function ArtistAdminClient() {
               value={form.name}
               onChange={handleInput}
               placeholder="Name"
-              style={{ padding: "0.7rem 0.8rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.2)" }}
+              style={{ padding: "0.8rem 0.9rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.16)", background: "#fff" }}
             />
             <input
               name="style"
               value={form.style}
               onChange={handleInput}
               placeholder="Style"
-              style={{ padding: "0.7rem 0.8rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.2)" }}
+              style={{ padding: "0.8rem 0.9rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.16)", background: "#fff" }}
             />
           </div>
 
@@ -192,7 +177,7 @@ export default function ArtistAdminClient() {
             value={form.image}
             onChange={handleInput}
             placeholder="Image URL or /artists/file.jpg"
-            style={{ padding: "0.7rem 0.8rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.2)" }}
+            style={{ padding: "0.8rem 0.9rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.16)", background: "#fff" }}
           />
           <input type="file" accept="image/*" onChange={handleImageUpload} />
 
@@ -202,7 +187,7 @@ export default function ArtistAdminClient() {
             onChange={handleInput}
             placeholder="descKey (translation key) or plain description"
             rows={3}
-            style={{ padding: "0.7rem 0.8rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.2)", resize: "vertical" }}
+            style={{ padding: "0.8rem 0.9rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.16)", resize: "vertical", background: "#fff" }}
           />
 
           <div style={{ display: "flex", gap: "0.7rem", flexWrap: "wrap" }}>
@@ -211,11 +196,12 @@ export default function ArtistAdminClient() {
               style={{
                 border: 0,
                 borderRadius: "999px",
-                padding: "0.65rem 1rem",
-                background: "#111",
+                padding: "0.7rem 1.1rem",
+                background: "linear-gradient(135deg, #6f0000 0%, #b2001a 55%, #ff4d4d 100%)",
                 color: "#fff",
                 cursor: "pointer",
                 fontWeight: 700,
+                boxShadow: "0 10px 24px rgba(109, 6, 17, 0.28)",
               }}
             >
               {submitLabel}
@@ -227,8 +213,9 @@ export default function ArtistAdminClient() {
                 style={{
                   border: "1px solid rgba(0,0,0,0.25)",
                   borderRadius: "999px",
-                  padding: "0.65rem 1rem",
-                  background: "transparent",
+                  padding: "0.7rem 1.1rem",
+                  background: "linear-gradient(135deg, #2f2f2f 0%, #111 100%)",
+                  color: "#fff",
                   cursor: "pointer",
                 }}
               >
@@ -244,13 +231,14 @@ export default function ArtistAdminClient() {
           <article
             key={artist.id}
             style={{
-              border: "1px solid rgba(0,0,0,0.15)",
-              borderRadius: "14px",
+              border: "1px solid rgba(0,0,0,0.12)",
+              borderRadius: "16px",
               padding: "0.9rem",
               display: "grid",
               gridTemplateColumns: "96px 1fr auto",
               gap: "0.9rem",
               alignItems: "center",
+              background: "linear-gradient(180deg, rgba(255,255,255,0.98) 0%, rgba(248,248,248,0.98) 100%)",
             }}
           >
             <div style={{ width: "96px", height: "96px", borderRadius: "10px", overflow: "hidden", background: "rgba(0,0,0,0.08)" }}>
@@ -271,7 +259,8 @@ export default function ArtistAdminClient() {
                   border: "1px solid rgba(0,0,0,0.22)",
                   borderRadius: "999px",
                   padding: "0.45rem 0.8rem",
-                  background: "transparent",
+                  background: "linear-gradient(135deg, #2f2f2f 0%, #111 100%)",
+                  color: "#fff",
                   cursor: "pointer",
                 }}
               >
@@ -281,11 +270,11 @@ export default function ArtistAdminClient() {
                 type="button"
                 onClick={() => removeArtist(artist.id)}
                 style={{
-                  border: "1px solid rgba(176, 0, 32, 0.4)",
+                  border: "1px solid rgba(255,255,255,0.2)",
                   borderRadius: "999px",
                   padding: "0.45rem 0.8rem",
-                  background: "rgba(176, 0, 32, 0.08)",
-                  color: "#8a0017",
+                  background: "linear-gradient(135deg, #7a0012 0%, #b2001a 60%, #f14b61 100%)",
+                  color: "#fff",
                   cursor: "pointer",
                 }}
               >
