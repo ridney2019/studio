@@ -45,9 +45,9 @@ export default function OwnerRegisterPage() {
         {error ? <p style={{ margin: 0, color: "#8a0017" }}>{error}</p> : null}
         {message ? <p style={{ margin: 0, color: "#0c5a2a" }}>{message}</p> : null}
         <form onSubmit={handleSubmit} style={{ display: "grid", gap: "0.85rem" }}>
-          <input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Owner email" required style={{ width: "100%", border: "1px solid rgba(0,0,0,0.14)", borderRadius: "12px", padding: "0.8rem 0.9rem", font: "inherit", background: "#fff" }} />
-          <input type="password" autoComplete="new-password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" required style={{ width: "100%", border: "1px solid rgba(0,0,0,0.14)", borderRadius: "12px", padding: "0.8rem 0.9rem", font: "inherit", background: "#fff" }} />
-          <input type="password" autoComplete="new-password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} placeholder="Confirm password" required style={{ width: "100%", border: "1px solid rgba(0,0,0,0.14)", borderRadius: "12px", padding: "0.8rem 0.9rem", font: "inherit", background: "#fff" }} />
+          <input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Owner email" required style={{ width: "100%", border: "1px solid rgba(0,0,0,0.22)", borderRadius: "12px", padding: "0.8rem 0.9rem", font: "inherit", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }} />
+          <input type="password" autoComplete="new-password" value={password} onChange={(event) => setPassword(event.target.value)} placeholder="Password" required style={{ width: "100%", border: "1px solid rgba(0,0,0,0.22)", borderRadius: "12px", padding: "0.8rem 0.9rem", font: "inherit", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }} />
+          <input type="password" autoComplete="new-password" value={confirmPassword} onChange={(event) => setConfirmPassword(event.target.value)} placeholder="Confirm password" required style={{ width: "100%", border: "1px solid rgba(0,0,0,0.22)", borderRadius: "12px", padding: "0.8rem 0.9rem", font: "inherit", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }} />
           <p style={{ margin: 0, fontSize: "0.82rem", opacity: 0.65 }}>
             Use at least 12 characters with uppercase, lowercase, and a number.
           </p>

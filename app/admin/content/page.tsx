@@ -431,18 +431,18 @@ export default function AdminContentPage() {
         <h2 style={{ margin: 0 }}>Blog Admin</h2>
         <form onSubmit={handleBlogSubmit} style={{ display: "grid", gap: "0.8rem" }}>
           <div style={{ display: "grid", gap: "0.7rem", gridTemplateColumns: "repeat(auto-fit, minmax(190px, 1fr))" }}>
-            <input name="title" value={blogForm.title} onChange={handleBlogField} placeholder="Title" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }} />
-            <input name="author" value={blogForm.author} onChange={handleBlogField} placeholder="Written by" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }} />
-            <input name="readTime" value={blogForm.readTime} onChange={handleBlogField} placeholder="Min read (e.g. 5 MIN READ)" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }} />
-            <input name="category" value={blogForm.category} onChange={handleBlogField} placeholder="Category (INSIGHTS, FINE LINE...)" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }} />
-            <input name="date" value={blogForm.date} onChange={handleBlogField} placeholder="Date (JUNE 12, 2026)" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }} />
+            <input name="title" value={blogForm.title} onChange={handleBlogField} placeholder="Title" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }} />
+            <input name="author" value={blogForm.author} onChange={handleBlogField} placeholder="Written by" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }} />
+            <input name="readTime" value={blogForm.readTime} onChange={handleBlogField} placeholder="Min read (e.g. 5 MIN READ)" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }} />
+            <input name="category" value={blogForm.category} onChange={handleBlogField} placeholder="Category (INSIGHTS, FINE LINE...)" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }} />
+            <input name="date" value={blogForm.date} onChange={handleBlogField} placeholder="Date (JUNE 12, 2026)" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }} />
           </div>
 
-          <input name="image" value={blogForm.image} onChange={handleBlogField} placeholder="Image URL or upload" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }} />
+          <input name="image" value={blogForm.image} onChange={handleBlogField} placeholder="Image URL or upload" style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }} />
           <input type="file" accept="image/*" onChange={handleBlogImageUpload} />
 
-          <textarea name="description" value={blogForm.description} onChange={handleBlogField} placeholder="Short description" rows={2} style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff", resize: "vertical" }} />
-          <textarea name="content" value={blogForm.content} onChange={handleBlogField} placeholder="Full post content" rows={5} style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff", resize: "vertical" }} />
+          <textarea name="description" value={blogForm.description} onChange={handleBlogField} placeholder="Short description" rows={2} style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", resize: "vertical", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }} />
+          <textarea name="content" value={blogForm.content} onChange={handleBlogField} placeholder="Full post content" rows={5} style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", resize: "vertical", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }} />
 
           <label style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem" }}>
             <input
@@ -499,7 +499,7 @@ export default function AdminContentPage() {
 
         <label style={{ display: "grid", gap: "0.3rem", maxWidth: "280px" }}>
           <span style={{ fontSize: "0.82rem", fontWeight: 600 }}>Service</span>
-          <select value={serviceKey} onChange={(event) => setServiceKey(event.target.value as ServiceKey)} style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }}>
+          <select value={serviceKey} onChange={(event) => setServiceKey(event.target.value as ServiceKey)} style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }}>
             {serviceOptions.map((option) => (
               <option key={option.key} value={option.key}>
                 {option.label}
@@ -516,7 +516,7 @@ export default function AdminContentPage() {
             value={currentServiceForm.processStepsText}
             onChange={(event) => handleServiceProcessText(event.target.value)}
             placeholder="Consultation | We review your references and goals"
-            style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff", resize: "vertical" }}
+            style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", resize: "vertical", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }}
           />
         </label>
 
@@ -527,14 +527,14 @@ export default function AdminContentPage() {
               value={block.title}
               onChange={(event) => handleServiceBlockField(blockIndex, "title", event.target.value)}
               placeholder="Block title (e.g. Fresh vs. Healed)"
-                style={{ padding: "0.7rem 0.8rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }}
+                style={{ padding: "0.7rem 0.8rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }}
             />
             <textarea
               rows={2}
               value={block.intro}
               onChange={(event) => handleServiceBlockField(blockIndex, "intro", event.target.value)}
               placeholder="Block intro"
-                style={{ padding: "0.7rem 0.8rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff", resize: "vertical" }}
+                style={{ padding: "0.7rem 0.8rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", resize: "vertical", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }}
             />
 
             {block.slides.map((slide, slideIndex) => (
@@ -544,25 +544,25 @@ export default function AdminContentPage() {
                   value={slide.label}
                   onChange={(event) => handleServiceSlideField(blockIndex, slideIndex, "label", event.target.value)}
                   placeholder="Label"
-                    style={{ padding: "0.65rem 0.75rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }}
+                    style={{ padding: "0.65rem 0.75rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }}
                 />
                 <input
                   value={slide.caption}
                   onChange={(event) => handleServiceSlideField(blockIndex, slideIndex, "caption", event.target.value)}
                   placeholder="Caption"
-                    style={{ padding: "0.65rem 0.75rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }}
+                    style={{ padding: "0.65rem 0.75rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }}
                 />
                 <input
                   value={slide.imageSrc}
                   onChange={(event) => handleServiceSlideField(blockIndex, slideIndex, "imageSrc", event.target.value)}
                   placeholder="Image URL or upload"
-                    style={{ padding: "0.65rem 0.75rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }}
+                    style={{ padding: "0.65rem 0.75rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }}
                 />
                 <input
                   value={slide.imageAlt}
                   onChange={(event) => handleServiceSlideField(blockIndex, slideIndex, "imageAlt", event.target.value)}
                   placeholder="Image alt"
-                    style={{ padding: "0.65rem 0.75rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.14)", background: "#fff" }}
+                    style={{ padding: "0.65rem 0.75rem", borderRadius: "10px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }}
                 />
                 <input type="file" accept="image/*" onChange={(event) => handleServiceSlideImageUpload(blockIndex, slideIndex, event)} />
               </div>

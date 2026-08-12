@@ -140,11 +140,12 @@ export default function ArtistAdminPage() {
                 required
                 style={{
                   width: "100%",
-                  border: "1px solid rgba(0,0,0,0.14)",
+                  border: "1px solid rgba(0,0,0,0.22)",
                   borderRadius: "12px",
                   padding: "0.8rem 0.9rem",
                   font: "inherit",
-                  background: "#fff",
+                  background: "#f5f6f8",
+                  boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)",
                 }}
               />
             </label>
@@ -158,11 +159,12 @@ export default function ArtistAdminPage() {
                 required
                 style={{
                   width: "100%",
-                  border: "1px solid rgba(0,0,0,0.14)",
+                  border: "1px solid rgba(0,0,0,0.22)",
                   borderRadius: "12px",
                   padding: "0.8rem 0.9rem",
                   font: "inherit",
-                  background: "#fff",
+                  background: "#f5f6f8",
+                  boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)",
                 }}
               />
             </label>

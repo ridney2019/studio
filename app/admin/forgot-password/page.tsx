@@ -43,7 +43,7 @@ export default function OwnerForgotPasswordPage() {
         {error ? <p style={{ margin: 0, color: "#8a0017" }}>{error}</p> : null}
         {message ? <p style={{ margin: 0, color: "#0c5a2a" }}>{message}</p> : null}
         <form onSubmit={handleSubmit} style={{ display: "grid", gap: "0.85rem" }}>
-          <input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Owner email" required style={{ width: "100%", border: "1px solid rgba(0,0,0,0.14)", borderRadius: "12px", padding: "0.8rem 0.9rem", font: "inherit", background: "#fff" }} />
+          <input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="Owner email" required style={{ width: "100%", border: "1px solid rgba(0,0,0,0.22)", borderRadius: "12px", padding: "0.8rem 0.9rem", font: "inherit", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }} />
           <button type="submit" disabled={isSubmitting} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", border: 0, borderRadius: "999px", padding: "0.75rem 1rem", fontWeight: 700, background: "linear-gradient(135deg, #6f0000 0%, #b2001a 55%, #ff4d4d 100%)", color: "#fff", cursor: isSubmitting ? "wait" : "pointer", opacity: isSubmitting ? 0.7 : 1, boxShadow: "0 10px 24px rgba(109, 6, 17, 0.28)" }}>
             {isSubmitting ? "Sending..." : "Send reset link"}
           </button>

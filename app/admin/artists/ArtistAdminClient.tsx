@@ -161,14 +161,14 @@ export default function ArtistAdminClient() {
               value={form.name}
               onChange={handleInput}
               placeholder="Name"
-              style={{ padding: "0.8rem 0.9rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.16)", background: "#fff" }}
+              style={{ padding: "0.8rem 0.9rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }}
             />
             <input
               name="style"
               value={form.style}
               onChange={handleInput}
               placeholder="Style"
-              style={{ padding: "0.8rem 0.9rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.16)", background: "#fff" }}
+              style={{ padding: "0.8rem 0.9rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }}
             />
           </div>
 
@@ -177,7 +177,7 @@ export default function ArtistAdminClient() {
             value={form.image}
             onChange={handleInput}
             placeholder="Image URL or /artists/file.jpg"
-            style={{ padding: "0.8rem 0.9rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.16)", background: "#fff" }}
+            style={{ padding: "0.8rem 0.9rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }}
           />
           <input type="file" accept="image/*" onChange={handleImageUpload} />
 
@@ -187,7 +187,7 @@ export default function ArtistAdminClient() {
             onChange={handleInput}
             placeholder="descKey (translation key) or plain description"
             rows={3}
-            style={{ padding: "0.8rem 0.9rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.16)", resize: "vertical", background: "#fff" }}
+            style={{ padding: "0.8rem 0.9rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", resize: "vertical", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }}
           />
 
           <div style={{ display: "flex", gap: "0.7rem", flexWrap: "wrap" }}>
