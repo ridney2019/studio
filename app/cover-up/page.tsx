@@ -2,15 +2,14 @@
 
 import ServiceFunnelPage from "@/app/components/ServiceFunnelPage";
 import { useTranslation } from "@/app/hooks/useTranslation";
+import { applyServiceOverrides } from "@/lib/service-content";
 
 export default function CoverUpPage() {
   const { t, isHydrated } = useTranslation();
 
   if (!isHydrated) return null;
 
-  return (
-    <ServiceFunnelPage
-      content={{
+  const baseContent = {
         serviceLabel: t("coverServiceLabel"),
         hookTitle: t("coverHookTitle"),
         hookDescription: t("coverHookDescription"),
@@ -136,7 +135,7 @@ export default function CoverUpPage() {
         ],
         formCta: t("coverFormCta"),
         formHelper: t("coverFormHelper"),
-      }}
-    />
-  );
+      };
+
+  return <ServiceFunnelPage content={applyServiceOverrides("cover-up", baseContent)} />;
 }

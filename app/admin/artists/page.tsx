@@ -207,19 +207,35 @@ export default function ArtistAdminPage() {
             Signed in as {session.user.email}
           </p>
         </div>
-        <button
-          type="button"
-          onClick={() => signOut({ callbackUrl: "/admin/artists" })}
-          style={{
-            border: "1px solid rgba(0,0,0,0.2)",
-            borderRadius: "999px",
-            padding: "0.55rem 0.9rem",
-            background: "transparent",
-            cursor: "pointer",
-          }}
-        >
-          Sign out
-        </button>
+        <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
+          <Link
+            href="/admin/content"
+            style={{
+              border: "1px solid rgba(0,0,0,0.2)",
+              borderRadius: "999px",
+              padding: "0.55rem 0.9rem",
+              background: "transparent",
+              cursor: "pointer",
+              textDecoration: "none",
+              color: "inherit",
+            }}
+          >
+            Content Admin
+          </Link>
+          <button
+            type="button"
+            onClick={() => signOut({ callbackUrl: "/admin/artists" })}
+            style={{
+              border: "1px solid rgba(0,0,0,0.2)",
+              borderRadius: "999px",
+              padding: "0.55rem 0.9rem",
+              background: "transparent",
+              cursor: "pointer",
+            }}
+          >
+            Sign out
+          </button>
+        </div>
       </header>
 
       <ArtistAdminClient />

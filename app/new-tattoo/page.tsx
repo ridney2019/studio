@@ -2,15 +2,14 @@
 
 import ServiceFunnelPage from "@/app/components/ServiceFunnelPage";
 import { useTranslation } from "@/app/hooks/useTranslation";
+import { applyServiceOverrides } from "@/lib/service-content";
 
 export default function NewTattooPage() {
   const { t, isHydrated } = useTranslation();
 
   if (!isHydrated) return null;
 
-  return (
-    <ServiceFunnelPage
-      content={{
+  const baseContent = {
         serviceLabel: t("newServiceLabel"),
         hookTitle: t("newHookTitle"),
         hookDescription: t("newHookDescription"),
@@ -136,7 +135,7 @@ export default function NewTattooPage() {
         ],
         formCta: t("newFormCta"),
         formHelper: t("newFormHelper"),
-      }}
-    />
-  );
+      };
+
+  return <ServiceFunnelPage content={applyServiceOverrides("new-tattoo", baseContent)} />;
 }

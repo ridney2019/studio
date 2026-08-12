@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useTranslation } from "@/app/hooks/useTranslation";
 import { useLanguage } from "@/app/providers";
@@ -8,54 +8,12 @@ import { SocialLinks } from "@/app/components/SocialLinks";
 import ScrollToTopButton from "@/app/components/ScrollToTopButton";
 import FloatingSocials from "@/app/components/FloatingSocials";
 import GlobalMenu from "@/app/components/GlobalMenu";
-
-// Mock Database for Studio Blog Articles
-const BLOG_POSTS = [
-  {
-    id: "fine-line-blackwork",
-    title: "The Renaissance of Fine-Line Blackwork",
-    description: "An exploration into the structural physics and minimalistic philosophy transforming modern skin art into high-end luxury.",
-    date: "JUNE 12, 2026",
-    author: "Gabriel Nexo",
-    readTime: "5 MIN READ",
-    category: "INSIGHTS",
-    image: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&q=80&w=800",
-    featured: true
-  },
-  {
-    id: "ink-chemistry-safety",
-    title: "Beneath the Surface: Modern Ink Chemistry",
-    description: "A comprehensive look at organic pigment compounds, allergen safety updates, and how premium composition preserves micro-lines over decades.",
-    date: "MAY 28, 2026",
-    author: "Dr. Elena Rostova",
-    readTime: "8 MIN READ",
-    category: "FINE LINE",
-    image: "https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?auto=format&fit=crop&q=80&w=800",
-    featured: false
-  },
-  {
-    id: "minimalist-placement-guide",
-    title: "Geometry & Anatomy: The Art of Placement",
-    description: "How structural muscle flow dictates where minimalist designs should live. Master the alignment balance before hitting the needle.",
-    date: "APRIL 14, 2026",
-    author: "Sasha Vane",
-    readTime: "4 MIN READ",
-    category: "DESIGN",
-    image: "https://images.unsplash.com/photo-1562157873-818bc0726f68?auto=format&fit=crop&q=80&w=800",
-    featured: false
-  },
-  {
-    id: "aftercare-physics-healing",
-    title: "The Physics of Dermal Healing Over Time",
-    description: "Ditching old myths for advanced scientific methods. Why medical-grade breathable barriers radically alter long-term crispness.",
-    date: "MARCH 03, 2026",
-    author: "Gabriel Nexo",
-    readTime: "6 MIN READ",
-    category: "AFTERCARE",
-    image: "https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&q=80&w=800",
-    featured: false
-  }
-];
+import {
+  BLOG_UPDATED_EVENT,
+  BlogPost,
+  DEFAULT_BLOG_POSTS,
+  getBlogPostsFromStorage,
+} from "@/lib/blog";
 
 const BlogIcons = {
   Search: () => (
@@ -83,25 +41,37 @@ const BlogIcons = {
 export default function BlogPage() {
   const { t, isHydrated } = useTranslation();
   const { theme, toggleTheme } = useLanguage();
+  const [posts, setPosts] = useState<BlogPost[]>(DEFAULT_BLOG_POSTS);
 
   // Filter States
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("ALL");
 
+  useEffect(() => {
+    const sync = () => {
+      setPosts(getBlogPostsFromStorage());
+    };
+
+    sync();
+    window.addEventListener(BLOG_UPDATED_EVENT, sync);
+    return () => window.removeEventListener(BLOG_UPDATED_EVENT, sync);
+  }, []);
+
   // Extract separate layout entries
-  const featuredPost = useMemo(() => BLOG_POSTS.find(p => p.featured), []);
-  const categories = useMemo(() => ["ALL", ...Array.from(new Set(BLOG_POSTS.map(p => p.category)))], []);
+  const featuredPost = useMemo(() => posts.find((p) => p.featured) ?? posts[0], [posts]);
+  const categories = useMemo(() => ["ALL", ...Array.from(new Set(posts.map((p) => p.category)))], [posts]);
 
   // Filter Pipeline Engine
   const filteredPosts = useMemo(() => {
-    return BLOG_POSTS.filter(post => {
+    return posts.filter((post) => {
       if (post.featured) return false; // Don't repeat the hero article below
       const matchesCategory = selectedCategory === "ALL" || post.category === selectedCategory;
-      const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                            post.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch =
+        post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        post.description.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     });
-  }, [searchQuery, selectedCategory]);
+  }, [posts, searchQuery, selectedCategory]);
 
   if (!isHydrated) return null;
 

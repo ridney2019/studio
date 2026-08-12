@@ -2,15 +2,14 @@
 
 import ServiceFunnelPage from "@/app/components/ServiceFunnelPage";
 import { useTranslation } from "@/app/hooks/useTranslation";
+import { applyServiceOverrides } from "@/lib/service-content";
 
 export default function ScalpMicropigmentationPage() {
   const { t, isHydrated } = useTranslation();
 
   if (!isHydrated) return null;
 
-  return (
-    <ServiceFunnelPage
-      content={{
+  const baseContent = {
         serviceLabel: t("scalpServiceLabel"),
         hookTitle: t("scalpHookTitle"),
         hookDescription: t("scalpHookDescription"),
@@ -136,7 +135,7 @@ export default function ScalpMicropigmentationPage() {
         ],
         formCta: t("scalpFormCta"),
         formHelper: t("scalpFormHelper"),
-      }}
-    />
-  );
+      };
+
+  return <ServiceFunnelPage content={applyServiceOverrides("scalp-micropigmentation", baseContent)} />;
 }

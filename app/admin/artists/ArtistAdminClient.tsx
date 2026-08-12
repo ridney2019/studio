@@ -142,6 +142,18 @@ export default function ArtistAdminClient() {
             Restore Defaults
           </button>
           <Link
+            href="/admin/content"
+            style={{
+              border: "1px solid rgba(0,0,0,0.2)",
+              borderRadius: "999px",
+              padding: "0.55rem 0.9rem",
+              textDecoration: "none",
+              color: "inherit",
+            }}
+          >
+            Content Admin
+          </Link>
+          <Link
             href="/"
             style={{
               border: "1px solid rgba(0,0,0,0.2)",
