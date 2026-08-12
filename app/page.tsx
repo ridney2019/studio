@@ -80,7 +80,9 @@ const TattooMachineCursor = () => {
         zIndex: 99999,
         x: position.x,
         y: position.y,
-        transform: "translate(0px, 0px)", 
+        transform: "translate(0px, 0px)",
+        opacity: isVisible ? 1 : 0,
+        transition: "opacity 140ms ease",
       }}
       animate={{
         rotate: isHovered ? -5 : 0,
@@ -414,12 +416,6 @@ export default function Home() {
             padding: 0;
             letter-spacing: -0.01em;
             scroll-behavior: smooth;
-          }
-
-          @media (min-width: 1024px) {
-            body, a, button, select, option, input {
-              cursor: none !important;
-            }
           }
 
           /* --- FIXED TRANSPARENT GLASSMORPHIC NAVIGATION BAR --- */
