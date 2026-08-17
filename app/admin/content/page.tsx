@@ -18,6 +18,7 @@ import {
   ServiceKey,
   SERVICE_CONTENT_UPDATED_EVENT,
 } from "@/lib/service-content";
+import { DEFAULT_FAQ_ITEMS, FAQItem, FAQ_UPDATED_EVENT, getFaqItemsFromStorage, saveFaqItemsToStorage } from "@/lib/faq";
 
 type BlogForm = {
   title: string;
@@ -48,6 +49,8 @@ type ServiceForm = {
   processStepsText: string;
   blocks: BlockForm[];
 };
+
+type FaqFormItem = FAQItem;
 
 const emptyBlogForm: BlogForm = {
   title: "",
@@ -96,6 +99,11 @@ const makeEmptyServiceForm = (): ServiceForm => ({
       ],
     },
   ],
+});
+
+const makeEmptyFaqItem = (): FaqFormItem => ({
+  question: "",
+  answer: "",
 });
 
 const applyOverrideToForm = (
@@ -153,6 +161,7 @@ export default function AdminContentPage() {
     "new-tattoo": makeEmptyServiceForm(),
     "scalp-micropigmentation": makeEmptyServiceForm(),
   });
+  const [faqItems, setFaqItems] = useState<FaqFormItem[]>(DEFAULT_FAQ_ITEMS);
 
   useEffect(() => {
     const syncBlog = () => {
@@ -177,6 +186,16 @@ export default function AdminContentPage() {
     syncServices();
     window.addEventListener(SERVICE_CONTENT_UPDATED_EVENT, syncServices);
     return () => window.removeEventListener(SERVICE_CONTENT_UPDATED_EVENT, syncServices);
+  }, []);
+
+  useEffect(() => {
+    const syncFaqs = () => {
+      setFaqItems(getFaqItemsFromStorage());
+    };
+
+    syncFaqs();
+    window.addEventListener(FAQ_UPDATED_EVENT, syncFaqs);
+    return () => window.removeEventListener(FAQ_UPDATED_EVENT, syncFaqs);
   }, []);
 
   const currentServiceForm = serviceForms[serviceKey];
@@ -241,6 +260,7 @@ export default function AdminContentPage() {
           : post
       );
       persistPosts(updated);
+      window.alert("Blog post updated successfully.");
       resetBlogEditor();
       return;
     }
@@ -251,6 +271,7 @@ export default function AdminContentPage() {
     };
 
     persistPosts([nextPost, ...featuredReset]);
+    window.alert("Blog post added successfully.");
     resetBlogEditor();
   };
 
@@ -327,6 +348,33 @@ export default function AdminContentPage() {
     reader.readAsDataURL(file);
   };
 
+  const handleFaqField = (index: number, field: keyof FaqFormItem, value: string) => {
+    setFaqItems((prev) => {
+      const next = structuredClone(prev);
+      next[index][field] = value;
+      return next;
+    });
+  };
+
+  const addFaqItem = () => {
+    setFaqItems((prev) => [...prev, makeEmptyFaqItem()]);
+  };
+
+  const removeFaqItem = (index: number) => {
+    setFaqItems((prev) => prev.filter((_, itemIndex) => itemIndex !== index));
+  };
+
+  const saveFaqContent = () => {
+    const cleaned = faqItems
+      .map((item) => ({ question: item.question.trim(), answer: item.answer.trim() }))
+      .filter((item) => item.question && item.answer);
+
+    const nextFaqItems = cleaned.length > 0 ? cleaned : DEFAULT_FAQ_ITEMS;
+    saveFaqItemsToStorage(nextFaqItems);
+    setFaqItems(nextFaqItems);
+    window.alert("FAQ updated successfully.");
+  };
+
   const saveCurrentServiceOverride = () => {
     const parsedSteps = currentServiceForm.processStepsText
       .split("\n")
@@ -373,6 +421,7 @@ export default function AdminContentPage() {
     };
 
     saveServiceOverridesToStorage(nextOverrides);
+    window.alert("Service content saved successfully.");
   };
 
   const clearCurrentServiceOverride = () => {
@@ -417,6 +466,9 @@ export default function AdminContentPage() {
           <Link href="/admin/artists" style={{ border: "1px solid rgba(255,255,255,0.2)", borderRadius: "999px", padding: "0.55rem 0.9rem", textDecoration: "none", color: "#fff", background: "linear-gradient(135deg, #5c0000 0%, #a30015 55%, #ff4d4d 100%)" }}>
             Artist Admin
           </Link>
+          <a href="#faq-admin" style={{ border: "1px solid rgba(255,255,255,0.2)", borderRadius: "999px", padding: "0.55rem 0.9rem", textDecoration: "none", color: "#fff", background: "linear-gradient(135deg, #3a3a3a 0%, #111 100%)" }}>
+            FAQ Admin
+          </a>
           <button
             type="button"
             onClick={() => signOut({ callbackUrl: "/admin/artists" })}
@@ -576,6 +628,62 @@ export default function AdminContentPage() {
           </button>
           <button type="button" onClick={clearCurrentServiceOverride} style={{ border: "1px solid rgba(255,255,255,0.2)", borderRadius: "999px", padding: "0.6rem 1rem", background: "linear-gradient(135deg, #2f2f2f 0%, #111 100%)", color: "#fff", cursor: "pointer" }}>
             Clear {serviceOptions.find((item) => item.key === serviceKey)?.label} Overrides
+          </button>
+        </div>
+      </section>
+
+      <section id="faq-admin" style={{ border: "1px solid rgba(0,0,0,0.12)", borderRadius: "18px", padding: "1.2rem", display: "grid", gap: "0.9rem", background: "linear-gradient(180deg, rgba(255,255,255,0.97) 0%, rgba(248,248,248,0.97) 100%)", boxShadow: "0 12px 32px rgba(0,0,0,0.08)" }}>
+        <h2 style={{ margin: 0 }}>FAQ Admin</h2>
+        <p style={{ margin: 0, opacity: 0.72 }}>
+          Manage the homepage FAQ with question and answer fields. Blank entries are ignored when you save.
+        </p>
+
+        <div style={{ display: "grid", gap: "0.8rem" }}>
+          {faqItems.map((item, index) => (
+            <article key={index} style={{ border: "1px solid rgba(0,0,0,0.12)", borderRadius: "12px", padding: "0.9rem", display: "grid", gap: "0.7rem" }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "1rem", flexWrap: "wrap" }}>
+                <strong style={{ fontSize: "0.92rem" }}>FAQ Item {index + 1}</strong>
+                <button
+                  type="button"
+                  onClick={() => removeFaqItem(index)}
+                  style={{ border: "1px solid rgba(255,255,255,0.2)", borderRadius: "999px", padding: "0.45rem 0.8rem", background: "linear-gradient(135deg, #7a0012 0%, #b2001a 60%, #f14b61 100%)", color: "#fff", cursor: "pointer" }}
+                >
+                  Remove
+                </button>
+              </div>
+
+              <input
+                value={item.question}
+                onChange={(event) => handleFaqField(index, "question", event.target.value)}
+                placeholder="Question"
+                style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }}
+              />
+
+              <textarea
+                rows={3}
+                value={item.answer}
+                onChange={(event) => handleFaqField(index, "answer", event.target.value)}
+                placeholder="Answer / description"
+                style={{ padding: "0.75rem 0.85rem", borderRadius: "12px", border: "1px solid rgba(0,0,0,0.22)", background: "#f5f6f8", resize: "vertical", boxShadow: "inset 0 1px 2px rgba(0,0,0,0.04)" }}
+              />
+            </article>
+          ))}
+        </div>
+
+        <div style={{ display: "flex", gap: "0.6rem", flexWrap: "wrap" }}>
+          <button
+            type="button"
+            onClick={addFaqItem}
+            style={{ border: 0, borderRadius: "999px", padding: "0.6rem 1rem", background: "linear-gradient(135deg, #2f2f2f 0%, #111 100%)", color: "#fff", cursor: "pointer", boxShadow: "0 10px 22px rgba(20, 20, 20, 0.18)" }}
+          >
+            Add FAQ Item
+          </button>
+          <button
+            type="button"
+            onClick={saveFaqContent}
+            style={{ border: 0, borderRadius: "999px", padding: "0.6rem 1rem", background: "linear-gradient(135deg, #6f0000 0%, #b2001a 55%, #ff4d4d 100%)", color: "#fff", cursor: "pointer", boxShadow: "0 10px 22px rgba(109, 6, 17, 0.24)" }}
+          >
+            Save FAQ
           </button>
         </div>
       </section>

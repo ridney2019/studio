@@ -12,6 +12,8 @@ import { FaUsers, FaPenNib, FaUserCheck, FaPalette, FaLocationDot, FaStar, FaGoo
 import { LocationMap } from "./components/LocationMap";
 import ScrollToTopButton from "./components/ScrollToTopButton";
 import FloatingSocials from "./components/FloatingSocials";
+import { ArtistGrid } from "./components/ArtistGrid";
+import FAQSection from "./components/FAQSection";
 import { ArtistProfile, ARTISTS_UPDATED_EVENT, DEFAULT_ARTISTS, getArtistsFromStorage } from "../lib/artists";
 
 const GOOGLE_REVIEW_URL = "https://g.page/r/CRIAbJ7AOfOPEBM/review";
@@ -1217,83 +1219,21 @@ export default function Home() {
             </h2>
           </div>
           
-          <div 
-            className="carousel-container" 
-            style={{ position: 'relative', marginTop: '2rem' }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            <div 
-              style={{ 
-                display: 'flex', 
-                transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
-                transform: `translateX(-${currentArtistIndex * 100}%)`,
-                willChange: 'transform'
-              }}
-            >
-              {artists.map((artist) => (
-                <div key={artist.id} style={{ minWidth: '100%', padding: '0 10px', boxSizing: 'border-box' }}>
-                  <div className="nike-split-card">
-                    <div style={{ position: 'relative', height: '500px', width: '100%', overflow: 'hidden', background: 'var(--border-color)' }}>
-                      <motion.div whileHover={{ scale: 1.01 }} transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }} style={{ width: '100%', height: '100%', position: 'relative' }}>
-                        <img
-                          src={artist.image}
-                          alt={artist.name}
-                          style={{ width: '100%', height: '100%', objectFit: 'contain' }}
-                        />
-                      </motion.div>
-                      <span style={{ position: 'absolute', bottom: '24px', left: '24px', background: 'var(--bg-color)', fontSize: '10px', fontWeight: 800, padding: '6px 14px', borderRadius: '4px', letterSpacing: '0.1em', boxShadow: '0 2px 10px rgba(0,0,0,0.05)' }}>
-                        {artist.style}
-                      </span>
-                    </div>
-                    
-                    <div style={{ padding: '3.5rem', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
-                      <span style={{ fontSize: '11px', fontWeight: 700, letterSpacing: '0.2em', opacity: 0.4 }}>RESIDENT ELITE</span>
-                      <h3 style={{ fontSize: '2.2rem', fontWeight: 900, margin: '0.5rem 0 1.5rem 0', letterSpacing: '-0.02em' }}>{artist.name}</h3>
-                      <p style={{ opacity: 0.7, lineHeight: 1.6, fontSize: '1rem', marginBottom: '2.5rem' }}>{getArtistDescription(artist.descKey)}</p>
-                      <div>
-                        <Link className="nike-link-action" href="/contact">
-                          BOOK A SESSION
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <button 
-              onClick={() => {
-                if (artists.length === 0) return;
-                setCurrentArtistIndex((prev) => (prev - 1 + artists.length) % artists.length);
-              }}
-              style={{
-                position: 'absolute', left: '-20px', top: '50%', transform: 'translateY(-50%)',
-                background: 'var(--text-color)', border: 'none', color: 'var(--bg-color)',
-                width: '48px', height: '48px', borderRadius: '50%', cursor: 'pointer', zIndex: 10,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
-              }}
-              aria-label="Previous Profile"
-              disabled={artists.length <= 1}
-            >
-              ←
-            </button>
-            <button 
-              onClick={() => {
-                if (artists.length === 0) return;
-                setCurrentArtistIndex((prev) => (prev + 1) % artists.length);
-              }}
-              style={{
-                position: 'absolute', right: '-20px', top: '50%', transform: 'translateY(-50%)',
-                background: 'var(--text-color)', border: 'none', color: 'var(--bg-color)',
-                width: '48px', height: '48px', borderRadius: '50%', cursor: 'pointer', zIndex: 10,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 20px rgba(0,0,0,0.15)'
-              }}
-              aria-label="Next Profile"
-              disabled={artists.length <= 1}
-            >
-              →
-            </button>
+          <div style={{ marginTop: "2rem" }}>
+            <ArtistGrid
+              artists={artists.map((artist, index) => ({
+                name: artist.name,
+                style: artist.style,
+                specialty: artist.style,
+                profileImage: artist.image,
+                accentColor: ["#9bdc28", "#1da3c3", "#eb0e2f", "#d49f5b", "#7c9fff"][index % 5],
+                bookingUrl: "/contact",
+                instagramUrl: artist.instagram,
+                portfolioUrl: `/artists/${artist.id}`,
+                bio: getArtistDescription(artist.descKey),
+                tags: artist.tags && artist.tags.length > 0 ? artist.tags : artist.style.split(" & ").map((tag) => tag.trim()).filter(Boolean),
+              }))}
+            />
           </div>
         </motion.section>
 
@@ -1344,25 +1284,14 @@ export default function Home() {
             </a>
           </div>
         </motion.section>
+
+        <FAQSection />
+
+  
         
         {/* Footer */}
         <footer className="site-footer">
           <SocialLinks />
-          <div style={{ textAlign: "center", paddingTop: "0.5rem" }}>
-            <Link
-              href="/admin"
-              style={{
-                fontSize: "0.75rem",
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-                opacity: 0.5,
-                textDecoration: "none",
-                color: "var(--text-color)",
-              }}
-            >
-              Owner Admin
-            </Link>
-          </div>
         </footer>
       </main>
 

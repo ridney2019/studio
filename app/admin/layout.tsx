@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import AdminMenu from "./AdminMenu";
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
@@ -52,6 +53,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           `,
         }}
       />
+      <AdminMenu />
       {children}
     </div>
   );

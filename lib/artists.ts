@@ -6,6 +6,10 @@ export type ArtistProfile = {
   image: string;
   style: string;
   descKey: string;
+  instagram?: string;
+  portfolio?: string;
+  galleryImages?: string[];
+  tags?: string[];
 };
 
 export const ARTISTS_STORAGE_KEY = "nexo.artists.v1";
@@ -63,6 +67,18 @@ const sanitizeArtist = (artist: Partial<ArtistProfile>): ArtistProfile | null =>
   const image = artist.image.trim();
   const style = artist.style.trim();
   const descKey = artist.descKey.trim();
+  const instagram = typeof artist.instagram === "string" ? artist.instagram.trim() : "";
+  const portfolio = typeof artist.portfolio === "string" ? artist.portfolio.trim() : "";
+  const galleryImages = Array.isArray(artist.galleryImages)
+    ? artist.galleryImages
+        .map((image) => (typeof image === "string" ? image.trim() : ""))
+        .filter(Boolean)
+    : [];
+  const tags = Array.isArray(artist.tags)
+    ? artist.tags
+        .map((tag) => (typeof tag === "string" ? tag.trim() : ""))
+        .filter(Boolean)
+    : [];
 
   if (!name || !image || !style || !descKey) {
     return null;
@@ -74,6 +90,10 @@ const sanitizeArtist = (artist: Partial<ArtistProfile>): ArtistProfile | null =>
     image,
     style,
     descKey,
+    instagram: instagram || undefined,
+    portfolio: portfolio || undefined,
+    galleryImages: galleryImages.length > 0 ? galleryImages.slice(0, 12) : undefined,
+    tags: tags.length > 0 ? tags.slice(0, 6) : undefined,
   };
 };
 
