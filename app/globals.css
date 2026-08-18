@@ -1139,3 +1139,14 @@ body, select, option, button {
     transform: translateY(0);
   }
 }
+
+.copyright-text .developer-link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease-in-out;
+}
+
+.copyright-text .developer-link:hover {
+  color: #ffffff; /* Or your site's primary accent/gold color */
+}

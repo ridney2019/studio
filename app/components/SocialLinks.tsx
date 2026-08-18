@@ -128,11 +128,18 @@ export const SocialLinks = () => {
           </div>
         </div>
       </div>
-
-      {/* Footer Bottom Metadata */}
+    {/* Footer Bottom Metadata */}
       <div className="footer-bottom">
-        <p className="copyright-text">&copy; 2026 Ridney Silva. All rights reserved |
-          Designed & built in-house
+        <p className="copyright-text">
+          &copy; {new Date().getFullYear()} NEXO Studio Tattoo. All rights reserved | Designed &amp; Developed by{' '}
+          <a 
+            href="https://www.ridneysilva.eu" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="developer-link"
+          >
+            Ridney Silva
+          </a>
         </p>
         <div className="footer-legal">
           {/*<a href="#privacy">Privacy Policy</a>*/}
