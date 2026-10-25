@@ -1,6 +1,11 @@
+"use client";
+
 import React from "react";
+import { useTranslation } from "../hooks/useTranslation";
+import { LABS_URL } from "@/lib/entry-choice";
 
 export const SocialLinks = () => {
+  const { t } = useTranslation();
   const socialLinks = [
     {
       name: "Instagram",
@@ -144,6 +149,7 @@ export const SocialLinks = () => {
         <div className="footer-legal">
           {/*<a href="#privacy">Privacy Policy</a>*/}
           {/*<a href="#terms">Terms</a>*/}
+          <a className="footer-labs-link" href={LABS_URL}>{t("footerLabsLink")}</a>
         </div>
       </div>
     </footer>

@@ -25,10 +25,22 @@ if (fs.existsSync(envPath)) {
   });
 }
 
-const ownerEmailArg = process.argv[2];
-const ownerPasswordArg = process.argv[3];
-const ownerEmail = (ownerEmailArg || "nexostudiosltd@gmail.com").trim().toLowerCase();
-const ownerPassword = ownerPasswordArg || "Nexos@@@2026";
+// The e-mail and password are NEVER written in this file (the repository is public): they come from the command line or from the
+// environment, and the script stops with a clear message when one is missing.
+//   OWNER_PASSWORD='…' npx tsx scripts/add-owner-directly.ts owner@example.com
+//   or: OWNER_EMAIL=owner@example.com OWNER_PASSWORD='…' npx tsx scripts/add-owner-directly.ts
+// Prefer the OWNER_PASSWORD variable over a password argument (arguments stay in the shell history).
+const ownerEmailRaw = process.argv[2] || process.env.OWNER_EMAIL;
+const ownerPasswordRaw = process.argv[3] || process.env.OWNER_PASSWORD;
+
+if (!ownerEmailRaw || !ownerPasswordRaw) {
+  const missing = [!ownerEmailRaw ? "e-mail (argument 1 or OWNER_EMAIL)" : null, !ownerPasswordRaw ? "password (argument 2 or OWNER_PASSWORD)" : null].filter(Boolean).join(" and ");
+  console.error(`Missing ${missing}. Nothing was changed.`);
+  console.error("Usage: OWNER_PASSWORD='…' npx tsx scripts/add-owner-directly.ts <owner-email>");
+  process.exit(1);
+}
+const ownerEmail: string = ownerEmailRaw.trim().toLowerCase();
+const ownerPassword: string = ownerPasswordRaw;
 
 async function addOwnerDirectly() {
   const { prisma } = await import("../lib/prisma");

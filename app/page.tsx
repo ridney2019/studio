@@ -14,6 +14,7 @@ import ScrollToTopButton from "./components/ScrollToTopButton";
 import FloatingSocials from "./components/FloatingSocials";
 import { ArtistGrid } from "./components/ArtistGrid";
 import FAQSection from "./components/FAQSection";
+import { EntryChooser } from "./components/EntryChooser";
 import { ArtistProfile, ARTISTS_UPDATED_EVENT, DEFAULT_ARTISTS, getArtistsFromStorage } from "../lib/artists";
 
 const GOOGLE_REVIEW_URL = "https://g.page/r/CRIAbJ7AOfOPEBM/review";
@@ -400,6 +401,7 @@ export default function Home() {
 
   return (
     <>
+      <EntryChooser />
       <main id="home" className="page-shell loaded relative w-full overflow-hidden">
         <style dangerouslySetInnerHTML={{ __html: `
           :root {

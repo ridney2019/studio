@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTranslation } from "../hooks/useTranslation";
+import { ENTRY_CLOSED_EVENT, entryChooserPending } from "@/lib/entry-choice";
 
 export function CookieBanner() {
   const { t, isHydrated } = useTranslation();
@@ -16,17 +17,28 @@ export function CookieBanner() {
   useEffect(() => {
     // Check if user has already given consent
     const consent = localStorage.getItem("cookie-consent");
-    if (!consent) {
+    if (consent) return;
+
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let animTimer: ReturnType<typeof setTimeout> | undefined;
+    const show = () => {
       // Show banner with a slight delay for better UX
-      const timer = setTimeout(() => setIsVisible(true), 1000);
+      timer = setTimeout(() => setIsVisible(true), 1000);
       // Trigger entry animation shortly after mounting
-      const animTimer = setTimeout(() => setIsAnimating(true), 1100);
-      
-      return () => {
-        clearTimeout(timer);
-        clearTimeout(animTimer);
-      };
-    }
+      animTimer = setTimeout(() => setIsAnimating(true), 1100);
+    };
+
+    // The first-visit choice (studio / NEXO Labs) comes first: the cookie banner waits until it is gone,
+    // so the two are never on screen together.
+    const waiting = entryChooserPending();
+    if (waiting) window.addEventListener(ENTRY_CLOSED_EVENT, show, { once: true });
+    else show();
+
+    return () => {
+      if (waiting) window.removeEventListener(ENTRY_CLOSED_EVENT, show);
+      clearTimeout(timer);
+      clearTimeout(animTimer);
+    };
   }, []);
 
   const handleConsent = (choice: "accepted" | "customized" | "save") => {
